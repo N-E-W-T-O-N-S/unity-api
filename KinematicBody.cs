@@ -6,7 +6,8 @@ using System;
 
 public class KinematicBody : MonoBehaviour
 {
-    public WeakReference<NEWTONS.Core.KinematicBody> body;
+    //TODO: serialze this
+    private WeakReference<NEWTONS.Core.KinematicBody> _bodyRef;
     [SerializeField]
     private bool useGravity = false;
     [SerializeField]
@@ -17,9 +18,8 @@ public class KinematicBody : MonoBehaviour
         get => GetPhysicsBody().UseGravity;
         set
         {
-            if (!body.TryGetTarget(out NEWTONS.Core.KinematicBody b))
-                throw new Exception("No KinematicBody");
-            if (b.UseGravity != value)
+            NEWTONS.Core.KinematicBody b = GetPhysicsBody();
+            if (b != null)
                 b.UseGravity = value;
         }
     }
@@ -29,10 +29,23 @@ public class KinematicBody : MonoBehaviour
         get => GetPhysicsBody().Velocity.ToUnityVector();
         set
         {
-            if (!body.TryGetTarget(out NEWTONS.Core.KinematicBody b))
-                throw new Exception("No KinematicBody");
-            if (b.Velocity != value.ToNewtonsVector())
+            NEWTONS.Core.KinematicBody b = GetPhysicsBody();
+            if (b != null)
                 b.Velocity = value.ToNewtonsVector();
+        }
+    }
+
+    [SerializeField]
+    private float mass = 1f;
+
+    public float Mass
+    {
+        get => GetPhysicsBody().Mass;
+        set 
+        {
+            NEWTONS.Core.KinematicBody b = GetPhysicsBody();
+            if (b != null)
+                b.Mass = value;
         }
     }
 
@@ -41,30 +54,39 @@ public class KinematicBody : MonoBehaviour
         get => GetPhysicsBody().Position.ToUnityVector();
         set
         {
-            if (!body.TryGetTarget(out NEWTONS.Core.KinematicBody b))
-                throw new Exception("No KinematicBody");
-            if (b.Position != value.ToNewtonsVector())
+            NEWTONS.Core.KinematicBody b = GetPhysicsBody();
+            if (b != null)
                 b.Position = value.ToNewtonsVector();
         }
     }
 
-    private void Awake()
+    private void Reset()
     {
         NEWTONS.Core.KinematicBody physicsBody = new NEWTONS.Core.KinematicBody()
         {
             Position = transform.position.ToNewtonsVector(),
             UseGravity = useGravity,
             Velocity = initVelocity.ToNewtonsVector(),
+            Mass = mass,
         };
         physicsBody.UpdatePosition += UpdateTransformPosition;
-        body = new WeakReference<NEWTONS.Core.KinematicBody>(physicsBody);
+        _bodyRef = new WeakReference<NEWTONS.Core.KinematicBody>(physicsBody);
         PhysicsWorld.tests.Add(this);
     }
 
-    //Experimental
+    public void AddForce(UnityEngine.Vector3 force, NEWTONS.Core.ForceMode forceMode)
+    {
+        NEWTONS.Core.KinematicBody b = GetPhysicsBody();
+        b?.AddForce(force.ToNewtonsVector(), forceMode, Time.fixedDeltaTime);
+    }
+
+    /// <summary>
+    /// Gets the Physics Body attached to the KinematicBody if it exists, destroys the KinematicBody if it doesn't
+    /// </summary>
+    /// <returns>KineamBody, null if not</returns>
     public NEWTONS.Core.KinematicBody GetPhysicsBody()
     {
-        if (!body.TryGetTarget(out NEWTONS.Core.KinematicBody target))
+        if (!_bodyRef.TryGetTarget(out NEWTONS.Core.KinematicBody target))
         {
             Debug.LogWarning("No Physics Body Attached to the KinematicBody, KinematicBody will be Destroyed");
             Destroy(gameObject);
@@ -88,4 +110,9 @@ public class KinematicBody : MonoBehaviour
     {
         //transform.rotation = GetPhysicsBody().Rotation;
     }
+
+
+#if UNITY_EDITOR
+    public bool foldOutInfo = false;
+#endif
 }

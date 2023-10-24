@@ -19,11 +19,11 @@ public class PhysicsWorld : MonoBehaviour
         NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
     }
 
-    public static void DestroyBody(KinematicBody test)
+    public static void DestroyBody(KinematicBody body)
     {
-        tests.Remove(test);
-        if (!test.body.TryGetTarget(out NEWTONS.Core.KinematicBody b))
-            throw new Exception("No KinematicBody");
-        NEWTONS.Core.Physics.RemoveBody(b);
+        tests.Remove(body);
+        NEWTONS.Core.KinematicBody b = body.GetPhysicsBody();
+        if (b != null)
+            NEWTONS.Core.Physics.RemoveBody(b);
     }
 }
