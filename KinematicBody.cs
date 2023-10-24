@@ -6,13 +6,48 @@ using System;
 
 public class KinematicBody : MonoBehaviour
 {
-    //TODO: serialze this
     private WeakReference<NEWTONS.Core.KinematicBody> _bodyRef;
-    [SerializeField]
-    private bool useGravity = false;
-    [SerializeField]
-    private UnityEngine.Vector3 initVelocity;
 
+    /// <summary>
+    /// Internal NEWTONS field. Do not use.
+    /// </summary>
+    /// <remarks>
+    /// Do not use this method directly. Insteade use <see cref="UseGravity"/> to alter gravity.
+    /// </remarks>
+    public bool initialUseGravity = false;
+    /// <summary>
+    /// Internal NEWTONS field. Do not use.
+    /// </summary>
+    /// <remarks>
+    /// Do not use this method directly. Insteade use <see cref="Velocity"/> to alter the velocity.
+    /// </remarks>
+    public UnityEngine.Vector3 initialVelocity;
+    /// <summary>
+    /// Internal NEWTONS field. Do not use.
+    /// </summary>
+    /// <remarks>
+    /// Do not use this method directly. Insteade use <see cref="Mass"/> to alter the mass.
+    /// </remarks>
+    public float initialMass = 1f;
+    /// <summary>
+    /// Internal NEWTONS field. Do not use.
+    /// </summary>
+    /// <remarks>
+    /// Do not use this method directly. Insteade use <see cref="Drag"/> to alter the drag.
+    /// </remarks>
+    public float initialDrag = 0f;
+
+    public UnityEngine.Vector3 Position
+    {
+        get => GetPhysicsBody().Position.ToUnityVector();
+        set
+        {
+            NEWTONS.Core.KinematicBody b = GetPhysicsBody();
+            if (b != null)
+                b.Position = value.ToNewtonsVector();
+        }
+    }
+    
     public bool UseGravity
     {
         get => GetPhysicsBody().UseGravity;
@@ -23,6 +58,7 @@ public class KinematicBody : MonoBehaviour
                 b.UseGravity = value;
         }
     }
+
 
     public UnityEngine.Vector3 Velocity
     {
@@ -35,13 +71,10 @@ public class KinematicBody : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    private float mass = 1f;
-
     public float Mass
     {
         get => GetPhysicsBody().Mass;
-        set 
+        set
         {
             NEWTONS.Core.KinematicBody b = GetPhysicsBody();
             if (b != null)
@@ -49,25 +82,26 @@ public class KinematicBody : MonoBehaviour
         }
     }
 
-    public UnityEngine.Vector3 Position
+    public float Drag
     {
-        get => GetPhysicsBody().Position.ToUnityVector();
+        get => GetPhysicsBody().Drag;
         set
         {
             NEWTONS.Core.KinematicBody b = GetPhysicsBody();
             if (b != null)
-                b.Position = value.ToNewtonsVector();
+                b.Drag = value;
         }
     }
 
-    private void Reset()
+
+    private void Awake()
     {
         NEWTONS.Core.KinematicBody physicsBody = new NEWTONS.Core.KinematicBody()
         {
             Position = transform.position.ToNewtonsVector(),
-            UseGravity = useGravity,
-            Velocity = initVelocity.ToNewtonsVector(),
-            Mass = mass,
+            UseGravity = initialUseGravity,
+            Velocity = initialVelocity.ToNewtonsVector(),
+            Mass = initialMass,
         };
         physicsBody.UpdatePosition += UpdateTransformPosition;
         _bodyRef = new WeakReference<NEWTONS.Core.KinematicBody>(physicsBody);
