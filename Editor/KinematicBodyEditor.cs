@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(KinematicBody))]
+[CustomEditor(typeof(KinematicBody), true)]
+[CanEditMultipleObjects]
 public class KinematicBodyEditor : Editor
 {
     KinematicBody kinematicBody;
@@ -17,7 +18,7 @@ public class KinematicBodyEditor : Editor
         DrawProps();
         DrawInfo();
         if (FindObjectOfType<PhysicsWorld>() == null)
-            Warning("No PhysicsWorld in the current scene. Add a PhysicsWorld to enable physics calculations");
+            WarningBox("No PhysicsWorld in the current scene. Add a PhysicsWorld to enable physics calculations");
     }
 
     private void DrawProps()
@@ -54,8 +55,13 @@ public class KinematicBodyEditor : Editor
         }
     }
 
-    private void Warning(string text)
+    private void WarningBox(string text)
     {
         EditorGUILayout.HelpBox(text, MessageType.Warning);
+    }
+
+    private void InfoBox(string text)
+    {
+        EditorGUILayout.HelpBox(text, MessageType.Info);
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using NEWTONS.Core;
 using System;
+using System.Data.Common;
+using Unity.VisualScripting;
 
 public class KinematicBody : MonoBehaviour
 {
@@ -102,8 +104,9 @@ public class KinematicBody : MonoBehaviour
             UseGravity = initialUseGravity,
             Velocity = initialVelocity.ToNewtonsVector(),
             Mass = initialMass,
+            Drag = initialDrag
         };
-        physicsBody.UpdatePosition += UpdateTransformPosition;
+        physicsBody.OnUpdatePosition += UpdateTransformPosition;
         _bodyRef = new WeakReference<NEWTONS.Core.KinematicBody>(physicsBody);
         PhysicsWorld.tests.Add(this);
     }
