@@ -1,14 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NEWTONS.Core;
-using System;
 
 public class PhysicsWorld : MonoBehaviour
 {
     public static List<KinematicBody> tests = new List<KinematicBody>();
 
-    public UnityEngine.Vector3 Gravity
+    /// <summary>
+    /// Internal NEWTONS field. Do not use.
+    /// </summary>
+    /// <remarks>
+    /// Do not use this method directly. Insteade use <see cref="Temperature"/> to alter the Temperature.
+    /// </remarks>
+    public float initialTemperature = NEWTONS.Core.Physics.Temperature;
+    /// <summary>
+    /// Internal NEWTONS field. Do not use.
+    /// </summary>
+    /// <remarks>
+    /// Do not use this method directly. Insteade use <see cref="Density"/> to alter the Density.
+    /// </remarks>
+    public float initialDensity = NEWTONS.Core.Physics.Density;
+    /// <summary>
+    /// Internal NEWTONS field. Do not use.
+    /// </summary>
+    /// <remarks>
+    /// Do not use this method directly. Insteade use <see cref="UseCustomDrag"/> to alter the UseCustomDrag.
+    /// </remarks>
+    public bool initialUseCustomDrag = NEWTONS.Core.Physics.UseCustomDrag;
+    /// <summary>
+    /// Internal NEWTONS field. Do not use.
+    /// </summary>
+    /// <remarks>
+    /// Do not use this method directly. Insteade use <see cref="Gravity"/> to alter the Gravity.
+    /// </remarks>
+    public Vector3 initialGravity = NEWTONS.Core.Physics.Gravity.ToUnityVector();
+
+    public static bool UseCustomDrag 
+    {
+        get => NEWTONS.Core.Physics.UseCustomDrag;
+        set => NEWTONS.Core.Physics.UseCustomDrag = value;
+    }
+
+    public static float Temperature
+    {
+        get => NEWTONS.Core.Physics.Temperature;
+        set { NEWTONS.Core.Physics.Temperature = value; }
+    }
+
+    public static float Density
+    {
+        get => NEWTONS.Core.Physics.Density;
+        set { NEWTONS.Core.Physics.Density = value; }
+    }
+
+
+    public static UnityEngine.Vector3 Gravity
     {
         get => NEWTONS.Core.Physics.Gravity.ToUnityVector();
         set { NEWTONS.Core.Physics.Gravity = value.ToNewtonsVector(); }
@@ -17,26 +63,13 @@ public class PhysicsWorld : MonoBehaviour
     private void FixedUpdate()
     {
         NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
-        Debug.Log(NEWTONS.Core.Physics.Bodies.Count);
-        for (int i = 0; i < tests.Count; i++)
-        {
-            if (!tests[i].body.TryGetTarget(out NEWTONS.Core.KinematicBody b))
-                throw new Exception("No KinematicBody");
-            UnityEngine.Vector3 enginePos = b.Position.ToUnityVector();
-            UnityEngine.Vector3 engineVelocity = b.Velocity.ToUnityVector();
-
-            if (tests[i].transform.position != enginePos)
-                tests[i].transform.position = enginePos;
-            if (tests[i].Velocity != engineVelocity)
-                tests[i].Velocity = engineVelocity;
-        }
     }
 
-    public static void DestroyBody(KinematicBody test)
+    public static void DestroyBody(KinematicBody body)
     {
-        tests.Remove(test);
-        if (!test.body.TryGetTarget(out NEWTONS.Core.KinematicBody b))
-            throw new Exception("No KinematicBody");
-        NEWTONS.Core.Physics.RemoveBody(b);
+        tests.Remove(body);
+        NEWTONS.Core.KinematicBody b = body.GetPhysicsBody();
+        if (b != null)
+            NEWTONS.Core.Physics.RemoveBody(b);
     }
 }
