@@ -10,6 +10,7 @@ public class KinematicBody : MonoBehaviour
 {
     private WeakReference<NEWTONS.Core.KinematicBody> _bodyRef;
 
+    #region Internal NEWTONS fields
     /// <summary>
     /// Internal NEWTONS field. Do not use.
     /// </summary>
@@ -38,6 +39,7 @@ public class KinematicBody : MonoBehaviour
     /// Do not use this method directly. Insteade use <see cref="Drag"/> to alter the drag.
     /// </remarks>
     public float initialDrag = 0f;
+    #endregion
 
     public UnityEngine.Vector3 Position
     {
@@ -130,6 +132,11 @@ public class KinematicBody : MonoBehaviour
             return null;
         }
         return target;
+    }
+
+    public WeakReference<NEWTONS.Core.KinematicBody> GetPhysicsBodyRef()
+    {
+        return _bodyRef;
     }
 
     private void OnDestroy()
