@@ -25,6 +25,9 @@ public class KinematicBodyEditor : Editor
     {
         if (Application.isPlaying)
         {
+            if(kinematicBody.GetPhysicsBody() == null)
+                return;
+
             kinematicBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
             kinematicBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
             EditorGUILayout.Space();
