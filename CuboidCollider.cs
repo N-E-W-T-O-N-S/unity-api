@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(KinematicBody))]
 public class CuboidCollider : MonoBehaviour
 {
+    //Do not make WeakReffernce, instead dispose interface
     private WeakReference<NEWTONS.Core.CuboidCollider> _cuboidRef;
     public Vector3 initialScale = Vector3.one;
     public Vector3 initialCenter = Vector3.zero;
@@ -36,7 +37,6 @@ public class CuboidCollider : MonoBehaviour
             GetCuboidCollider().Center = value.ToNewtonsVector();
         }
     }
-
 
     private void Awake()
     {

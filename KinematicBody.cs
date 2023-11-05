@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 
 public class KinematicBody : MonoBehaviour
 {
+    //Do not make WeakReffernce, instead dispose interface
     private WeakReference<NEWTONS.Core.KinematicBody> _bodyRef;
 
     #region Internal NEWTONS fields
