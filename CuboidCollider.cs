@@ -1,74 +1,59 @@
+using NEWTONS.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(KinematicBody))]
-public class CuboidCollider : MonoBehaviour
+public class CuboidCollider : MonoBehaviour, IColliderReference
 {
-    //Do not make WeakReffernce, instead dispose interface
-    private WeakReference<NEWTONS.Core.CuboidCollider> _cuboidRef;
-    public Vector3 initialScale = Vector3.one;
-    public Vector3 initialCenter = Vector3.zero;
+    [SerializeField, HideInInspector]
+    private NEWTONS.Core.CuboidCollider _cuboidColl;
 
-    public Vector3 Scale
+    public NEWTONS.Core.CuboidCollider CuboidColl { get => _cuboidColl; set { _cuboidColl = value; } }
+
+    public UnityEngine.Vector3 Scale
     {
-        get => GetCuboidCollider().Scale.ToUnityVector();
+        get => CuboidColl.Scale.ToUnityVector();
         set
         {
-            GetCuboidCollider().Scale = value.ToNewtonsVector();
+            CuboidColl.Scale = value.ToNewtonsVector();
         }
     }
 
-    public NEWTONS.Core.KinematicBody Body
+
+    public UnityEngine.Vector3 Center
     {
-        get => GetCuboidCollider().KinematicBody;
+        get => CuboidColl.Center.ToUnityVector();
         set
         {
-            GetCuboidCollider().KinematicBody = value;
+            CuboidColl.Center = value.ToNewtonsVector();
         }
     }
 
-    public Vector3 Center
+    public UnityEngine.Vector3[] Points 
+    { 
+        get => CuboidColl.Points.ToUnityVectorArray(); 
+        set { CuboidColl.Points = value.ToNewtonsVectorArray(); } }
+
+
+    public void Dispose()
     {
-        get => GetCuboidCollider().Center.ToUnityVector();
-        set
-        {
-            GetCuboidCollider().Center = value.ToNewtonsVector();
-        }
+        CuboidColl = null;
+        Destroy(this);
+    }
+
+    public IColliderReference SetCollider(NEWTONS.Core.Collider collider)
+    {
+        CuboidColl = collider as NEWTONS.Core.CuboidCollider;
+        if (CuboidColl == null)
+            throw new ArgumentException("Collider must be of type CuboidCollider");
+        return this;
     }
 
     private void Awake()
     {
-        _cuboidRef = new WeakReference<NEWTONS.Core.CuboidCollider>
-        (
-            new NEWTONS.Core.CuboidCollider
-            (
-                initialScale.ToNewtonsVector(),
-                GetComponent<KinematicBody>().GetPhysicsBody(),
-                initialCenter.ToNewtonsVector()
-            )
-        );
+        CuboidColl.Body = GetComponent<KinematicBody>().Body;
         PhysicsWorld.colltest.Add(this);
-    }
-
-    /// <summary>
-    /// Gets the Collider attached to the CuboidCollider if it exists, destroys the CuboidCollider if it doesn't
-    /// </summary>
-    /// <returns>CuboidCollider, null if not</returns>
-    public NEWTONS.Core.CuboidCollider GetCuboidCollider()
-    {
-        if (!_cuboidRef.TryGetTarget(out NEWTONS.Core.CuboidCollider target))
-        {
-            Debug.LogWarning("No Cuboid Collider Attached to the CuboidCollider, gameObject will be Destroyed");
-            Destroy(gameObject);
-            return null;
-        }
-        return target;
-    }
-
-    public WeakReference<NEWTONS.Core.CuboidCollider> GetCuboidColliderRef()
-    {
-        return _cuboidRef;
     }
 }

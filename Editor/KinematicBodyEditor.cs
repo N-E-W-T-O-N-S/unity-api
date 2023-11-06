@@ -23,24 +23,15 @@ public class KinematicBodyEditor : Editor
 
     private void DrawProps()
     {
-        if (Application.isPlaying)
-        {
-            if(kinematicBody.GetPhysicsBody() == null)
-                return;
+        if (kinematicBody.Body == null)
+            return;
 
-            kinematicBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
-            kinematicBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
-            EditorGUILayout.Space();
-            kinematicBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.UseGravity);
-        }
-        else
-        {
-            kinematicBody.initialMass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.initialMass), NEWTONS.Core.PhysicsInfo.MinMass);
-            kinematicBody.initialDrag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.initialDrag), NEWTONS.Core.PhysicsInfo.MinDrag);
-            EditorGUILayout.Space();
-            kinematicBody.initialUseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.initialUseGravity);
-            kinematicBody.initialVelocity = EditorGUILayout.Vector3Field("Initial Velocity", kinematicBody.initialVelocity);
-        }
+        kinematicBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
+        kinematicBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
+        kinematicBody.Velocity = EditorGUILayout.Vector3Field("Velocity", kinematicBody.Velocity);
+        EditorGUILayout.Space();
+        kinematicBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.UseGravity);
+
     }
 
     private void DrawInfo()
