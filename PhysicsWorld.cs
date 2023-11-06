@@ -7,6 +7,7 @@ public class PhysicsWorld : MonoBehaviour
     public static List<KinematicBody> tests = new List<KinematicBody>();
     public static List<CuboidCollider> colltest = new List<CuboidCollider>();
 
+    //TODO: Look into removing these:
     #region Internal NEWTONS fields
     /// <summary>
     /// <b><u>WARNING:</u></b> Internal NEWTONS field. Do not use.
@@ -87,7 +88,6 @@ public class PhysicsWorld : MonoBehaviour
 
     private void Test2()
     {
-        Debug.Log(colltest[0].CuboidColl.Body + " " + colltest[1].CuboidColl.Body);
         bool b = colltest[0].CuboidColl.IsColliding(colltest[1].CuboidColl);
         if (b)
         {

@@ -15,7 +15,6 @@ public class CuboidColliderEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        serializedObject.Update();
         DrawProps();
     }
 
@@ -24,11 +23,15 @@ public class CuboidColliderEditor : Editor
         if (cuboidCollider.CuboidColl == null)
             return;
 
+        Vector3 oldCenter = cuboidCollider.Center;
         cuboidCollider.Center = EditorGUILayout.Vector3Field("Center", cuboidCollider.Center);
+        Vector3 oldScale = cuboidCollider.Scale;
         cuboidCollider.Scale = EditorGUILayout.Vector3Field("Scale", cuboidCollider.Scale);
+        if (oldScale != cuboidCollider.Scale || oldCenter != cuboidCollider.Center)
+        {
+            SceneView.RepaintAll();
+        }
         EditorGUILayout.Space();
-
-        Debug.Log(cuboidCollider.Points.Length);
 
         //SerializedProperty listProperty = serializedObject.FindProperty("Points");
         //EditorGUILayout.PropertyField(listProperty, true);
@@ -38,8 +41,28 @@ public class CuboidColliderEditor : Editor
 
     private void OnSceneGUI()
     {
-        //TODO: think about center and position of collider (is center just offset or compllete position?)
+        Vector3[] points = cuboidCollider.ScaledPoints;
+        Vector3 offset = cuboidCollider.transform.position + cuboidCollider.Center;
+        //for (int i = 0; i < points.Length; i++)
+        //{
+        //    Debug.Log(points[i]);
+        //}
         Handles.color = Color.green;
-        Handles.DrawLine(cuboidCollider.Points[0] + cuboidCollider.transform.position + cuboidCollider.Center, cuboidCollider.Points[1] + cuboidCollider.transform.position + cuboidCollider.Center);
+        Handles.DrawLine(points[0] + offset, points[1] + offset);
+        Handles.DrawLine(points[1] + offset, points[3] + offset);
+        Handles.DrawLine(points[2] + offset, points[3] + offset);
+        Handles.DrawLine(points[0] + offset, points[2] + offset);
+        
+        Handles.DrawLine(points[4] + offset, points[5] + offset);
+        Handles.DrawLine(points[5] + offset, points[7] + offset);
+        Handles.DrawLine(points[6] + offset, points[7] + offset);
+        Handles.DrawLine(points[4] + offset, points[6] + offset);
+
+        Handles.DrawLine(points[0] + offset, points[4] + offset);
+        Handles.DrawLine(points[1] + offset, points[5] + offset);
+        Handles.DrawLine(points[2] + offset, points[6] + offset);
+        Handles.DrawLine(points[3] + offset, points[7] + offset);
+
+
     }
 }

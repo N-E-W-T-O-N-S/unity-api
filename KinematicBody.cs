@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using NEWTONS.Core;
 using System;
-using System.Data.Common;
 
+[RequireComponent(typeof(TransformConnector))]
 public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
 {
     [SerializeField, HideInInspector]
@@ -70,9 +70,8 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
 
     private void Awake()
     {
-        Body.OnUpdatePosition += UpdateTransformPosition;
-        Position = transform.position;
         PhysicsWorld.tests.Add(this);
+        Body.OnUpdatePosition += UpdateTransformPosition;
     }
 
     public void AddForce(UnityEngine.Vector3 force, NEWTONS.Core.ForceMode forceMode)
@@ -80,20 +79,20 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
         Body?.AddForce(force.ToNewtonsVector(), forceMode, Time.fixedDeltaTime);
     }
 
-    private void OnDestroy()
-    {
-        PhysicsWorld.DestroyBody(this);
-    }
-
     private void UpdateTransformPosition()
     {
-        transform.position = Body.Position.ToUnityVector();
+        transform.position = Position;
     }
-
+    
     //Needs own Quaternion implementation
     private void UpdateTransformRotation()
     {
         //transform.rotation = GetPhysicsBody().Rotation;
+    }
+
+    private void OnDestroy()
+    {
+        PhysicsWorld.DestroyBody(this);
     }
 
     public IKinematicBodyReference SetKinematicBody(NEWTONS.Core.KinematicBody kinematicBody)

@@ -16,9 +16,10 @@ public class KinematicBodyEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawProps();
-        DrawInfo();
         if (FindObjectOfType<PhysicsWorld>() == null)
             WarningBox("No PhysicsWorld in the current scene. Add a PhysicsWorld to enable physics calculations");
+        else if (FindObjectsOfType<PhysicsWorld>().Length > 1)
+            ErrorBox("More than one PhysicsWorld in the current scene. Remove all but one PhysicsWorld to enable physics calculations");
     }
 
     private void DrawProps()
@@ -31,31 +32,21 @@ public class KinematicBodyEditor : Editor
         kinematicBody.Velocity = EditorGUILayout.Vector3Field("Velocity", kinematicBody.Velocity);
         EditorGUILayout.Space();
         kinematicBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.UseGravity);
-
     }
 
-    private void DrawInfo()
+
+    private void InfoBox(string text)
     {
-        if (!Application.isPlaying)
-            return;
-        kinematicBody.foldOutInfo = EditorGUILayout.Foldout(kinematicBody.foldOutInfo, "Info");
-        if (kinematicBody.foldOutInfo)
-        {
-            EditorGUI.indentLevel++;
-            GUI.enabled = false;
-            kinematicBody.Velocity = EditorGUILayout.Vector3Field("Velocity", kinematicBody.Velocity);
-            GUI.enabled = true;
-            EditorGUI.indentLevel++;
-        }
+        EditorGUILayout.HelpBox(text, MessageType.Info);
     }
-
+    
     private void WarningBox(string text)
     {
         EditorGUILayout.HelpBox(text, MessageType.Warning);
     }
 
-    private void InfoBox(string text)
+    private void ErrorBox(string text)
     {
-        EditorGUILayout.HelpBox(text, MessageType.Info);
+        EditorGUILayout.HelpBox(text, MessageType.Error);
     }
 }
