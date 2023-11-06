@@ -63,6 +63,14 @@ public class PhysicsWorld : MonoBehaviour
         set { NEWTONS.Core.Physics.Gravity = value.ToNewtonsVector(); }
     }
 
+    private void Awake()
+    {
+        NEWTONS.Core.Physics.Temperature = initialTemperature;
+        NEWTONS.Core.Physics.Density = initialDensity;
+        NEWTONS.Core.Physics.UseCustomDrag = initialUseCustomDrag;
+        NEWTONS.Core.Physics.Gravity = initialGravity.ToNewtonsVector();
+    }
+
     private void FixedUpdate()
     {
         NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
@@ -72,14 +80,15 @@ public class PhysicsWorld : MonoBehaviour
     public static void DestroyBody(KinematicBody body)
     {
         tests.Remove(body);
-        NEWTONS.Core.KinematicBody b = body.GetPhysicsBody();
+        NEWTONS.Core.KinematicBody b = body.Body;
         if (b != null)
             NEWTONS.Core.Physics.RemoveBody(b);
     }
 
     private void Test2()
     {
-        bool b = colltest[0].GetCuboidCollider().IsColliding(colltest[1].GetCuboidCollider());
+        Debug.Log(colltest[0].CuboidColl.Body + " " + colltest[1].CuboidColl.Body);
+        bool b = colltest[0].CuboidColl.IsColliding(colltest[1].CuboidColl);
         if (b)
         {
             colltest[0].GetComponent<MeshRenderer>().material.color = Color.red;
