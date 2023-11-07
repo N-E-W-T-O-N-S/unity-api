@@ -75,12 +75,11 @@ public class PhysicsWorld : MonoBehaviour
     private void FixedUpdate()
     {
         NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
-        Test2();
     }
 
     public static void DestroyBody(KinematicBody body)
     {
-        tests.Remove(body);
+        //tests.Remove(body);
         NEWTONS.Core.KinematicBody b = body.Body;
         if (b != null)
             NEWTONS.Core.Physics.RemoveBody(b);
