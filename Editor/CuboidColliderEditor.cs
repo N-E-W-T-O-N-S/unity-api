@@ -26,7 +26,7 @@ public class CuboidColliderEditor : Editor
         Vector3 oldCenter = cuboidCollider.Center;
         cuboidCollider.Center = EditorGUILayout.Vector3Field("Center", cuboidCollider.Center);
         Vector3 oldScale = cuboidCollider.Scale;
-        cuboidCollider.Scale = EditorGUILayout.Vector3Field("Scale", cuboidCollider.Scale);
+        cuboidCollider.Scale = EditorGUILayout.Vector3Field("Scale", new Vector3(Mathf.Max(cuboidCollider.Scale.x, 0), Mathf.Max(cuboidCollider.Scale.y, 0), Mathf.Max(cuboidCollider.Scale.z, 0)));
         if (oldScale != cuboidCollider.Scale || oldCenter != cuboidCollider.Center)
         {
             SceneView.RepaintAll();

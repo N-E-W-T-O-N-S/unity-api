@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(KinematicBody), true)]
-[CanEditMultipleObjects]
+[CustomEditor(typeof(KinematicBody))]
 public class KinematicBodyEditor : Editor
 {
     KinematicBody kinematicBody;

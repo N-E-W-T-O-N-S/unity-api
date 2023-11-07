@@ -20,52 +20,38 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     public UnityEngine.Vector3 Position
     {
         get => Body.Position.ToUnityVector();
-        set
-        {
-            if (Body != null)
-                Body.Position = value.ToNewtonsVector();
-        }
+        set => Body.Position = value.ToNewtonsVector();
+    }
+
+    public UnityEngine.Vector3 PositionNoNotify 
+    { 
+        get => _body.PositionNoNotify.ToUnityVector();
+        set => _body.PositionNoNotify = value.ToNewtonsVector(); 
     }
 
     public bool UseGravity
     {
         get => Body.UseGravity;
-        set
-        {
-            if (Body != null)
-                Body.UseGravity = value;
-        }
+        set => Body.UseGravity = value;
     }
 
 
     public UnityEngine.Vector3 Velocity
     {
         get => Body.Velocity.ToUnityVector();
-        set
-        {
-            if (Body != null)
-                Body.Velocity = value.ToNewtonsVector();
-        }
+        set => Body.Velocity = value.ToNewtonsVector();
     }
 
     public float Mass
     {
         get => Body.Mass;
-        set
-        {
-            if (Body != null)
-                Body.Mass = value;
-        }
+        set => Body.Mass = value;
     }
 
     public float Drag
     {
         get => Body.Drag;
-        set
-        {
-            if (Body != null)
-                Body.Drag = value;
-        }
+        set => Body.Drag = value;
     }
 
     private void Awake()
