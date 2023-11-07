@@ -21,6 +21,12 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
         }
     }
 
+    public UnityEngine.Vector3 GlobalScale 
+    { 
+        get => CuboidColl.GlobalScales.ToUnityVector(); 
+        set => CuboidColl.GlobalScales = value.ToNewtonsVector(); 
+    }
+
     public UnityEngine.Vector3 Center
     {
         get => CuboidColl.Center.ToUnityVector();
