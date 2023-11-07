@@ -51,6 +51,7 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
     {
         CuboidColl.Body = GetComponent<KinematicBody>().Body;
         PhysicsWorld.colltest.Add(this);
+        CuboidColl.AddToPhysicsEngine();
     }
 
     public void Dispose()

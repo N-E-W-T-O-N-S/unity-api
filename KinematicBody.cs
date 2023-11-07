@@ -58,6 +58,7 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     {
         PhysicsWorld.tests.Add(this);
         Body.OnUpdatePosition += UpdateTransformPosition;
+        Body.AddToPhysicsEngine();
     }
 
     public void AddForce(UnityEngine.Vector3 force, NEWTONS.Core.ForceMode forceMode)
