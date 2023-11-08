@@ -39,7 +39,7 @@ public class PhysicsWorld : MonoBehaviour
     public Vector3 initialGravity = NEWTONS.Core.Physics.Gravity.ToUnityVector();
     #endregion
 
-    public static bool UseCustomDrag 
+    public static bool UseCustomDrag
     {
         get => NEWTONS.Core.Physics.UseCustomDrag;
         set => NEWTONS.Core.Physics.UseCustomDrag = value;
@@ -71,6 +71,12 @@ public class PhysicsWorld : MonoBehaviour
         NEWTONS.Core.Physics.UseCustomDrag = initialUseCustomDrag;
         NEWTONS.Core.Physics.Gravity = initialGravity.ToNewtonsVector();
     }
+
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //        NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
+    //}
 
     private void FixedUpdate()
     {
