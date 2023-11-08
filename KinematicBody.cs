@@ -17,6 +17,12 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     /// </summary>
     public NEWTONS.Core.KinematicBody Body { get => _body; set { _body = value; } }
 
+    public bool IsStatic 
+    { 
+        get => Body.IsStatic; 
+        set => Body.IsStatic = value; 
+    }
+
     public UnityEngine.Vector3 Position
     {
         get => Body.Position.ToUnityVector();
