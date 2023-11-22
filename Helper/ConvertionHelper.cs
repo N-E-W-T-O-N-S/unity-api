@@ -17,4 +17,26 @@ public static class ConvertionHelper
     {
         return new NEWTONS.Core.Vector3(vector.x, vector.y, vector.z);
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static UnityEngine.Vector3[] ToUnityVectorArray(this NEWTONS.Core.Vector3[] vectors)
+    {
+        UnityEngine.Vector3[] unityVectors = new UnityEngine.Vector3[vectors.Length];
+        for (int i = 0; i < vectors.Length; i++)
+        {
+            unityVectors[i] = vectors[i].ToUnityVector();
+        }
+        return unityVectors;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static NEWTONS.Core.Vector3[] ToNewtonsVectorArray(this UnityEngine.Vector3[] vectors)
+    {
+        NEWTONS.Core.Vector3[] newtonsVectors = new NEWTONS.Core.Vector3[vectors.Length];
+        for (int i = 0; i < vectors.Length; i++)
+        {
+            newtonsVectors[i] = vectors[i].ToNewtonsVector();
+        }
+        return newtonsVectors;
+    }
 }

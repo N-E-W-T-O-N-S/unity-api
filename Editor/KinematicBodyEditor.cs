@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(KinematicBody), true)]
-[CanEditMultipleObjects]
+[CustomEditor(typeof(KinematicBody))]
 public class KinematicBodyEditor : Editor
 {
     KinematicBody kinematicBody;
@@ -16,52 +15,38 @@ public class KinematicBodyEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawProps();
-        DrawInfo();
         if (FindObjectOfType<PhysicsWorld>() == null)
             WarningBox("No PhysicsWorld in the current scene. Add a PhysicsWorld to enable physics calculations");
+        else if (FindObjectsOfType<PhysicsWorld>().Length > 1)
+            ErrorBox("More than one PhysicsWorld in the current scene. Remove all but one PhysicsWorld to enable physics calculations");
     }
 
     private void DrawProps()
     {
-        if (Application.isPlaying)
-        {
-            kinematicBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
-            kinematicBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
-            EditorGUILayout.Space();
-            kinematicBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.UseGravity);
-        }
-        else
-        {
-            kinematicBody.initialMass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.initialMass), NEWTONS.Core.PhysicsInfo.MinMass);
-            kinematicBody.initialDrag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.initialDrag), NEWTONS.Core.PhysicsInfo.MinDrag);
-            EditorGUILayout.Space();
-            kinematicBody.initialUseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.initialUseGravity);
-            kinematicBody.initialVelocity = EditorGUILayout.Vector3Field("Initial Velocity", kinematicBody.initialVelocity);
-        }
-    }
-
-    private void DrawInfo()
-    {
-        if (!Application.isPlaying)
+        if (kinematicBody.Body == null)
             return;
-        kinematicBody.foldOutInfo = EditorGUILayout.Foldout(kinematicBody.foldOutInfo, "Info");
-        if (kinematicBody.foldOutInfo)
-        {
-            EditorGUI.indentLevel++;
-            GUI.enabled = false;
-            kinematicBody.Velocity = EditorGUILayout.Vector3Field("Velocity", kinematicBody.Velocity);
-            GUI.enabled = true;
-            EditorGUI.indentLevel++;
-        }
+
+        kinematicBody.IsStatic = EditorGUILayout.Toggle("Is Static", kinematicBody.IsStatic);
+        kinematicBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
+        kinematicBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
+        kinematicBody.Velocity = EditorGUILayout.Vector3Field("Velocity", kinematicBody.Velocity);
+        EditorGUILayout.Space();
+        kinematicBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.UseGravity);
     }
 
+
+    private void InfoBox(string text)
+    {
+        EditorGUILayout.HelpBox(text, MessageType.Info);
+    }
+    
     private void WarningBox(string text)
     {
         EditorGUILayout.HelpBox(text, MessageType.Warning);
     }
 
-    private void InfoBox(string text)
+    private void ErrorBox(string text)
     {
-        EditorGUILayout.HelpBox(text, MessageType.Info);
+        EditorGUILayout.HelpBox(text, MessageType.Error);
     }
 }
