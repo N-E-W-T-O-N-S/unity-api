@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,21 +7,29 @@ using UnityEngine;
 [ExecuteAlways]
 public class TransformConnector : MonoBehaviour
 {
-    [SerializeField, HideInInspector]
-    private KinematicBody _body;
+    private Vector3 _oldPosition;
+    private Vector3 _oldScale;
 
-    [SerializeField, HideInInspector]
-    private CuboidCollider _collider;
+    public event Action OnPositionChanged;
+    public event Action OnScaleChanged;
 
     private void Start()
     {
-        _body = GetComponent<KinematicBody>();
-        _collider = GetComponent<CuboidCollider>();
+        _oldPosition = transform.position;
+        _oldScale = transform.localScale;
     }
 
     private void Update()
     {
-        _body.Body.PositionNoNotify = transform.position.ToNewtonsVector();
-        _collider.GlobalScale = transform.lossyScale;
+        if (transform.position != _oldPosition)
+        {
+            OnPositionChanged?.Invoke();
+            _oldPosition = transform.position;
+        }
+        if (transform.lossyScale != _oldScale)
+        {
+            OnScaleChanged?.Invoke();
+            _oldScale = transform.lossyScale;
+        }
     }
 }
