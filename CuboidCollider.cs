@@ -4,13 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(KinematicBody))]
+[RequireComponent(typeof(KinematicBody), typeof(TransformConnector))]
 public class CuboidCollider : MonoBehaviour, IColliderReference
 {
     [SerializeField, HideInInspector]
     private NEWTONS.Core.CuboidCollider _cuboidColl;
 
     public NEWTONS.Core.CuboidCollider CuboidColl { get => _cuboidColl; set { _cuboidColl = value; } }
+
+    private TransformConnector _transformConnector;
 
     public UnityEngine.Vector3 Scale
     {
@@ -52,6 +54,17 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
         CuboidColl.Body = GetComponent<KinematicBody>().Body;
         PhysicsWorld.colltest.Add(this);
         CuboidColl.AddToPhysicsEngine();
+    }
+
+    private void OnValidate()
+    {
+        _transformConnector = GetComponent<TransformConnector>();
+        _transformConnector.OnScaleChanged += UpdateNEWTONSGlobalScale;
+    }
+
+    private void UpdateNEWTONSGlobalScale()
+    {
+        GlobalScale = transform.lossyScale;
     }
 
     public void Dispose()
