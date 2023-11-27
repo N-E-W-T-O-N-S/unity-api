@@ -97,13 +97,13 @@ public class PhysicsWorld2D : MonoBehaviour
         bool b = colltest[0].KonvexCollider.Collision(colltest[1].KonvexCollider);
         if (b)
         {
-            colltest[0].GetComponent<MeshRenderer>().material.color = Color.red;
-            colltest[1].GetComponent<MeshRenderer>().material.color = Color.red;
+            colltest[0].GetComponent<SpriteRenderer>().material.color = Color.red;
+            colltest[1].GetComponent<SpriteRenderer>().material.color = Color.red;
         }
         else
         {
-            colltest[0].GetComponent<MeshRenderer>().material.color = Color.white;
-            colltest[1].GetComponent<MeshRenderer>().material.color = Color.white;
+            colltest[0].GetComponent<SpriteRenderer>().material.color = Color.white;
+            colltest[1].GetComponent<SpriteRenderer>().material.color = Color.white;
         }
     }
 }
