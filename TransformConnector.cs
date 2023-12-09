@@ -8,14 +8,17 @@ using UnityEngine;
 public class TransformConnector : MonoBehaviour
 {
     private Vector3 _oldPosition;
+    private Quaternion _oldRotation;
     private Vector3 _oldScale;
 
     public event Action OnPositionChanged;
+    public event Action OnRotationChanged;
     public event Action OnScaleChanged;
 
     private void Start()
     {
         _oldPosition = transform.position;
+        _oldRotation = transform.rotation;
         _oldScale = transform.localScale;
     }
 
@@ -25,6 +28,11 @@ public class TransformConnector : MonoBehaviour
         {
             OnPositionChanged?.Invoke();
             _oldPosition = transform.position;
+        }
+        if (transform.rotation != _oldRotation)
+        {
+            OnRotationChanged?.Invoke();
+            _oldRotation = transform.rotation;
         }
         if (transform.lossyScale != _oldScale)
         {
