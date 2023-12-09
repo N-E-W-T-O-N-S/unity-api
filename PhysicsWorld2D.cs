@@ -81,7 +81,7 @@ public class PhysicsWorld2D : MonoBehaviour
     private void FixedUpdate()
     {
         NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
-        Test2();
+        //Test2();
     }
 
     public static void DestroyBody(KinematicBody2D body)

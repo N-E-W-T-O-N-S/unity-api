@@ -30,6 +30,13 @@ public class KonvexCollider2D : MonoBehaviour, IColliderReference2D
         set => KonvexCollider.GlobalScales = value.ToNewtonsVector();
     }
 
+    public float Rotation
+    {
+        get => KonvexCollider.Rotation;
+        set => KonvexCollider.Rotation = value;
+    }
+
+
     public UnityEngine.Vector2 Center
     {
         get => KonvexCollider.Center.ToUnityVector();
@@ -42,9 +49,15 @@ public class KonvexCollider2D : MonoBehaviour, IColliderReference2D
     public UnityEngine.Vector2[] Points
     {
         get => KonvexCollider.Points.ToUnityVectorArray();
-        set { KonvexCollider.Points = value.ToNewtonsVectorArray(); }
     }
 
+    public UnityEngine.Vector2[] PointsRaw
+    {
+        get => KonvexCollider.PointsRaw.ToUnityVectorArray();
+        set { KonvexCollider.PointsRaw = value.ToNewtonsVectorArray(); }
+    }
+
+    [Obsolete("Use Points instead")]
     public UnityEngine.Vector2[] ScaledPoints
     {
         get => KonvexCollider.ScaledPoints.ToUnityVectorArray();
@@ -61,11 +74,17 @@ public class KonvexCollider2D : MonoBehaviour, IColliderReference2D
     {
         _transformConnector = GetComponent<TransformConnector>();
         _transformConnector.OnScaleChanged += UpdateNEWTONSGlobalScale;
+        _transformConnector.OnRotationChanged += UpdateNEWTOSRotation;
     }
 
     private void UpdateNEWTONSGlobalScale()
     {
         GlobalScale = transform.lossyScale;
+    }
+
+    private void UpdateNEWTOSRotation()
+    {
+        Rotation = transform.rotation.eulerAngles.z;
     }
 
     public void Dispose()

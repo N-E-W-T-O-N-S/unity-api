@@ -41,7 +41,7 @@ public class KonvexCollider2DEditor : Editor
 
     private void OnSceneGUI()
     {
-        Vector2[] points = konvexCollider.ScaledPoints;
+        Vector2[] points = konvexCollider.Points;
         Vector2 offset = (Vector2)konvexCollider.transform.position + konvexCollider.Center;
         //for (int i = 0; i < points.Length; i++)
         //{
