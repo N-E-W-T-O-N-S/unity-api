@@ -80,7 +80,8 @@ public class PhysicsWorld2D : MonoBehaviour
 
     private void FixedUpdate()
     {
-        NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
+        int n =NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
+        Debug.Log(n);
         //Test2();
     }
 
