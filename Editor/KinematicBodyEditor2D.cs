@@ -15,9 +15,9 @@ public class KinematicBodyEditor2D : Editor
     public override void OnInspectorGUI()
     {
         DrawProps();
-        if (FindObjectOfType<PhysicsWorld>() == null)
+        if (FindObjectOfType<PhysicsWorld2D>() == null)
             WarningBox("No PhysicsWorld in the current scene. Add a PhysicsWorld to enable physics calculations");
-        else if (FindObjectsOfType<PhysicsWorld>().Length > 1)
+        else if (FindObjectsOfType<PhysicsWorld2D>().Length > 1)
             ErrorBox("More than one PhysicsWorld in the current scene. Remove all but one PhysicsWorld to enable physics calculations");
     }
 
