@@ -47,6 +47,13 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
         get => CuboidColl.ScaledPoints.ToUnityVectorArray();
     }
 
+    public float Restitution
+    {
+        get => CuboidColl.Restitution;
+        set => CuboidColl.Restitution = value;
+    }
+
+
     private void Awake()
     {
         CuboidColl.Body = GetComponent<KinematicBody>().Body;
