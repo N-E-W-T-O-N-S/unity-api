@@ -73,4 +73,16 @@ public static class ConvertionHelper
         }
         return newtonsVectors;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static UnityEngine.Quaternion ToUnityQuaternion(this NEWTONS.Core.Quaternion quaternion)
+    {
+        return new UnityEngine.Quaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static NEWTONS.Core.Quaternion ToNewtonsQuaternion(this UnityEngine.Quaternion quaternion)
+    {
+        return new NEWTONS.Core.Quaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
 }
