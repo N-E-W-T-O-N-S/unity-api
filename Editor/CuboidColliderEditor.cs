@@ -44,7 +44,7 @@ public class CuboidColliderEditor : Editor
 
     private void OnSceneGUI()
     {
-        Vector3[] points = cuboidCollider.ScaledPoints;
+        Vector3[] points = cuboidCollider.Points;
         Vector3 offset = cuboidCollider.transform.position + cuboidCollider.Center;
         //for (int i = 0; i < points.Length; i++)
         //{

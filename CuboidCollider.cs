@@ -29,6 +29,12 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
         set => CuboidColl.GlobalScales = value.ToNewtonsVector(); 
     }
 
+    public UnityEngine.Quaternion Rotation
+    {
+        get => CuboidColl.Rotation.ToUnityQuaternion();
+        set => CuboidColl.Rotation = value.ToNewtonsQuaternion();
+    }
+
     public UnityEngine.Vector3 Center
     {
         get => CuboidColl.Center.ToUnityVector();
@@ -38,15 +44,15 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
         }
     }
 
+    public UnityEngine.Vector3[] PointsRaw
+    {
+        get => CuboidColl.Points.ToUnityVectorArray();
+        set { CuboidColl.PointsRaw = value.ToNewtonsVectorArray(); }
+    }
+
     public UnityEngine.Vector3[] Points
     {
         get => CuboidColl.Points.ToUnityVectorArray();
-        set { CuboidColl.Points = value.ToNewtonsVectorArray(); }
-    }
-
-    public UnityEngine.Vector3[] ScaledPoints
-    {
-        get => CuboidColl.ScaledPoints.ToUnityVectorArray();
     }
 
     public float Restitution
@@ -67,6 +73,12 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
     {
         _transformConnector = GetComponent<TransformConnector>();
         _transformConnector.OnScaleChanged += UpdateNEWTONSGlobalScale;
+        _transformConnector.OnRotationChanged += UpdateNEWTONSRotation;
+    }
+
+    private void UpdateNEWTONSRotation()
+    {
+        Rotation = transform.rotation;
     }
 
     private void UpdateNEWTONSGlobalScale()
