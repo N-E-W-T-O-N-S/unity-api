@@ -1,40 +1,40 @@
+using NEWTONS.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NEWTONS.Core;
-using System;
 
 [RequireComponent(typeof(TransformConnector))]
-public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
+public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core.KinematicBody _body;
+    private NEWTONS.Core.KinematicBody2D _body;
 
     /// <summary>
     /// Direct access to the Physics Engine's KinematicBody
-    /// <inheritdoc cref="NEWTONS.Core.KinematicBody"/>
+    /// <inheritdoc cref="NEWTONS.Core.KinematicBody2D"/>
     /// <para><u><b>WARNING:</b></u> <b>Do not directly use to change properties</b></para>
     /// </summary>
-    public NEWTONS.Core.KinematicBody Body { get => _body; set { _body = value; } }
+    public NEWTONS.Core.KinematicBody2D Body { get => _body; set { _body = value; } }
 
     private TransformConnector _transformConnector;
 
-    public bool IsStatic 
-    { 
-        get => Body.IsStatic; 
-        set => Body.IsStatic = value; 
+    public bool IsStatic
+    {
+        get => Body.IsStatic;
+        set => Body.IsStatic = value;
     }
 
-    public UnityEngine.Vector3 Position
+    public UnityEngine.Vector2 Position
     {
         get => Body.Position.ToUnityVector();
         set => Body.Position = value.ToNewtonsVector();
     }
 
-    public UnityEngine.Vector3 PositionNoNotify 
-    { 
+    public UnityEngine.Vector2 PositionNoNotify
+    {
         get => _body.PositionNoNotify.ToUnityVector();
-        set => _body.PositionNoNotify = value.ToNewtonsVector(); 
+        set => _body.PositionNoNotify = value.ToNewtonsVector();
     }
 
     public bool UseGravity
@@ -44,7 +44,7 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     }
 
 
-    public UnityEngine.Vector3 Velocity
+    public UnityEngine.Vector2 Velocity
     {
         get => Body.Velocity.ToUnityVector();
         set => Body.Velocity = value.ToNewtonsVector();
@@ -64,7 +64,7 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
 
     private void Awake()
     {
-        PhysicsWorld.tests.Add(this);
+        PhysicsWorld2D.tests.Add(this);
         Body.OnUpdatePosition += UpdateTransformPosition;
         Body.AddToPhysicsEngine();
     }
@@ -75,7 +75,12 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
         _transformConnector.OnPositionChanged += UpdateNEWTONSPosition;
     }
 
-    public void AddForce(UnityEngine.Vector3 force, NEWTONS.Core.ForceMode forceMode)
+    private void UpdateNEWTONSPosition()
+    {
+        PositionNoNotify = transform.position;
+    }
+
+    public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
     {
         Body?.AddForce(force.ToNewtonsVector(), forceMode, Time.fixedDeltaTime);
     }
@@ -83,14 +88,6 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     private void UpdateTransformPosition()
     {
         transform.position = Position;
-    }
-
-    /// <summary>
-    /// Updates the position of the KinematicBody in the Physics Engine without notifying Unity
-    /// </summary>
-    private void UpdateNEWTONSPosition()
-    {
-        PositionNoNotify = transform.position;
     }
 
     //Needs own Quaternion implementation
@@ -101,19 +98,19 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
 
     private void OnDestroy()
     {
-        PhysicsWorld.DestroyBody(this);
-    }
-
-    public IKinematicBodyReference SetKinematicBody(NEWTONS.Core.KinematicBody kinematicBody)
-    {
-        Body = kinematicBody;
-        return this;
+        //PhysicsWorld.DestroyBody(this);
     }
 
     public void Dispose()
     {
         Body = null;
         Destroy(this);
+    }
+
+    public IKinematicBodyReference2D SetKinematicBody(NEWTONS.Core.KinematicBody2D kinematicBody)
+    {
+        Body = kinematicBody;
+        return this;
     }
 
 
