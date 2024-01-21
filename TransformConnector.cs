@@ -27,6 +27,7 @@ public class TransformConnector : MonoBehaviour
         if (transform.position != _oldPosition)
         {
             OnPositionChanged?.Invoke();
+            Debug.Log("HELLO");
             _oldPosition = transform.position;
         }
         if (transform.rotation != _oldRotation)
