@@ -77,7 +77,7 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
 
     private void UpdateNEWTONSPosition()
     {
-        PositionNoNotify = (UnityEngine.Vector2)transform.position;
+        PositionNoNotify = transform.position;
     }
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
