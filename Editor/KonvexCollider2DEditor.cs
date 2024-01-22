@@ -23,6 +23,7 @@ public class KonvexCollider2DEditor : Editor
         if (konvexCollider.KonvexCollider == null)
             return;
 
+        Undo.RecordObject(konvexCollider, "konvex props");
         Vector2 oldCenter = konvexCollider.Center;
         konvexCollider.Center = EditorGUILayout.Vector2Field("Center", konvexCollider.Center);
         Vector2 oldScale = konvexCollider.Scale;

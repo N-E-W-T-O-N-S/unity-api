@@ -26,6 +26,7 @@ public class KinematicBodyEditor : Editor
         if (kinematicBody.Body == null)
             return;
 
+        Undo.RecordObject(kinematicBody, "kinematic props");
         kinematicBody.IsStatic = EditorGUILayout.Toggle("Is Static", kinematicBody.IsStatic);
         kinematicBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
         kinematicBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
