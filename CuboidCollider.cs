@@ -44,10 +44,16 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
         }
     }
 
+    public int[] Indices
+    {
+        get => CuboidColl.Indices;
+        set => CuboidColl.Indices = value;
+    }
+
     public UnityEngine.Vector3[] PointsRaw
     {
         get => CuboidColl.Points.ToUnityVectorArray();
-        set { CuboidColl.PointsRaw = value.ToNewtonsVectorArray(); }
+        set => CuboidColl.PointsRaw = value.ToNewtonsVectorArray();
     }
 
     public UnityEngine.Vector3[] Points

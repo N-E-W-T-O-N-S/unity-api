@@ -23,6 +23,7 @@ public class CuboidColliderEditor : Editor
         if (cuboidCollider.CuboidColl == null)
             return;
 
+        Undo.RecordObject(cuboidCollider, "cuboid props");
         Vector3 oldCenter = cuboidCollider.Center;
         cuboidCollider.Center = EditorGUILayout.Vector3Field("Center", cuboidCollider.Center);
         Vector3 oldScale = cuboidCollider.Scale;
@@ -45,27 +46,14 @@ public class CuboidColliderEditor : Editor
     private void OnSceneGUI()
     {
         Vector3[] points = cuboidCollider.Points;
+        int[] indices = cuboidCollider.Indices;
         Vector3 offset = cuboidCollider.transform.position + cuboidCollider.Center;
-        //for (int i = 0; i < points.Length; i++)
-        //{
-        //    Debug.Log(points[i]);
-        //}
+
         Handles.color = Color.green;
-        Handles.DrawLine(points[0] + offset, points[1] + offset);
-        Handles.DrawLine(points[1] + offset, points[3] + offset);
-        Handles.DrawLine(points[2] + offset, points[3] + offset);
-        Handles.DrawLine(points[0] + offset, points[2] + offset);
-        
-        Handles.DrawLine(points[4] + offset, points[5] + offset);
-        Handles.DrawLine(points[5] + offset, points[7] + offset);
-        Handles.DrawLine(points[6] + offset, points[7] + offset);
-        Handles.DrawLine(points[4] + offset, points[6] + offset);
 
-        Handles.DrawLine(points[0] + offset, points[4] + offset);
-        Handles.DrawLine(points[1] + offset, points[5] + offset);
-        Handles.DrawLine(points[2] + offset, points[6] + offset);
-        Handles.DrawLine(points[3] + offset, points[7] + offset);
-
-
+        for (int i = 0; i < indices.Length; i += 2)
+        {
+            Handles.DrawLine(points[indices[i]] + offset, points[indices[i + 1]] + offset);
+        }
     }
 }
