@@ -1,3 +1,4 @@
+using NEWTONS.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +37,7 @@ public class PhysicsWorld : MonoBehaviour
     /// <remarks>
     /// Do not use this field directly. Insteade use <see cref="Gravity"/> to alter the Gravity.
     /// </remarks>
-    public Vector3 initialGravity = NEWTONS.Core.Physics.Gravity.ToUnityVector();
+    public UnityEngine.Vector3 initialGravity = NEWTONS.Core.Physics.Gravity.ToUnityVector();
     #endregion
 
     public static bool UseCustomDrag
@@ -93,8 +94,8 @@ public class PhysicsWorld : MonoBehaviour
 
     private void Test2()
     {
-        bool b = colltest[0].CuboidColl.IsColliding(colltest[1].CuboidColl);
-        if (b)
+        CollisionInfo coll = colltest[0].CuboidColl.IsColliding(colltest[1].CuboidColl);
+        if (coll.didCollide)
         {
             colltest[0].GetComponent<MeshRenderer>().material.color = Color.red;
             colltest[1].GetComponent<MeshRenderer>().material.color = Color.red;
