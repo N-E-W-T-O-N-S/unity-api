@@ -18,10 +18,7 @@ public class KonvexCollider2D : MonoBehaviour, IColliderReference2D
     public UnityEngine.Vector2 Scale
     {
         get => KonvexCollider.Scale.ToUnityVector();
-        set
-        {
-            KonvexCollider.Scale = value.ToNewtonsVector();
-        }
+        set => KonvexCollider.Scale = value.ToNewtonsVector();
     }
 
     public UnityEngine.Vector2 GlobalScale
@@ -32,18 +29,14 @@ public class KonvexCollider2D : MonoBehaviour, IColliderReference2D
 
     public float Rotation
     {
-        get => KonvexCollider.Rotation;
-        set => KonvexCollider.Rotation = value;
+        get => KonvexCollider.Body.Rotation;
     }
 
 
     public UnityEngine.Vector2 Center
     {
         get => KonvexCollider.Center.ToUnityVector();
-        set
-        {
-            KonvexCollider.Center = value.ToNewtonsVector();
-        }
+        set => KonvexCollider.Center = value.ToNewtonsVector();
     }
 
     public UnityEngine.Vector2[] Points
@@ -72,19 +65,18 @@ public class KonvexCollider2D : MonoBehaviour, IColliderReference2D
 
     private void OnValidate()
     {
-        _transformConnector = GetComponent<TransformConnector>();
+        try
+        {
+            KonvexCollider.Body = GetComponent<KinematicBody2D>().Body;
+            _transformConnector = GetComponent<TransformConnector>();
+        }
+        catch { }
         _transformConnector.OnScaleChanged += UpdateNEWTONSGlobalScale;
-        _transformConnector.OnRotationChanged += UpdateNEWTOSRotation;
     }
 
     private void UpdateNEWTONSGlobalScale()
     {
         GlobalScale = transform.lossyScale;
-    }
-
-    private void UpdateNEWTOSRotation()
-    {
-        Rotation = transform.rotation.eulerAngles.z;
     }
 
     public void Dispose()

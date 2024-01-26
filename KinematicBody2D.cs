@@ -33,8 +33,18 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
 
     public UnityEngine.Vector2 PositionNoNotify
     {
-        get => _body.PositionNoNotify.ToUnityVector();
         set => _body.PositionNoNotify = value.ToNewtonsVector();
+    }
+
+    public float Rotation
+    {
+        get => _body.Rotation;
+        set => _body.Rotation = value;
+    }
+
+    public float RotationNoNotify
+    {
+        set => _body.RotationNoNotify = value;
     }
 
     public bool UseGravity
@@ -66,6 +76,7 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
     {
         PhysicsWorld2D.tests.Add(this);
         Body.OnUpdatePosition += UpdateTransformPosition;
+        Body.OnUpdateRotation += UpdateTransformRotation;
         Body.AddToPhysicsEngine();
     }
 
@@ -73,11 +84,17 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
     {
         _transformConnector = GetComponent<TransformConnector>();
         _transformConnector.OnPositionChanged += UpdateNEWTONSPosition;
+        _transformConnector.OnRotationChanged += UpdateNEWTOSRotation;
     }
 
     private void UpdateNEWTONSPosition()
     {
         PositionNoNotify = transform.position;
+    }
+
+    private void UpdateNEWTOSRotation()
+    {
+        RotationNoNotify = transform.rotation.z;
     }
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
@@ -90,10 +107,10 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
         transform.position = Position;
     }
 
-    //Needs own Quaternion implementation
     private void UpdateTransformRotation()
     {
-        //transform.rotation = GetPhysicsBody().Rotation;
+        UnityEngine.Vector3 rot = transform.rotation.eulerAngles;
+        transform.rotation = UnityEngine.Quaternion.Euler(rot.x, Rotation, rot.z);
     }
 
     private void OnDestroy()
