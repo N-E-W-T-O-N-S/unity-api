@@ -25,6 +25,7 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
         set => Body.IsStatic = value; 
     }
 
+
     public UnityEngine.Vector3 Position
     {
         get => Body.Position.ToUnityVector();
@@ -36,6 +37,19 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
         get => _body.PositionNoNotify.ToUnityVector();
         set => _body.PositionNoNotify = value.ToNewtonsVector(); 
     }
+
+
+    public UnityEngine.Quaternion Rotation
+    {
+        get => _body.Rotation.ToUnityQuaternion();
+        set => _body.Rotation = value.ToNewtonsQuaternion();
+    }
+
+    public UnityEngine.Quaternion RotationNoNotify
+    {
+        set => _body.RotationNoNotify = value.ToNewtonsQuaternion();
+    }
+
 
     public bool UseGravity
     {
@@ -66,6 +80,7 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     {
         PhysicsWorld.tests.Add(this);
         Body.OnUpdatePosition += UpdateTransformPosition;
+        Body.OnUpdateRotation += UpdateTransformRotation;
         Body.AddToPhysicsEngine();
     }
 
@@ -73,6 +88,7 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     {
         _transformConnector = GetComponent<TransformConnector>();
         _transformConnector.OnPositionChanged += UpdateNEWTONSPosition;
+        _transformConnector.OnRotationChanged += UpdateNEWTONSRotation;
     }
 
     public void AddForce(UnityEngine.Vector3 force, NEWTONS.Core.ForceMode forceMode)
@@ -85,6 +101,11 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
         transform.position = Position;
     }
 
+    private void UpdateTransformRotation()
+    {
+        transform.rotation = Rotation;
+    }
+
     /// <summary>
     /// Updates the position of the KinematicBody in the Physics Engine without notifying Unity
     /// </summary>
@@ -94,9 +115,9 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     }
 
     //Needs own Quaternion implementation
-    private void UpdateTransformRotation()
+    private void UpdateNEWTONSRotation()
     {
-        //transform.rotation = GetPhysicsBody().Rotation;
+        RotationNoNotify = transform.rotation;
     }
 
     private void OnDestroy()

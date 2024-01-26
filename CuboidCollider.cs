@@ -23,16 +23,15 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
         }
     }
 
-    public UnityEngine.Vector3 GlobalScale 
-    { 
-        get => CuboidColl.GlobalScales.ToUnityVector(); 
-        set => CuboidColl.GlobalScales = value.ToNewtonsVector(); 
+    public UnityEngine.Vector3 GlobalScale
+    {
+        get => CuboidColl.GlobalScales.ToUnityVector();
+        set => CuboidColl.GlobalScales = value.ToNewtonsVector();
     }
 
     public UnityEngine.Quaternion Rotation
     {
-        get => CuboidColl.Rotation.ToUnityQuaternion();
-        set => CuboidColl.Rotation = value.ToNewtonsQuaternion();
+        get => CuboidColl.Body.Rotation.ToUnityQuaternion();
     }
 
     public UnityEngine.Vector3 Center
@@ -77,14 +76,13 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
 
     private void OnValidate()
     {
-        _transformConnector = GetComponent<TransformConnector>();
+        try
+        {
+            CuboidColl.Body = GetComponent<KinematicBody>().Body;
+            _transformConnector = GetComponent<TransformConnector>();
+        }
+        catch { }
         _transformConnector.OnScaleChanged += UpdateNEWTONSGlobalScale;
-        _transformConnector.OnRotationChanged += UpdateNEWTONSRotation;
-    }
-
-    private void UpdateNEWTONSRotation()
-    {
-        Rotation = transform.rotation;
     }
 
     private void UpdateNEWTONSGlobalScale()
