@@ -75,26 +75,16 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
     private void Awake()
     {
         PhysicsWorld2D.tests.Add(this);
-        Body.OnUpdatePosition += UpdateTransformPosition;
-        Body.OnUpdateRotation += UpdateTransformRotation;
+        Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
+        Body.OnUpdateRotation += OnUpdateNEWTOSRotation;
         Body.AddToPhysicsEngine();
     }
 
     private void OnValidate()
     {
         _transformConnector = GetComponent<TransformConnector>();
-        _transformConnector.OnPositionChanged += UpdateNEWTONSPosition;
-        _transformConnector.OnRotationChanged += UpdateNEWTOSRotation;
-    }
-
-    private void UpdateNEWTONSPosition()
-    {
-        PositionNoNotify = transform.position;
-    }
-
-    private void UpdateNEWTOSRotation()
-    {
-        RotationNoNotify = transform.rotation.z;
+        _transformConnector.OnPositionChanged += OnUpdateTransformPosition; 
+        _transformConnector.OnRotationChanged += OnUpdateTransformRotation; 
     }
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
@@ -102,15 +92,25 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
         Body?.AddForce(force.ToNewtonsVector(), forceMode, Time.fixedDeltaTime);
     }
 
-    private void UpdateTransformPosition()
+    private void OnUpdateNEWTONSPosition()
     {
         transform.position = Position;
     }
 
-    private void UpdateTransformRotation()
+    private void OnUpdateNEWTOSRotation()
     {
         UnityEngine.Vector3 rot = transform.rotation.eulerAngles;
-        transform.rotation = UnityEngine.Quaternion.Euler(rot.x, Rotation, rot.z);
+        transform.rotation = UnityEngine.Quaternion.Euler(rot.x, rot.y, Rotation);
+    }
+
+    private void OnUpdateTransformPosition()
+    {
+        PositionNoNotify = transform.position;
+    }
+
+    private void OnUpdateTransformRotation()
+    {
+        RotationNoNotify = transform.rotation.eulerAngles.z;
     }
 
     private void OnDestroy()

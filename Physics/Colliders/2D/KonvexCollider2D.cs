@@ -4,36 +4,35 @@ using UnityEngine;
 using NEWTONS.Core;
 using System;
 
-[RequireComponent(typeof(KinematicBody2D), typeof(TransformConnector))]
-public class KonvexCollider2D : MonoBehaviour, IColliderReference2D
+public class KonvexCollider2D : NTS_Collider2D
 {
 
     [SerializeField, HideInInspector]
     private NEWTONS.Core.KonvexCollider2D _konvexCollider;
 
-    public NEWTONS.Core.KonvexCollider2D KonvexCollider { get => _konvexCollider; set { _konvexCollider = value; } }
+    public NEWTONS.Core.KonvexCollider2D KonvexCollider { get => _konvexCollider; set => _konvexCollider = value; }
 
-    private TransformConnector _transformConnector;
+    public DebugManager debugManager;
 
-    public UnityEngine.Vector2 Scale
+    public override UnityEngine.Vector2 Scale
     {
         get => KonvexCollider.Scale.ToUnityVector();
         set => KonvexCollider.Scale = value.ToNewtonsVector();
     }
 
-    public UnityEngine.Vector2 GlobalScale
+    public override UnityEngine.Vector2 GlobalScale
     {
         get => KonvexCollider.GlobalScales.ToUnityVector();
         set => KonvexCollider.GlobalScales = value.ToNewtonsVector();
     }
 
-    public float Rotation
+    public override float Rotation
     {
         get => KonvexCollider.Body.Rotation;
     }
 
 
-    public UnityEngine.Vector2 Center
+    public override UnityEngine.Vector2 Center
     {
         get => KonvexCollider.Center.ToUnityVector();
         set => KonvexCollider.Center = value.ToNewtonsVector();
@@ -65,31 +64,41 @@ public class KonvexCollider2D : MonoBehaviour, IColliderReference2D
 
     private void OnValidate()
     {
-        try
-        {
-            KonvexCollider.Body = GetComponent<KinematicBody2D>().Body;
-            _transformConnector = GetComponent<TransformConnector>();
-        }
-        catch { }
+        _transformConnector = GetComponent<TransformConnector>();
         _transformConnector.OnScaleChanged += UpdateNEWTONSGlobalScale;
     }
 
-    private void UpdateNEWTONSGlobalScale()
-    {
-        GlobalScale = transform.lossyScale;
-    }
-
-    public void Dispose()
+    public override void Dispose()
     {
         KonvexCollider = null;
         Destroy(this);
     }
 
-    public IColliderReference2D SetCollider(NEWTONS.Core.Collider2D collider)
+    public override IColliderReference2D SetCollider(NEWTONS.Core.Collider2D collider)
     {
         KonvexCollider = collider as NEWTONS.Core.KonvexCollider2D;
         if (KonvexCollider == null)
             throw new ArgumentException("Collider must be of type CuboidCollider");
         return this;
     }
+
+#if UNITY_EDITOR
+    public void Validate() 
+    {
+        try
+        {
+            NEWTONS.Core.KinematicBody2D b = GetComponent<KinematicBody2D>().Body;
+            if (KonvexCollider.Body == null || KonvexCollider.Body != b)
+                KonvexCollider.Body = b;
+        }
+        catch
+        {
+            debugManager.LogError("KonvexCollider2D: " + name + " is missing a KinematicBody2D component");
+        }
+    }
+
+    public bool foldOutDebugManager = false;
+
+#endif
+
 }

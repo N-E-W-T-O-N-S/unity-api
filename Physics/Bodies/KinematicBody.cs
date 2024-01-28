@@ -24,8 +24,7 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
         get => Body.IsStatic; 
         set => Body.IsStatic = value; 
     }
-
-
+    
     public UnityEngine.Vector3 Position
     {
         get => Body.Position.ToUnityVector();
@@ -34,29 +33,26 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
 
     public UnityEngine.Vector3 PositionNoNotify 
     { 
-        get => _body.PositionNoNotify.ToUnityVector();
-        set => _body.PositionNoNotify = value.ToNewtonsVector(); 
+        get => Body.PositionNoNotify.ToUnityVector();
+        set => Body.PositionNoNotify = value.ToNewtonsVector(); 
     }
-
-
+    
     public UnityEngine.Quaternion Rotation
     {
-        get => _body.Rotation.ToUnityQuaternion();
-        set => _body.Rotation = value.ToNewtonsQuaternion();
+        get => Body.Rotation.ToUnityQuaternion();
+        set => Body.Rotation = value.ToNewtonsQuaternion();
     }
 
     public UnityEngine.Quaternion RotationNoNotify
     {
-        set => _body.RotationNoNotify = value.ToNewtonsQuaternion();
+        set => Body.RotationNoNotify = value.ToNewtonsQuaternion();
     }
-
 
     public bool UseGravity
     {
         get => Body.UseGravity;
         set => Body.UseGravity = value;
     }
-
 
     public UnityEngine.Vector3 Velocity
     {
@@ -79,16 +75,16 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
     private void Awake()
     {
         PhysicsWorld.tests.Add(this);
-        Body.OnUpdatePosition += UpdateTransformPosition;
-        Body.OnUpdateRotation += UpdateTransformRotation;
+        Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
+        Body.OnUpdateRotation += OnUpdateNEWTONSRotation;
         Body.AddToPhysicsEngine();
     }
 
     private void OnValidate()
     {
         _transformConnector = GetComponent<TransformConnector>();
-        _transformConnector.OnPositionChanged += UpdateNEWTONSPosition;
-        _transformConnector.OnRotationChanged += UpdateNEWTONSRotation;
+        _transformConnector.OnPositionChanged += OnUpdateTransformPosition;
+        _transformConnector.OnRotationChanged += OnUpdateTransformRotation;
     }
 
     public void AddForce(UnityEngine.Vector3 force, NEWTONS.Core.ForceMode forceMode)
@@ -96,28 +92,27 @@ public class KinematicBody : MonoBehaviour, NEWTONS.Core.IKinematicBodyReference
         Body?.AddForce(force.ToNewtonsVector(), forceMode, Time.fixedDeltaTime);
     }
 
-    private void UpdateTransformPosition()
+    private void OnUpdateTransformPosition()
     {
-        transform.position = Position;
+        PositionNoNotify = transform.position;
     }
 
-    private void UpdateTransformRotation()
+    private void OnUpdateTransformRotation()
     {
-        transform.rotation = Rotation;
+        RotationNoNotify = transform.rotation;
     }
 
     /// <summary>
     /// Updates the position of the KinematicBody in the Physics Engine without notifying Unity
     /// </summary>
-    private void UpdateNEWTONSPosition()
+    private void OnUpdateNEWTONSPosition()
     {
-        PositionNoNotify = transform.position;
+        transform.position = Position;
     }
 
-    //Needs own Quaternion implementation
-    private void UpdateNEWTONSRotation()
+    private void OnUpdateNEWTONSRotation()
     {
-        RotationNoNotify = transform.rotation;
+        transform.rotation = Rotation;
     }
 
     private void OnDestroy()
