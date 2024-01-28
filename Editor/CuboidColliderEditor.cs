@@ -11,11 +11,17 @@ public class CuboidColliderEditor : Editor
     private void OnEnable()
     {
         cuboidCollider = (CuboidCollider)target;
+        cuboidCollider.Validate();
     }
 
     public override void OnInspectorGUI()
     {
         DrawProps();
+
+        if (GUI.changed)
+        {
+            cuboidCollider.Validate();
+        }
     }
 
     private void DrawProps()
@@ -37,10 +43,14 @@ public class CuboidColliderEditor : Editor
         }
         EditorGUILayout.Space();
 
-        //SerializedProperty listProperty = serializedObject.FindProperty("Points");
-        //EditorGUILayout.PropertyField(listProperty, true);
+        cuboidCollider.foldOutDebugManager = EditorGUILayout.Foldout(cuboidCollider.foldOutDebugManager, "Debug Manager");
+        if (cuboidCollider.foldOutDebugManager)
+        {
+            cuboidCollider.debugManager.showMessages = EditorGUILayout.Toggle("Show Messages", cuboidCollider.debugManager.showMessages);
+            cuboidCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", cuboidCollider.debugManager.showWarnigs);
+            cuboidCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", cuboidCollider.debugManager.showErrors);
+        }
 
-        //serializedObject.ApplyModifiedProperties();
     }
 
     private void OnSceneGUI()

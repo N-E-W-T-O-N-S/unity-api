@@ -4,43 +4,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(KinematicBody), typeof(TransformConnector))]
-public class CuboidCollider : MonoBehaviour, IColliderReference
+public class CuboidCollider : NTS_Collider
 {
+    // INFO: Debug
+    // <------------------------->
+    [HideInInspector]
+    public DebugManager debugManager;
+    // <------------------------->
+
+
+
     [SerializeField, HideInInspector]
     private NEWTONS.Core.CuboidCollider _cuboidColl;
 
     public NEWTONS.Core.CuboidCollider CuboidColl { get => _cuboidColl; set { _cuboidColl = value; } }
 
-    private TransformConnector _transformConnector;
-
-    public UnityEngine.Vector3 Scale
+    public override UnityEngine.Vector3 Scale
     {
         get => CuboidColl.Scale.ToUnityVector();
-        set
-        {
-            CuboidColl.Scale = value.ToNewtonsVector();
-        }
+        set => CuboidColl.Scale = value.ToNewtonsVector();
     }
 
-    public UnityEngine.Vector3 GlobalScale
+    public override UnityEngine.Vector3 GlobalScale
     {
         get => CuboidColl.GlobalScales.ToUnityVector();
         set => CuboidColl.GlobalScales = value.ToNewtonsVector();
     }
 
-    public UnityEngine.Quaternion Rotation
+    public override UnityEngine.Quaternion Rotation
     {
         get => CuboidColl.Body.Rotation.ToUnityQuaternion();
     }
 
-    public UnityEngine.Vector3 Center
+    public override UnityEngine.Vector3 Center
     {
         get => CuboidColl.Center.ToUnityVector();
-        set
-        {
-            CuboidColl.Center = value.ToNewtonsVector();
-        }
+        set => CuboidColl.Center = value.ToNewtonsVector();
     }
 
     public int[] Indices
@@ -66,7 +65,6 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
         set => CuboidColl.Restitution = value;
     }
 
-
     private void Awake()
     {
         CuboidColl.Body = GetComponent<KinematicBody>().Body;
@@ -76,31 +74,41 @@ public class CuboidCollider : MonoBehaviour, IColliderReference
 
     private void OnValidate()
     {
-        try
-        {
-            CuboidColl.Body = GetComponent<KinematicBody>().Body;
-            _transformConnector = GetComponent<TransformConnector>();
-        }
-        catch { }
+        _transformConnector = GetComponent<TransformConnector>();
         _transformConnector.OnScaleChanged += UpdateNEWTONSGlobalScale;
     }
 
-    private void UpdateNEWTONSGlobalScale()
-    {
-        GlobalScale = transform.lossyScale;
-    }
-
-    public void Dispose()
+    public override void Dispose()
     {
         CuboidColl = null;
         Destroy(this);
     }
 
-    public IColliderReference SetCollider(NEWTONS.Core.Collider collider)
+    public override IColliderReference SetCollider(NEWTONS.Core.Collider collider)
     {
         CuboidColl = collider as NEWTONS.Core.CuboidCollider;
         if (CuboidColl == null)
             throw new ArgumentException("Collider must be of type CuboidCollider");
         return this;
     }
+
+#if UNITY_EDITOR
+    public void Validate()
+    {
+        try
+        {
+            NEWTONS.Core.KinematicBody b = GetComponent<KinematicBody>().Body;
+            if (CuboidColl.Body == null || CuboidColl.Body != b)
+                CuboidColl.Body = b;
+        }
+        catch
+        {
+            debugManager.LogError("CuboidCollider: " + name + " is missing a KinematicBody component");
+        }
+    }
+
+    public bool foldOutDebugManager = false;
+
+#endif
+
 }

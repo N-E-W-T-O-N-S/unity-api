@@ -11,6 +11,7 @@ public class KonvexCollider2DEditor : Editor
     private void OnEnable()
     {
         konvexCollider = (KonvexCollider2D)target;
+        konvexCollider.Validate();
     }
 
     public override void OnInspectorGUI()
@@ -34,20 +35,26 @@ public class KonvexCollider2DEditor : Editor
         }
         EditorGUILayout.Space();
 
-        //SerializedProperty listProperty = serializedObject.FindProperty("Points");
-        //EditorGUILayout.PropertyField(listProperty, true);
+        konvexCollider.foldOutDebugManager = EditorGUILayout.Foldout(konvexCollider.foldOutDebugManager, "Debug Manager");
+        if (konvexCollider.foldOutDebugManager)
+        {
+            konvexCollider.debugManager.showMessages = EditorGUILayout.Toggle("Show Messages", konvexCollider.debugManager.showMessages);
+            konvexCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", konvexCollider.debugManager.showWarnigs);
+            konvexCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", konvexCollider.debugManager.showErrors);
+        }
 
-        //serializedObject.ApplyModifiedProperties();
+        if (GUI.changed)
+        {
+            konvexCollider.Validate();
+        }
+
     }
 
     private void OnSceneGUI()
     {
         Vector2[] points = konvexCollider.Points;
         Vector2 offset = (Vector2)konvexCollider.transform.position + konvexCollider.Center;
-        //for (int i = 0; i < points.Length; i++)
-        //{
-        //    Debug.Log(points[i]);
-        //}
+
         Handles.color = Color.green;
         for (int i = 0; i < points.Length; i++)
         {
