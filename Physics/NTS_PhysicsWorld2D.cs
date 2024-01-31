@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhysicsWorld2D : MonoBehaviour
+public class NTS_PhysicsWorld2D : MonoBehaviour
 {
-    public static List<KinematicBody2D> tests = new List<KinematicBody2D>();
-    public static List<KonvexCollider2D> colltest = new List<KonvexCollider2D>();
+    public static List<NTS_Rigidbody2D> tests = new List<NTS_Rigidbody2D>();
+    public static List<NTS_KonvexCollider2D> colltest = new List<NTS_KonvexCollider2D>();
 
     //TODO: Look into removing these:
     #region Internal NEWTONS fields
@@ -85,10 +85,10 @@ public class PhysicsWorld2D : MonoBehaviour
         //Test2();
     }
 
-    public static void DestroyBody(KinematicBody2D body)
+    public static void DestroyBody(NTS_Rigidbody2D body)
     {
         //tests.Remove(body);
-        NEWTONS.Core.KinematicBody2D b = body.Body;
+        NEWTONS.Core.Rigidbody2D b = body.Body;
         if (b != null)
             NEWTONS.Core.Physics2D.RemoveBody(b);
     }

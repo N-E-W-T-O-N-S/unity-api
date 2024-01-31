@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(CuboidCollider))]
-public class CuboidColliderEditor : Editor
+[CustomEditor(typeof(NTS_CuboidCollider)), CanEditMultipleObjects]
+public class NTS_CuboidColliderEditor : Editor
 {
-    CuboidCollider cuboidCollider;
+    NTS_CuboidCollider cuboidCollider;
     private void OnEnable()
     {
-        cuboidCollider = (CuboidCollider)target;
+        cuboidCollider = (NTS_CuboidCollider)target;
         cuboidCollider.Validate();
     }
 
@@ -32,12 +32,12 @@ public class CuboidColliderEditor : Editor
         Undo.RecordObject(cuboidCollider, "cuboid props");
         Vector3 oldCenter = cuboidCollider.Center;
         cuboidCollider.Center = EditorGUILayout.Vector3Field("Center", cuboidCollider.Center);
-        Vector3 oldScale = cuboidCollider.Scale;
-        cuboidCollider.Scale = EditorGUILayout.Vector3Field("Scale", new Vector3(Mathf.Max(cuboidCollider.Scale.x, 0), Mathf.Max(cuboidCollider.Scale.y, 0), Mathf.Max(cuboidCollider.Scale.z, 0)));
+        Vector3 oldScale = cuboidCollider.Size;
+        cuboidCollider.Size = EditorGUILayout.Vector3Field("Scale", new Vector3(Mathf.Max(cuboidCollider.Size.x, 0), Mathf.Max(cuboidCollider.Size.y, 0), Mathf.Max(cuboidCollider.Size.z, 0)));
         
         cuboidCollider.Restitution = EditorGUILayout.Slider("Restitution", cuboidCollider.Restitution, 0, 1);
         
-        if (oldScale != cuboidCollider.Scale || oldCenter != cuboidCollider.Center)
+        if (oldScale != cuboidCollider.Size || oldCenter != cuboidCollider.Center)
         {
             SceneView.RepaintAll();
         }
@@ -50,14 +50,13 @@ public class CuboidColliderEditor : Editor
             cuboidCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", cuboidCollider.debugManager.showWarnigs);
             cuboidCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", cuboidCollider.debugManager.showErrors);
         }
-
     }
 
     private void OnSceneGUI()
     {
         Vector3[] points = cuboidCollider.Points;
         int[] indices = cuboidCollider.Indices;
-        Vector3 offset = cuboidCollider.transform.position + cuboidCollider.Center;
+        Vector3 offset = cuboidCollider.GlobalCenter;
 
         Handles.color = Color.green;
 

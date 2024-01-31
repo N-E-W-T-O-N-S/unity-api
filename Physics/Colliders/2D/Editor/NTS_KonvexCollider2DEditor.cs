@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(KonvexCollider2D))]
-public class KonvexCollider2DEditor : Editor
+[CustomEditor(typeof(NTS_KonvexCollider2D)), CanEditMultipleObjects]
+public class NTS_KonvexCollider2DEditor : Editor
 {
-    KonvexCollider2D konvexCollider;
+    NTS_KonvexCollider2D konvexCollider;
     private void OnEnable()
     {
-        konvexCollider = (KonvexCollider2D)target;
+        konvexCollider = (NTS_KonvexCollider2D)target;
         konvexCollider.Validate();
     }
 
@@ -27,9 +27,9 @@ public class KonvexCollider2DEditor : Editor
         Undo.RecordObject(konvexCollider, "konvex props");
         Vector2 oldCenter = konvexCollider.Center;
         konvexCollider.Center = EditorGUILayout.Vector2Field("Center", konvexCollider.Center);
-        Vector2 oldScale = konvexCollider.Scale;
-        konvexCollider.Scale = EditorGUILayout.Vector2Field("Scale", new Vector3(Mathf.Max(konvexCollider.Scale.x, 0), Mathf.Max(konvexCollider.Scale.y, 0)));
-        if (oldScale != konvexCollider.Scale || oldCenter != konvexCollider.Center)
+        Vector2 oldScale = konvexCollider.Size;
+        konvexCollider.Size = EditorGUILayout.Vector2Field("Scale", new Vector3(Mathf.Max(konvexCollider.Size.x, 0), Mathf.Max(konvexCollider.Size.y, 0)));
+        if (oldScale != konvexCollider.Size || oldCenter != konvexCollider.Center)
         {
             SceneView.RepaintAll();
         }

@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhysicsWorld : MonoBehaviour
+public class NTS_PhysicsWorld : MonoBehaviour
 {
-    public static List<KinematicBody> tests = new List<KinematicBody>();
-    public static List<CuboidCollider> colltest = new List<CuboidCollider>();
+    public static List<NTS_Rigidbody> tests = new List<NTS_Rigidbody>();
+    public static List<NTS_CuboidCollider> colltest = new List<NTS_CuboidCollider>();
 
     //TODO: Look into removing these:
     #region Internal NEWTONS fields
@@ -67,6 +67,7 @@ public class PhysicsWorld : MonoBehaviour
 
     private void Awake()
     {
+        //Time.fixedDeltaTime = .00625f;
         NEWTONS.Core.Physics.Temperature = initialTemperature;
         NEWTONS.Core.Physics.Density = initialDensity;
         NEWTONS.Core.Physics.UseCustomDrag = initialUseCustomDrag;
@@ -84,10 +85,10 @@ public class PhysicsWorld : MonoBehaviour
         NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
     }
 
-    public static void DestroyBody(KinematicBody body)
+    public static void DestroyBody(NTS_Rigidbody body)
     {
         //tests.Remove(body);
-        NEWTONS.Core.KinematicBody b = body.Body;
+        NEWTONS.Core.Rigidbody b = body.Body;
         if (b != null)
             NEWTONS.Core.Physics.RemoveBody(b);
     }

@@ -4,22 +4,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(KinematicBody), typeof(TransformConnector))]
+[RequireComponent(typeof(NTS_Rigidbody), typeof(TransformConnector))]
 public abstract class NTS_Collider : MonoBehaviour, IColliderReference
 {
     protected TransformConnector _transformConnector;
 
-    public abstract UnityEngine.Vector3 Scale { get; set; }
+    // INFO: Debug
+    // <------------------------->
+    [HideInInspector]
+    public NTS_DebugManager debugManager;
+    // <------------------------->
 
-    public abstract UnityEngine.Vector3 GlobalScale { get; set; }
+    /// <summary>
+    /// KinematicBody attached to the collider
+    /// </summary>
+    public abstract NTS_Rigidbody Body { get; protected set; }
+
+    /// <summary>
+    /// local center of the collider
+    /// </summary>
+    public abstract UnityEngine.Vector3 Center { get; set; }
+
+    public abstract UnityEngine.Vector3 GlobalCenter { get; }
 
     public abstract UnityEngine.Quaternion Rotation { get; }
 
-    public abstract UnityEngine.Vector3 Center { get; set; }
-    
-    protected void UpdateNEWTONSGlobalScale()
+    public abstract UnityEngine.Vector3 Size { get; set; }
+
+    /// <summary>
+    /// lossy scale of the collider
+    /// </summary>
+    public abstract UnityEngine.Vector3 Scale { get; set; }
+
+    public abstract UnityEngine.Vector3 ScaledSize { get; }
+
+    public abstract UnityEngine.Vector3 ScaleNoNotify { set; }
+
+    public abstract float Restitution { get; set; }
+
+    private void OnValidate()
     {
-        GlobalScale = transform.lossyScale;
+        _transformConnector = GetComponent<TransformConnector>();
+        _transformConnector.OnScaleChanged += OnTransformScaleChange;
+    }
+
+    protected void OnTransformScaleChange()
+    {
+        ScaleNoNotify = transform.lossyScale;
     }
 
     public virtual void Dispose()
