@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Rotation : MonoBehaviour
 {
-    public KinematicBody body;
+    public NTS_Rigidbody body;
     public float speed = 2.5f;
 
     void Start()

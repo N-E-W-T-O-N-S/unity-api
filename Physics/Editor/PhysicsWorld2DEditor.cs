@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(PhysicsWorld))]
-public class PhysicsWorldEditor : Editor
+[CustomEditor(typeof(NTS_PhysicsWorld2D))]
+public class PhysicsWorld2DEditor : Editor
 {
-    PhysicsWorld physicsWorld;
+    NTS_PhysicsWorld2D physicsWorld;
 
     private void OnEnable()
     {
-        physicsWorld = (PhysicsWorld)target;
+        physicsWorld = (NTS_PhysicsWorld2D)target;
     }
 
     public override void OnInspectorGUI()
@@ -22,16 +22,16 @@ public class PhysicsWorldEditor : Editor
     {
         if (Application.isPlaying)
         {
-            PhysicsWorld.Gravity = EditorGUILayout.Vector3Field("Gravity", PhysicsWorld.Gravity);
-            PhysicsWorld.UseCustomDrag = EditorGUILayout.Toggle("Use Physical Drag", PhysicsWorld.UseCustomDrag);
-            if (!PhysicsWorld.UseCustomDrag)
+            NTS_PhysicsWorld2D.Gravity = EditorGUILayout.Vector2Field("Gravity", NTS_PhysicsWorld2D.Gravity);
+            NTS_PhysicsWorld2D.UseCustomDrag = EditorGUILayout.Toggle("Use Physical Drag", NTS_PhysicsWorld2D.UseCustomDrag);
+            if (!NTS_PhysicsWorld2D.UseCustomDrag)
                 return;
-            PhysicsWorld.Temperature = Mathf.Max(EditorGUILayout.FloatField("Temperature", PhysicsWorld.Temperature), NEWTONS.Core.PhysicsInfo.MinTemperature);
-            PhysicsWorld.Density = Mathf.Max(EditorGUILayout.FloatField("Density", PhysicsWorld.Density), NEWTONS.Core.PhysicsInfo.MinDensity);
+            NTS_PhysicsWorld2D.Temperature = Mathf.Max(EditorGUILayout.FloatField("Temperature", NTS_PhysicsWorld2D.Temperature), NEWTONS.Core.PhysicsInfo.MinTemperature);
+            NTS_PhysicsWorld2D.Density = Mathf.Max(EditorGUILayout.FloatField("Density", NTS_PhysicsWorld2D.Density), NEWTONS.Core.PhysicsInfo.MinDensity);
         }
         else
         {
-            physicsWorld.initialGravity = EditorGUILayout.Vector3Field("Gravity", physicsWorld.initialGravity);
+            physicsWorld.initialGravity = EditorGUILayout.Vector2Field("Gravity", physicsWorld.initialGravity);
             physicsWorld.initialUseCustomDrag = EditorGUILayout.Toggle("Use Physical Drag", physicsWorld.initialUseCustomDrag);
             if (!physicsWorld.initialUseCustomDrag)
                 return;

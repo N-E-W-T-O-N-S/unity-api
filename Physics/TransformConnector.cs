@@ -20,6 +20,10 @@ public class TransformConnector : MonoBehaviour
         _oldPosition = transform.position;
         _oldRotation = transform.rotation;
         _oldScale = transform.localScale;
+
+        OnPositionChanged?.Invoke(); 
+        OnRotationChanged?.Invoke();
+        OnScaleChanged?.Invoke();
     }
 
     private void Update()

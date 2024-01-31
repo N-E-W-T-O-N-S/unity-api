@@ -5,17 +5,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(TransformConnector))]
-public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
+public class NTS_Rigidbody2D : MonoBehaviour, IRigidbodyReference2D
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core.KinematicBody2D _body;
+    private NEWTONS.Core.Rigidbody2D _body;
 
     /// <summary>
     /// Direct access to the Physics Engine's KinematicBody
     /// <inheritdoc cref="NEWTONS.Core.KinematicBody2D"/>
     /// <para><u><b>WARNING:</b></u> <b>Do not directly use to change properties</b></para>
     /// </summary>
-    public NEWTONS.Core.KinematicBody2D Body { get => _body; set { _body = value; } }
+    public NEWTONS.Core.Rigidbody2D Body { get => _body; private set => _body = value; }
 
     private TransformConnector _transformConnector;
 
@@ -74,27 +74,16 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
 
     private void Awake()
     {
-        PhysicsWorld2D.tests.Add(this);
-        Body.OnUpdatePosition += UpdateTransformPosition;
-        Body.OnUpdateRotation += UpdateTransformRotation;
+        Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
+        Body.OnUpdateRotation += OnUpdateNEWTOSRotation;
         Body.AddToPhysicsEngine();
     }
 
     private void OnValidate()
     {
         _transformConnector = GetComponent<TransformConnector>();
-        _transformConnector.OnPositionChanged += UpdateNEWTONSPosition;
-        _transformConnector.OnRotationChanged += UpdateNEWTOSRotation;
-    }
-
-    private void UpdateNEWTONSPosition()
-    {
-        PositionNoNotify = transform.position;
-    }
-
-    private void UpdateNEWTOSRotation()
-    {
-        RotationNoNotify = transform.rotation.z;
+        _transformConnector.OnPositionChanged += OnTransformPositionChange;
+        _transformConnector.OnRotationChanged += OnTransformRotationChange;
     }
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
@@ -102,15 +91,25 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
         Body?.AddForce(force.ToNewtonsVector(), forceMode, Time.fixedDeltaTime);
     }
 
-    private void UpdateTransformPosition()
+    private void OnUpdateNEWTONSPosition()
     {
         transform.position = Position;
     }
 
-    private void UpdateTransformRotation()
+    private void OnUpdateNEWTOSRotation()
     {
         UnityEngine.Vector3 rot = transform.rotation.eulerAngles;
-        transform.rotation = UnityEngine.Quaternion.Euler(rot.x, Rotation, rot.z);
+        transform.rotation = UnityEngine.Quaternion.Euler(rot.x, rot.y, Rotation);
+    }
+
+    private void OnTransformPositionChange()
+    {
+        PositionNoNotify = transform.position;
+    }
+
+    private void OnTransformRotationChange()
+    {
+        RotationNoNotify = transform.rotation.eulerAngles.z;
     }
 
     private void OnDestroy()
@@ -124,7 +123,7 @@ public class KinematicBody2D : MonoBehaviour, IKinematicBodyReference2D
         Destroy(this);
     }
 
-    public IKinematicBodyReference2D SetKinematicBody(NEWTONS.Core.KinematicBody2D kinematicBody)
+    public IRigidbodyReference2D SetRigidbody(NEWTONS.Core.Rigidbody2D kinematicBody)
     {
         Body = kinematicBody;
         return this;
