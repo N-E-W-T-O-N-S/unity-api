@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class DebugManager
+public class NTS_DebugManager
 {
     public bool showMessages = true;
     public bool showWarnigs = true;
