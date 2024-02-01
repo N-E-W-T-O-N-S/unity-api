@@ -33,6 +33,8 @@ public class NTS_SphereColliderEditor : Editor
         float oldRadius = _sphereCollider.Radius;
         _sphereCollider.Radius = Mathf.Max(EditorGUILayout.FloatField("Radius", _sphereCollider.Radius), 0);
 
+        _sphereCollider.Restitution = EditorGUILayout.Slider("Restitution", _sphereCollider.Restitution, 0, 1);
+
         if (oldRadius != _sphereCollider.Radius || oldCenter != _sphereCollider.Center)
         {
             SceneView.RepaintAll();
