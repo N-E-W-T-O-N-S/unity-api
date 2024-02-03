@@ -6,6 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(NTS_Rigidbody2D), typeof(TransformConnector))]
 public abstract class NTS_Collider2D : MonoBehaviour, IColliderReference2D
 {
+    // INFO: Debug
+    // <------------------------->
+    [HideInInspector]
+    public NTS_DebugManager debugManager;
+    // <------------------------->
+
     protected TransformConnector _transformConnector;
 
     /// <summary>
@@ -22,14 +28,10 @@ public abstract class NTS_Collider2D : MonoBehaviour, IColliderReference2D
 
     public abstract float Rotation { get; }
 
-    public abstract UnityEngine.Vector2 Size { get; set; }
-
     /// <summary>
     /// lossy scale of the colliser
     /// </summary>
     public abstract UnityEngine.Vector2 Scale { get; set; }
-
-    public abstract UnityEngine.Vector2 ScaledSize { get; }
 
     public abstract UnityEngine.Vector2 ScaleNoNotify { set; }
 

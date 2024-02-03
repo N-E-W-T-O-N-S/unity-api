@@ -49,25 +49,23 @@ public class NTS_PhysicsWorld : MonoBehaviour
     public static float Temperature
     {
         get => NEWTONS.Core.Physics.Temperature;
-        set { NEWTONS.Core.Physics.Temperature = value; }
+        set => NEWTONS.Core.Physics.Temperature = value;
     }
 
     public static float Density
     {
         get => NEWTONS.Core.Physics.Density;
-        set { NEWTONS.Core.Physics.Density = value; }
+        set => NEWTONS.Core.Physics.Density = value;
     }
-
 
     public static UnityEngine.Vector3 Gravity
     {
         get => NEWTONS.Core.Physics.Gravity.ToUnityVector();
-        set { NEWTONS.Core.Physics.Gravity = value.ToNewtonsVector(); }
+        set => NEWTONS.Core.Physics.Gravity = value.ToNewtonsVector();
     }
 
     private void Awake()
     {
-        //Time.fixedDeltaTime = .00625f;
         NEWTONS.Core.Physics.Temperature = initialTemperature;
         NEWTONS.Core.Physics.Density = initialDensity;
         NEWTONS.Core.Physics.UseCustomDrag = initialUseCustomDrag;

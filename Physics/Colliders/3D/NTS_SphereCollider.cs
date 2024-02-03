@@ -18,16 +18,13 @@ public class NTS_SphereCollider : NTS_Collider
 
     public override Quaternion Rotation => SphereColl.Rotation.ToUnityQuaternion();
 
-    public override Vector3 Size { get => SphereColl.Size.ToUnityVector(); set => SphereColl.Size = value.ToNewtonsVector(); }
-
     public override Vector3 Scale { get => SphereColl.Scale.ToUnityVector(); set => SphereColl.Scale = value.ToNewtonsVector(); }
-
-    public override Vector3 ScaledSize => SphereColl.ScaledSize.ToUnityVector();
 
     public override Vector3 ScaleNoNotify { set => SphereColl.ScaleNoNotify = value.ToNewtonsVector(); }
 
     public override float Restitution { get => SphereColl.Restitution; set => SphereColl.Restitution = value; }
 
+    
     public float Radius { get => SphereColl.Radius; set => SphereColl.Radius = value; }
 
     public float ScaledRadius => SphereColl.ScaledRadius;

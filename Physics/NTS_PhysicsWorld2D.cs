@@ -92,19 +92,4 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
         if (b != null)
             NEWTONS.Core.Physics2D.RemoveBody(b);
     }
-
-    private void Test2()
-    {
-        bool b = colltest[0].KonvexCollider.Collision(colltest[1].KonvexCollider);
-        if (b)
-        {
-            colltest[0].GetComponent<SpriteRenderer>().material.color = Color.red;
-            colltest[1].GetComponent<SpriteRenderer>().material.color = Color.red;
-        }
-        else
-        {
-            colltest[0].GetComponent<SpriteRenderer>().material.color = Color.white;
-            colltest[1].GetComponent<SpriteRenderer>().material.color = Color.white;
-        }
-    }
 }

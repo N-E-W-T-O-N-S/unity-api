@@ -6,30 +6,28 @@ using System;
 
 public class NTS_KonvexCollider2D : NTS_Collider2D
 {
-
     [SerializeField, HideInInspector]
     private NEWTONS.Core.KonvexCollider2D _konvexCollider;
 
     public NEWTONS.Core.KonvexCollider2D KonvexCollider { get => _konvexCollider; private set => _konvexCollider = value; }
 
-    public NTS_DebugManager debugManager;
-
-
+    
     public override NTS_Rigidbody2D Body { get; protected set; }
 
     public override UnityEngine.Vector2 Center { get => KonvexCollider.Center.ToUnityVector(); set => KonvexCollider.Center = value.ToNewtonsVector(); }
 
     public override UnityEngine.Vector2 GlobalCenter { get => Center + Body.Position; }
 
-    public override UnityEngine.Vector2 Size { get => KonvexCollider.Size.ToUnityVector(); set => KonvexCollider.Size = value.ToNewtonsVector(); }
-
     public override UnityEngine.Vector2 Scale { get => KonvexCollider.Scale.ToUnityVector(); set => KonvexCollider.Scale = value.ToNewtonsVector(); }
-
-    public override UnityEngine.Vector2 ScaledSize => KonvexCollider.ScaledSize.ToUnityVector();
 
     public override UnityEngine.Vector2 ScaleNoNotify { set => KonvexCollider.ScaleNoNotify = value.ToNewtonsVector(); }
 
     public override float Rotation { get => KonvexCollider.Rotation; }
+    
+
+    public UnityEngine.Vector2 Size { get => KonvexCollider.Size.ToUnityVector(); set => KonvexCollider.Size = value.ToNewtonsVector(); }
+    
+    public UnityEngine.Vector2 ScaledSize => KonvexCollider.ScaledSize.ToUnityVector();
 
     public UnityEngine.Vector2[] Points { get => KonvexCollider.Points.ToUnityVectorArray(); }
 

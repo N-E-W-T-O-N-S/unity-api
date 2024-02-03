@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class NTS_CuboidCollider : NTS_Collider
 {
-
-
     [SerializeField, HideInInspector]
     private NEWTONS.Core.CuboidCollider _cuboidColl;
 
@@ -21,15 +19,16 @@ public class NTS_CuboidCollider : NTS_Collider
 
     public override UnityEngine.Quaternion Rotation { get => CuboidColl.Rotation.ToUnityQuaternion(); }
 
-    public override UnityEngine.Vector3 Size { get => CuboidColl.Size.ToUnityVector(); set => CuboidColl.Size = value.ToNewtonsVector(); }
-
     public override UnityEngine.Vector3 Scale { get => CuboidColl.Scale.ToUnityVector(); set => CuboidColl.Scale = value.ToNewtonsVector(); }
-
-    public override UnityEngine.Vector3 ScaledSize => CuboidColl.ScaledSize.ToUnityVector();
 
     public override UnityEngine.Vector3 ScaleNoNotify { set => CuboidColl.ScaleNoNotify = value.ToNewtonsVector(); }
 
     public override float Restitution { get => CuboidColl.Restitution; set => CuboidColl.Restitution = value; }
+    
+    
+    public UnityEngine.Vector3 Size { get => CuboidColl.Size.ToUnityVector(); set => CuboidColl.Size = value.ToNewtonsVector(); }
+    
+    public UnityEngine.Vector3 ScaledSize => CuboidColl.ScaledSize.ToUnityVector();
 
     public int[] Indices { get => CuboidColl.Indices; set => CuboidColl.Indices = value; }
 
