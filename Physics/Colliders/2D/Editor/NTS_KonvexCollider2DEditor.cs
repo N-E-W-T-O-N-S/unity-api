@@ -17,6 +17,11 @@ public class NTS_KonvexCollider2DEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawProps();
+
+        if (GUI.changed)
+        {
+            konvexCollider.Validate();
+        }
     }
 
     private void DrawProps()
@@ -42,12 +47,6 @@ public class NTS_KonvexCollider2DEditor : Editor
             konvexCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", konvexCollider.debugManager.showWarnigs);
             konvexCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", konvexCollider.debugManager.showErrors);
         }
-
-        if (GUI.changed)
-        {
-            konvexCollider.Validate();
-        }
-
     }
 
     private void OnSceneGUI()

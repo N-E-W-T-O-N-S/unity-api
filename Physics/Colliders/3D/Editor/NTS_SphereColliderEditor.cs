@@ -19,7 +19,9 @@ public class NTS_SphereColliderEditor : Editor
         DrawProps();
 
         if (GUI.changed)
+        {
             _sphereCollider.Validate();
+        }
     }
 
     private void DrawProps()

@@ -29,14 +29,10 @@ public abstract class NTS_Collider : MonoBehaviour, IColliderReference
 
     public abstract UnityEngine.Quaternion Rotation { get; }
 
-    public abstract UnityEngine.Vector3 Size { get; set; }
-
     /// <summary>
     /// lossy scale of the collider
     /// </summary>
     public abstract UnityEngine.Vector3 Scale { get; set; }
-
-    public abstract UnityEngine.Vector3 ScaledSize { get; }
 
     public abstract UnityEngine.Vector3 ScaleNoNotify { set; }
 

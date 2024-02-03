@@ -171,7 +171,7 @@ MonoBehaviour:
         y: 0
         z: 0
         w: 1
-      IsStatic: 0
+      IsStatic: 1
       Velocity:
         x: 0
         y: 0
@@ -187,7 +187,7 @@ MonoBehaviour:
       x: 0
       y: 0
       z: 0
-    Restitution: 0.5
+    Restitution: 0
     scale:
       x: 1
       y: 1
@@ -219,7 +219,7 @@ MonoBehaviour:
       y: 0
       z: 0
       w: 1
-    IsStatic: 0
+    IsStatic: 1
     Velocity:
       x: 0
       y: 0
@@ -395,7 +395,7 @@ Transform:
   m_GameObject: {fileID: 388129460}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.235, y: 4.396, z: -2.831}
+  m_LocalPosition: {x: 0.83, y: 2.57, z: -0.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -903,8 +903,8 @@ MonoBehaviour:
   _sphereCollider:
     Body:
       position:
-        x: -2.26
-        y: 3.209
+        x: -1.641
+        y: 2.818
         z: 0
       rotation:
         x: 0
@@ -951,8 +951,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _body:
     position:
-      x: -2.26
-      y: 3.209
+      x: -1.641
+      y: 2.818
       z: 0
     rotation:
       x: 0
@@ -1043,7 +1043,7 @@ Transform:
   m_GameObject: {fileID: 997153049}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.26, y: 3.209, z: 0}
+  m_LocalPosition: {x: -1.641, y: 2.818, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1368,15 +1368,15 @@ MonoBehaviour:
   _cuboidColl:
     Body:
       position:
-        x: -0.695
-        y: 2.856
+        x: 0.089
+        y: 3.136
         z: 0
       rotation:
         x: 0
         y: 0
         z: 0.38268343
         w: 0.92387956
-      IsStatic: 1
+      IsStatic: 0
       Velocity:
         x: 0
         y: 0
@@ -1387,7 +1387,7 @@ MonoBehaviour:
         z: 0
       mass: 1
       drag: 0
-      UseGravity: 0
+      UseGravity: 1
     Center:
       x: 0
       y: 0
@@ -1461,15 +1461,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _body:
     position:
-      x: -0.695
-      y: 2.856
+      x: 0.089
+      y: 3.136
       z: 0
     rotation:
       x: 0
       y: 0
       z: 0.38268343
       w: 0.92387956
-    IsStatic: 1
+    IsStatic: 0
     Velocity:
       x: 0
       y: 0
@@ -1480,7 +1480,7 @@ MonoBehaviour:
       z: 0
     mass: 1
     drag: 0
-    UseGravity: 0
+    UseGravity: 1
   foldOutInfo: 0
 --- !u!114 &1322470498
 MonoBehaviour:
@@ -1553,7 +1553,7 @@ Transform:
   m_GameObject: {fileID: 1322470495}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
-  m_LocalPosition: {x: -0.695, y: 2.856, z: 0}
+  m_LocalPosition: {x: 0.089, y: 3.136, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
