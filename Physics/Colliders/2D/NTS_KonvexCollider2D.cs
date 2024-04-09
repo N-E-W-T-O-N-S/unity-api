@@ -16,7 +16,7 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
 
     public override UnityEngine.Vector2 Center { get => KonvexCollider.Center.ToUnityVector(); set => KonvexCollider.Center = value.ToNewtonsVector(); }
 
-    public override UnityEngine.Vector2 GlobalCenter { get => Center + Body.Position; }
+    public override UnityEngine.Vector2 GlobalCenter => Center + Body.Position;
 
     public override UnityEngine.Vector2 Scale { get => KonvexCollider.Scale.ToUnityVector(); set => KonvexCollider.Scale = value.ToNewtonsVector(); }
 
@@ -29,12 +29,12 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
     
     public UnityEngine.Vector2 ScaledSize => KonvexCollider.ScaledSize.ToUnityVector();
 
-    public UnityEngine.Vector2[] Points { get => KonvexCollider.Points.ToUnityVectorArray(); }
+    public UnityEngine.Vector2[] Points => KonvexCollider.Points.ToUnityVectorArray();
 
     public UnityEngine.Vector2[] PointsRaw { get => KonvexCollider.PointsRaw.ToUnityVectorArray(); set => KonvexCollider.PointsRaw = value.ToNewtonsVectorArray(); }
 
     [Obsolete("Use Points instead")]
-    public UnityEngine.Vector2[] ScaledPoints { get => KonvexCollider.ScaledPoints.ToUnityVectorArray(); }
+    public UnityEngine.Vector2[] ScaledPoints => KonvexCollider.ScaledPoints.ToUnityVectorArray();
 
     private void Awake()
     {

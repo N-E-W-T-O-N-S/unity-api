@@ -48,20 +48,20 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
     public static float Temperature
     {
         get => NEWTONS.Core.Physics2D.Temperature;
-        set { NEWTONS.Core.Physics2D.Temperature = value; }
+        set => NEWTONS.Core.Physics2D.Temperature = value;
     }
 
     public static float Density
     {
         get => NEWTONS.Core.Physics2D.Density;
-        set { NEWTONS.Core.Physics2D.Density = value; }
+        set => NEWTONS.Core.Physics2D.Density = value;
     }
 
 
     public static UnityEngine.Vector2 Gravity
     {
         get => NEWTONS.Core.Physics2D.Gravity.ToUnityVector();
-        set { NEWTONS.Core.Physics2D.Gravity = value.ToNewtonsVector(); }
+        set => NEWTONS.Core.Physics2D.Gravity = value.ToNewtonsVector();
     }
 
     private void Awake()
@@ -72,23 +72,9 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
         NEWTONS.Core.Physics2D.Gravity = initialGravity.ToNewtonsVector();
     }
 
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space))
-    //        NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
-    //}
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
-    }
-
     private void FixedUpdate()
     {
-        //NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
-        //Debug.Log(n);
-        //Test2();
+        NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
     }
 
     public static void DestroyBody(NTS_Rigidbody2D body)
