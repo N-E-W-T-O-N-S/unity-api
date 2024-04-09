@@ -33,7 +33,9 @@ public class NTS_KonvexCollider2DEditor : Editor
         Vector2 oldCenter = konvexCollider.Center;
         konvexCollider.Center = EditorGUILayout.Vector2Field("Center", konvexCollider.Center);
         Vector2 oldScale = konvexCollider.Size;
-        konvexCollider.Size = EditorGUILayout.Vector2Field("Scale", new Vector3(Mathf.Max(konvexCollider.Size.x, 0), Mathf.Max(konvexCollider.Size.y, 0)));
+        Vector2 size = EditorGUILayout.Vector2Field("Size", konvexCollider.Size);
+        konvexCollider.Size = new Vector2(Mathf.Max(0, size.x), Mathf.Max(0, size.y));
+
         if (oldScale != konvexCollider.Size || oldCenter != konvexCollider.Center)
         {
             SceneView.RepaintAll();

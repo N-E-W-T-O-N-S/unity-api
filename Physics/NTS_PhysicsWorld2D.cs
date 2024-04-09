@@ -78,9 +78,15 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
     //        NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
     //}
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
+    }
+
     private void FixedUpdate()
     {
-        int n = NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
+        //NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
         //Debug.Log(n);
         //Test2();
     }
