@@ -203,7 +203,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 172585671}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.215833, y: 0.3962167, z: 0}
+  m_LocalPosition: {x: 1.171, y: 0.453, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -229,8 +229,8 @@ MonoBehaviour:
   _circleCollider:
     Body:
       position:
-        x: 1.215833
-        y: 0.3962167
+        x: 1.171
+        y: 0.453
       rotation: 0
       IsStatic: 0
       Velocity:
@@ -267,8 +267,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _body:
     position:
-      x: 1.215833
-      y: 0.3962167
+      x: 1.171
+      y: 0.453
     rotation: 0
     IsStatic: 0
     Velocity:
@@ -332,8 +332,8 @@ MonoBehaviour:
   _konvexCollider:
     Body:
       position:
-        x: 2.147
-        y: 0
+        x: 2.204
+        y: 0.09
       rotation: 44.999996
       IsStatic: 0
       Velocity:
@@ -385,8 +385,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _body:
     position:
-      x: 2.147
-      y: 0
+      x: 2.204
+      y: 0.09
     rotation: 44.999996
     IsStatic: 0
     Velocity:
@@ -471,7 +471,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 273228983}
   m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
-  m_LocalPosition: {x: 2.147, y: 0, z: 0}
+  m_LocalPosition: {x: 2.204, y: 0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
