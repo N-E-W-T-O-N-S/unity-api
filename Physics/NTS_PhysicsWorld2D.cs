@@ -72,6 +72,12 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
         NEWTONS.Core.Physics2D.Gravity = initialGravity.ToNewtonsVector();
     }
 
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //        NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
+    //}
+
     private void FixedUpdate()
     {
         NEWTONS.Core.Physics2D.Update(Time.fixedDeltaTime);
