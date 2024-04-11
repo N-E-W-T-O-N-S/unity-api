@@ -5,9 +5,9 @@ using UnityEngine;
 public class NTS_CircleCollider : NTS_Collider2D
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core.CircleCollider _circleCollider;
+    private NEWTONS.Core._2D.CircleCollider _circleCollider;
 
-    public NEWTONS.Core.CircleCollider CircleCollider { get => _circleCollider; set => _circleCollider = value; }
+    public NEWTONS.Core._2D.CircleCollider CircleCollider { get => _circleCollider; set => _circleCollider = value; }
 
     public override NTS_Rigidbody2D Body { get; protected set; }
     

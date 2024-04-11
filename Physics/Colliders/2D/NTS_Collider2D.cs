@@ -1,10 +1,9 @@
-using NEWTONS.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(NTS_Rigidbody2D), typeof(TransformConnector))]
-public abstract class NTS_Collider2D : MonoBehaviour, IColliderReference2D
+public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.IColliderReference2D
 {
     // INFO: Debug
     // <------------------------->
@@ -51,7 +50,7 @@ public abstract class NTS_Collider2D : MonoBehaviour, IColliderReference2D
         throw new System.NotImplementedException();
     }
 
-    public virtual IColliderReference2D SetCollider(NEWTONS.Core.Collider2D collider)
+    public virtual NEWTONS.Core._2D.IColliderReference2D SetCollider(NEWTONS.Core._2D.Collider2D collider)
     {
         throw new System.NotImplementedException();
     }

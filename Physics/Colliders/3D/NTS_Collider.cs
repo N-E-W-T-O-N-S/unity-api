@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(NTS_Rigidbody), typeof(TransformConnector))]
-public abstract class NTS_Collider : MonoBehaviour, IColliderReference
+public abstract class NTS_Collider : MonoBehaviour, NEWTONS.Core._3D.IColliderReference
 {
     protected TransformConnector _transformConnector;
 
@@ -54,7 +54,7 @@ public abstract class NTS_Collider : MonoBehaviour, IColliderReference
         throw new System.NotImplementedException();
     }
 
-    public virtual IColliderReference SetCollider(NEWTONS.Core.Collider collider)
+    public virtual NEWTONS.Core._3D.IColliderReference SetCollider(NEWTONS.Core._3D.Collider collider)
     {
         throw new System.NotImplementedException();
     }

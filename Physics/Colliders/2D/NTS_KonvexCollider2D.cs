@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NEWTONS.Core;
 using System;
+using NEWTONS.Core._2D;
 
 public class NTS_KonvexCollider2D : NTS_Collider2D
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core.KonvexCollider2D _konvexCollider;
+    private KonvexCollider2D _konvexCollider;
 
-    public NEWTONS.Core.KonvexCollider2D KonvexCollider { get => _konvexCollider; private set => _konvexCollider = value; }
+    public KonvexCollider2D KonvexCollider { get => _konvexCollider; private set => _konvexCollider = value; }
 
     
     public override NTS_Rigidbody2D Body { get; protected set; }
@@ -63,9 +63,9 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
         Destroy(this);
     }
 
-    public override IColliderReference2D SetCollider(NEWTONS.Core.Collider2D collider)
+    public override IColliderReference2D SetCollider(NEWTONS.Core._2D.Collider2D collider)
     {
-        KonvexCollider = collider as NEWTONS.Core.KonvexCollider2D;
+        KonvexCollider = collider as KonvexCollider2D;
         if (KonvexCollider == null)
             throw new ArgumentException("Collider must be of type CuboidCollider");
         return this;

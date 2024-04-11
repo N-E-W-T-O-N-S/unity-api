@@ -5,17 +5,17 @@ using NEWTONS.Core;
 using System;
 
 [RequireComponent(typeof(TransformConnector))]
-public class NTS_Rigidbody : MonoBehaviour, NEWTONS.Core.IRigidbodyReference
+public class NTS_Rigidbody : MonoBehaviour, NEWTONS.Core._3D.IRigidbodyReference
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core.Rigidbody _body;
+    private NEWTONS.Core._3D.Rigidbody _body;
 
     /// <summary>
     /// Direct access to the Physics Engine's Rigidbody
     /// <inheritdoc cref="NEWTONS.Core.Rigidbody"/>
     /// <para><u><b>WARNING:</b></u> <b>Do not directly use to change properties</b></para>
     /// </summary>
-    public NEWTONS.Core.Rigidbody Body { get => _body; private set => _body = value; }
+    public NEWTONS.Core._3D.Rigidbody Body { get => _body; private set => _body = value; }
 
     private TransformConnector _transformConnector;
 
@@ -53,7 +53,7 @@ public class NTS_Rigidbody : MonoBehaviour, NEWTONS.Core.IRigidbodyReference
 
     public void AddForce(UnityEngine.Vector3 force, NEWTONS.Core.ForceMode forceMode)
     {
-        Body?.AddForce(force.ToNewtonsVector(), forceMode, Time.fixedDeltaTime);
+        Body?.AddForce(force.ToNewtonsVector(), forceMode);
     }
 
     private void OnTransformPositionChange() => PositionNoNotify = transform.position;
@@ -72,7 +72,7 @@ public class NTS_Rigidbody : MonoBehaviour, NEWTONS.Core.IRigidbodyReference
         NTS_PhysicsWorld.DestroyBody(this);
     }
 
-    public IRigidbodyReference SetRigidbody(NEWTONS.Core.Rigidbody kinematicBody)
+    public NEWTONS.Core._3D.IRigidbodyReference SetRigidbody(NEWTONS.Core._3D.Rigidbody kinematicBody)
     {
         Body = kinematicBody;
         return this;

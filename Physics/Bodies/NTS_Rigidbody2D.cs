@@ -5,17 +5,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(TransformConnector))]
-public class NTS_Rigidbody2D : MonoBehaviour, IRigidbodyReference2D
+public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReference2D
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core.Rigidbody2D _body;
+    private NEWTONS.Core._2D.Rigidbody2D _body;
 
     /// <summary>
     /// Direct access to the Physics Engine's KinematicBody
     /// <inheritdoc cref="NEWTONS.Core.KinematicBody2D"/>
     /// <para><u><b>WARNING:</b></u> <b>Do not directly use to change properties</b></para>
     /// </summary>
-    public NEWTONS.Core.Rigidbody2D Body { get => _body; private set => _body = value; }
+    public NEWTONS.Core._2D.Rigidbody2D Body { get => _body; private set => _body = value; }
 
     private TransformConnector _transformConnector;
 
@@ -88,7 +88,7 @@ public class NTS_Rigidbody2D : MonoBehaviour, IRigidbodyReference2D
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
     {
-        Body?.AddForce(force.ToNewtonsVector(), forceMode, Time.fixedDeltaTime);
+        Body?.AddForce(force.ToNewtonsVector(), forceMode);
     }
 
     private void OnUpdateNEWTONSPosition()
@@ -123,7 +123,7 @@ public class NTS_Rigidbody2D : MonoBehaviour, IRigidbodyReference2D
         Destroy(this);
     }
 
-    public IRigidbodyReference2D SetRigidbody(NEWTONS.Core.Rigidbody2D kinematicBody)
+    public NEWTONS.Core._2D.IRigidbodyReference2D SetRigidbody(NEWTONS.Core._2D.Rigidbody2D kinematicBody)
     {
         Body = kinematicBody;
         return this;
