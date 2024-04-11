@@ -16,60 +16,61 @@ public class NTS_PhysicsWorld : MonoBehaviour
     /// <remarks>
     /// Do not use this field directly. Insteade use <see cref="Temperature"/> to alter the Temperature.
     /// </remarks>
-    public float initialTemperature = NEWTONS.Core.Physics.Temperature;
+    public float initialTemperature = NEWTONS.Core._3D.Physics.Temperature;
     /// <summary>
     /// <b><u>WARNING:</u></b> Internal NEWTONS field. Do not use.
     /// </summary>
     /// <remarks>
     /// Do not use this field directly. Insteade use <see cref="Density"/> to alter the Density.
     /// </remarks>
-    public float initialDensity = NEWTONS.Core.Physics.Density;
+    public float initialDensity = NEWTONS.Core._3D.Physics.Density;
     /// <summary>
     /// <b><u>WARNING:</u></b> Internal NEWTONS field. Do not use.
     /// </summary>
     /// <remarks>
     /// Do not use this field directly. Insteade use <see cref="UseCustomDrag"/> to alter the UseCustomDrag.
     /// </remarks>
-    public bool initialUseCustomDrag = NEWTONS.Core.Physics.UseCustomDrag;
+    public bool initialUseCustomDrag = NEWTONS.Core._3D.Physics.UseCustomDrag;
     /// <summary>
     /// <b><u>WARNING:</u></b> Internal NEWTONS field. Do not use.
     /// </summary>
     /// <remarks>
     /// Do not use this field directly. Insteade use <see cref="Gravity"/> to alter the Gravity.
     /// </remarks>
-    public UnityEngine.Vector3 initialGravity = NEWTONS.Core.Physics.Gravity.ToUnityVector();
+    public UnityEngine.Vector3 initialGravity = NEWTONS.Core._3D.Physics.Gravity.ToUnityVector();
     #endregion
 
     public static bool UseCustomDrag
     {
-        get => NEWTONS.Core.Physics.UseCustomDrag;
-        set => NEWTONS.Core.Physics.UseCustomDrag = value;
+        get => NEWTONS.Core._3D.Physics.UseCustomDrag;
+        set => NEWTONS.Core._3D.Physics.UseCustomDrag = value;
     }
 
     public static float Temperature
     {
-        get => NEWTONS.Core.Physics.Temperature;
-        set => NEWTONS.Core.Physics.Temperature = value;
+        get => NEWTONS.Core._3D.Physics.Temperature;
+        set => NEWTONS.Core._3D.Physics.Temperature = value;
     }
 
     public static float Density
     {
-        get => NEWTONS.Core.Physics.Density;
-        set => NEWTONS.Core.Physics.Density = value;
+        get => NEWTONS.Core._3D.Physics.Density;
+        set => NEWTONS.Core._3D.Physics.Density = value;
     }
 
     public static UnityEngine.Vector3 Gravity
     {
-        get => NEWTONS.Core.Physics.Gravity.ToUnityVector();
-        set => NEWTONS.Core.Physics.Gravity = value.ToNewtonsVector();
+        get => NEWTONS.Core._3D.Physics.Gravity.ToUnityVector();
+        set => NEWTONS.Core._3D.Physics.Gravity = value.ToNewtonsVector();
     }
 
     private void Awake()
     {
-        NEWTONS.Core.Physics.Temperature = initialTemperature;
-        NEWTONS.Core.Physics.Density = initialDensity;
-        NEWTONS.Core.Physics.UseCustomDrag = initialUseCustomDrag;
-        NEWTONS.Core.Physics.Gravity = initialGravity.ToNewtonsVector();
+        NEWTONS.Core._3D.Physics.DeltaTime = Time.fixedDeltaTime;
+        NEWTONS.Core._3D.Physics.Temperature = initialTemperature;
+        NEWTONS.Core._3D.Physics.Density = initialDensity;
+        NEWTONS.Core._3D.Physics.UseCustomDrag = initialUseCustomDrag;
+        NEWTONS.Core._3D.Physics.Gravity = initialGravity.ToNewtonsVector();
     }
 
     //private void Update()
@@ -80,15 +81,15 @@ public class NTS_PhysicsWorld : MonoBehaviour
 
     private void FixedUpdate()
     {
-        NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
+        NEWTONS.Core._3D.Physics.Update();
     }
 
     public static void DestroyBody(NTS_Rigidbody body)
     {
         //tests.Remove(body);
-        NEWTONS.Core.Rigidbody b = body.Body;
+        NEWTONS.Core._3D.Rigidbody b = body.Body;
         if (b != null)
-            NEWTONS.Core.Physics.RemoveBody(b);
+            NEWTONS.Core._3D.Physics.RemoveBody(b);
     }
 
     private void Test2()

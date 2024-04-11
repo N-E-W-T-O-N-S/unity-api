@@ -7,9 +7,9 @@ using UnityEngine;
 public class NTS_CuboidCollider : NTS_Collider
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core.CuboidCollider _cuboidColl;
+    private NEWTONS.Core._3D.CuboidCollider _cuboidColl;
 
-    public NEWTONS.Core.CuboidCollider CuboidColl { get => _cuboidColl; private set => _cuboidColl = value; }
+    public NEWTONS.Core._3D.CuboidCollider CuboidColl { get => _cuboidColl; private set => _cuboidColl = value; }
 
     public override NTS_Rigidbody Body { get; protected set; }
 
@@ -64,9 +64,9 @@ public class NTS_CuboidCollider : NTS_Collider
         Destroy(this);
     }
 
-    public override IColliderReference SetCollider(NEWTONS.Core.Collider collider)
+    public override NEWTONS.Core._3D.IColliderReference SetCollider(NEWTONS.Core._3D.Collider collider)
     {
-        CuboidColl = collider as NEWTONS.Core.CuboidCollider;
+        CuboidColl = collider as NEWTONS.Core._3D.CuboidCollider;
         if (CuboidColl == null)
             throw new ArgumentException("Collider must be of type CuboidCollider");
         return this;

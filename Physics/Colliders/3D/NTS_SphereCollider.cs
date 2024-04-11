@@ -6,9 +6,9 @@ public class NTS_SphereCollider : NTS_Collider
 {
 
     [SerializeField, HideInInspector]
-    private NEWTONS.Core.SphereCollider _sphereCollider;
+    private NEWTONS.Core._3D.SphereCollider _sphereCollider;
 
-    public NEWTONS.Core.SphereCollider SphereColl { get => _sphereCollider; private set => _sphereCollider = value; }
+    public NEWTONS.Core._3D.SphereCollider SphereColl { get => _sphereCollider; private set => _sphereCollider = value; }
 
     public override NTS_Rigidbody Body { get; protected set; }
 
