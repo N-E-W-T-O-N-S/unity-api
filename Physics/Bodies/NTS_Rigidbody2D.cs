@@ -53,6 +53,7 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.UseGravity = value;
     }
 
+    public float Inertia => Body.Inertia;
 
     public UnityEngine.Vector2 Velocity
     {
