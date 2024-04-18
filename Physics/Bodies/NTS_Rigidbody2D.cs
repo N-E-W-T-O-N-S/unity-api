@@ -1,10 +1,11 @@
 using NEWTONS.Core;
+using NEWTONS.Core._3D;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TransformConnector))]
+[ExecuteAlways]
 public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReference2D
 {
     [SerializeField, HideInInspector]
@@ -12,12 +13,38 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
 
     /// <summary>
     /// Direct access to the Physics Engine's KinematicBody
-    /// <inheritdoc cref="NEWTONS.Core.KinematicBody2D"/>
+    /// <inheritdoc cref="NEWTONS.Core._2D.Rigidbody2D"/>
     /// <para><u><b>WARNING:</b></u> <b>Do not directly use to change properties</b></para>
     /// </summary>
     public NEWTONS.Core._2D.Rigidbody2D Body { get => _body; private set => _body = value; }
 
-    private TransformConnector _transformConnector;
+    private NTS_Collider2D attachedCollider;
+
+    /// <summary>
+    /// Gets the rigidbodys attached collider
+    /// </summary>
+    /// <returns>true if a collider is attached else false</returns>
+    public bool TryGetAttachedCollider(out NTS_Collider2D collider)
+    {
+        collider = null;
+        if (attachedCollider == null)
+            return false;
+
+        collider = attachedCollider;
+        return true;
+    }
+
+    /// <summary>
+    /// Sets this rigidbodys collider if the colliders rigidbody is the same as this one.
+    /// </summary>
+    /// <returns>true if the bodies are the same else false</returns>
+    public bool TrySetAttachedCollider(NTS_Collider2D collider)
+    {
+        if (collider.Body != this) return false;
+
+        attachedCollider = collider;
+        return true;
+    }
 
     public bool IsStatic
     {
@@ -61,6 +88,12 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.Velocity = value.ToNewtonsVector();
     }
 
+    public float AngularVelocity
+    {
+        get => Body.AngularVelocity;
+        set => Body.AngularVelocity = value;
+    }
+
     public float Mass
     {
         get => Body.Mass;
@@ -75,21 +108,31 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
 
     private void Awake()
     {
-        Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
-        Body.OnUpdateRotation += OnUpdateNEWTOSRotation;
-        Body.AddToPhysicsEngine();
+        if (Application.isPlaying)
+        {
+            Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
+            Body.OnUpdateRotation += OnUpdateNEWTOSRotation;
+            Body.AddToPhysicsEngine();   
+        }
     }
 
-    private void OnValidate()
+    private void Update()
     {
-        _transformConnector = GetComponent<TransformConnector>();
-        _transformConnector.OnPositionChanged += OnTransformPositionChange;
-        _transformConnector.OnRotationChanged += OnTransformRotationChange;
+        if (Position != (UnityEngine.Vector2)transform.position)
+            PositionNoNotify = transform.position;
+
+        if (Rotation != transform.rotation.z)
+            RotationNoNotify = transform.rotation.eulerAngles.z;
     }
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
     {
         Body?.AddForce(force.ToNewtonsVector(), forceMode);
+    }
+
+    public void AddTorque(float torque, NEWTONS.Core.ForceMode force)
+    {
+        Body?.AddTorque(torque, force);
     }
 
     private void OnUpdateNEWTONSPosition()
@@ -103,21 +146,13 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         transform.rotation = UnityEngine.Quaternion.Euler(rot.x, rot.y, Rotation);
     }
 
-    private void OnTransformPositionChange()
-    {
-        PositionNoNotify = transform.position;
-    }
-
-    private void OnTransformRotationChange()
-    {
-        RotationNoNotify = transform.rotation.eulerAngles.z;
-    }
-
     private void OnDestroy()
     {
-        //PhysicsWorld.DestroyBody(this);
+        Body.OnUpdatePosition -= OnUpdateNEWTONSPosition;
+        Body.OnUpdateRotation -= OnUpdateNEWTOSRotation;
+        NTS_PhysicsWorld2D.DestroyBody(this);
     }
-
+    
     public void Dispose()
     {
         Body = null;

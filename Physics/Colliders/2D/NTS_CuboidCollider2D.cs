@@ -2,15 +2,18 @@ using NEWTONS.Core._2D;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NTS_CuboidCollider2D : NTS_Collider2D
 {
 
     [SerializeField, HideInInspector]
-    private CuboidCollider2D _konvexCollider;
+    private CuboidCollider2D _cuboidCollider;
 
-    public CuboidCollider2D CuboidCollider { get => _konvexCollider; private set => _konvexCollider = value; }
+    public CuboidCollider2D CuboidCollider { get => _cuboidCollider; private set => _cuboidCollider = value; }
+
+    protected override NEWTONS.Core._2D.Collider2D BaseCollider => CuboidCollider;
 
 
     public override NTS_Rigidbody2D Body { get; protected set; }
@@ -25,6 +28,8 @@ public class NTS_CuboidCollider2D : NTS_Collider2D
 
     public override float Rotation { get => CuboidCollider.Rotation; }
 
+    public override float Restitution { get => CuboidCollider.Restitution; set => CuboidCollider.Restitution = value; }
+
 
     public UnityEngine.Vector2 Size { get => CuboidCollider.Size.ToUnityVector(); set => CuboidCollider.Size = value.ToNewtonsVector(); }
 
@@ -33,28 +38,6 @@ public class NTS_CuboidCollider2D : NTS_Collider2D
     public UnityEngine.Vector2[] Points => CuboidCollider.Points.ToUnityVectorArray();
 
     public UnityEngine.Vector2[] PointsRaw => CuboidCollider.PointsRaw.ToUnityVectorArray();
-
-    private void Awake()
-    {
-        Body = GetComponent<NTS_Rigidbody2D>();
-        CuboidCollider.Body = Body.Body;
-        Body.Body.collider = CuboidCollider;
-        CuboidCollider.OnUpdateScale += OnUpdateNEWTONSScale;
-
-        CuboidCollider.AddToPhysicsEngine();
-    }
-
-    private void OnUpdateNEWTONSScale()
-    {
-        UnityEngine.Vector3 loc = transform.localScale;
-        UnityEngine.Vector3 los = transform.lossyScale;
-        UnityEngine.Vector3 k = new UnityEngine.Vector3(los.x / loc.x, los.y / loc.y);
-        transform.localScale = new UnityEngine.Vector3(Scale.x / k.x, Scale.y / k.y);
-
-        // lossy = local * K
-        // K = lossy / local
-        // newLocal += newLossy - K
-    }
 
     public override void Dispose()
     {
@@ -84,7 +67,7 @@ public class NTS_CuboidCollider2D : NTS_Collider2D
         }
         catch
         {
-            debugManager.LogError("KonvexCollider2D: " + name + " is missing a KinematicBody2D component");
+            debugManager.LogError("KonvexCollider2D: " + name + " is missing a RigidBody2D component");
         }
     }
 

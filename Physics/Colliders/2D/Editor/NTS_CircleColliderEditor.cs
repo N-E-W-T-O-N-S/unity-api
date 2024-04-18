@@ -1,3 +1,4 @@
+using NEWTONS.Core._3D;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -36,6 +37,12 @@ public class NTS_CircleColliderEditor : Editor
 
         float oldRadius = _circleCollider.Radius;
         _circleCollider.Radius = Mathf.Max(EditorGUILayout.FloatField("Radius", _circleCollider.Radius), 0);
+
+        _circleCollider.Restitution = EditorGUILayout.Slider("Restitution", _circleCollider.Restitution, 0, 1);
+
+        GUI.enabled = false;
+        EditorGUILayout.FloatField("Inertia", _circleCollider.Body.Inertia);
+        GUI.enabled = true;
 
         if (oldRadius != _circleCollider.Radius || oldCenter != _circleCollider.Center)
         {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using NEWTONS.Core._2D;
@@ -9,9 +7,14 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
     [SerializeField, HideInInspector]
     private KonvexCollider2D _konvexCollider;
 
-    public KonvexCollider2D KonvexCollider { get => _konvexCollider; private set => _konvexCollider = value; }
+    public KonvexCollider2D KonvexCollider 
+    { 
+        get => _konvexCollider;
+        private set => _konvexCollider = value;
+    }
 
-    
+    protected override NEWTONS.Core._2D.Collider2D BaseCollider => KonvexCollider;
+
     public override NTS_Rigidbody2D Body { get; protected set; }
 
     public override UnityEngine.Vector2 Center { get => KonvexCollider.Center.ToUnityVector(); set => KonvexCollider.Center = value.ToNewtonsVector(); }
@@ -23,7 +26,9 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
     public override UnityEngine.Vector2 ScaleNoNotify { set => KonvexCollider.ScaleNoNotify = value.ToNewtonsVector(); }
 
     public override float Rotation { get => KonvexCollider.Rotation; }
-    
+
+    public override float Restitution { get => KonvexCollider.Restitution; set => KonvexCollider.Restitution = value; }
+
 
     public UnityEngine.Vector2 Size { get => KonvexCollider.Size.ToUnityVector(); set => KonvexCollider.Size = value.ToNewtonsVector(); }
     
@@ -36,27 +41,6 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
     [Obsolete("Use Points instead")]
     public UnityEngine.Vector2[] ScaledPoints => KonvexCollider.ScaledPoints.ToUnityVectorArray();
 
-    private void Awake()
-    {
-        Body = GetComponent<NTS_Rigidbody2D>();
-        KonvexCollider.Body = Body.Body;
-        KonvexCollider.OnUpdateScale += OnUpdateNEWTONSScale;
-
-        KonvexCollider.AddToPhysicsEngine();
-    }
-
-    private void OnUpdateNEWTONSScale()
-    {
-        UnityEngine.Vector3 loc = transform.localScale;
-        UnityEngine.Vector3 los = transform.lossyScale;
-        UnityEngine.Vector3 k = new UnityEngine.Vector3(los.x / loc.x, los.y / loc.y);
-        transform.localScale = new UnityEngine.Vector3(Scale.x / k.x, Scale.y / k.y);
-
-        // lossy = local * K
-        // K = lossy / local
-        // newLocal += newLossy - K
-    }
-
     public override void Dispose()
     {
         KonvexCollider = null;
@@ -67,7 +51,7 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
     {
         KonvexCollider = collider as KonvexCollider2D;
         if (KonvexCollider == null)
-            throw new ArgumentException("Collider must be of type CuboidCollider");
+            throw new ArgumentException("Collider must be of type " + GetType());
         return this;
     }
 
