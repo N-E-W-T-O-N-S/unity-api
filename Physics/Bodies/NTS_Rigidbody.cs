@@ -4,7 +4,6 @@ using UnityEngine;
 using NEWTONS.Core;
 using System;
 
-[RequireComponent(typeof(TransformConnector))]
 public class NTS_Rigidbody : MonoBehaviour, NEWTONS.Core._3D.IRigidbodyReference
 {
     [SerializeField, HideInInspector]
@@ -16,8 +15,6 @@ public class NTS_Rigidbody : MonoBehaviour, NEWTONS.Core._3D.IRigidbodyReference
     /// <para><u><b>WARNING:</b></u> <b>Do not directly use to change properties</b></para>
     /// </summary>
     public NEWTONS.Core._3D.Rigidbody Body { get => _body; private set => _body = value; }
-
-    private TransformConnector _transformConnector;
 
     public bool IsStatic { get => Body.IsStatic; set => Body.IsStatic = value; }
     
@@ -44,11 +41,12 @@ public class NTS_Rigidbody : MonoBehaviour, NEWTONS.Core._3D.IRigidbodyReference
         Body.AddToPhysicsEngine();
     }
 
-    private void OnValidate()
+    private void Update()
     {
-        _transformConnector = GetComponent<TransformConnector>();
-        _transformConnector.OnPositionChanged += OnTransformPositionChange;
-        _transformConnector.OnRotationChanged += OnTransformRotationChange;
+        if (Position != transform.position)
+            PositionNoNotify = transform.position;
+        if (Rotation != transform.rotation)
+            RotationNoNotify = transform.rotation;
     }
 
     public void AddForce(UnityEngine.Vector3 force, NEWTONS.Core.ForceMode forceMode)
@@ -56,13 +54,6 @@ public class NTS_Rigidbody : MonoBehaviour, NEWTONS.Core._3D.IRigidbodyReference
         Body?.AddForce(force.ToNewtonsVector(), forceMode);
     }
 
-    private void OnTransformPositionChange() => PositionNoNotify = transform.position;
-
-    private void OnTransformRotationChange() => RotationNoNotify = transform.rotation;
-
-    /// <summary>
-    /// Updates the position of the KinematicBody in the Physics Engine without notifying Unity
-    /// </summary>
     private void OnUpdateNEWTONSPosition() => transform.position = Position;
 
     private void OnUpdateNEWTONSRotation() => transform.rotation = Rotation;

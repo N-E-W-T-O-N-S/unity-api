@@ -1,15 +1,17 @@
+using log4net.Util;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [CustomEditor(typeof(NTS_Rigidbody2D)), CanEditMultipleObjects]
 public class KinematicBodyEditor2D : Editor
 {
-    NTS_Rigidbody2D kinematicBody;
+    NTS_Rigidbody2D _rigidBody;
     private void OnEnable()
     {
-        kinematicBody = (NTS_Rigidbody2D)target;
+        _rigidBody = (NTS_Rigidbody2D)target;
     }
 
     public override void OnInspectorGUI()
@@ -23,19 +25,20 @@ public class KinematicBodyEditor2D : Editor
 
     private void DrawProps()
     {
-        if (kinematicBody.Body == null)
+        if (_rigidBody.Body == null)
             return;
 
-        Undo.RecordObject(kinematicBody, "2d kinematic props");
-        kinematicBody.IsStatic = EditorGUILayout.Toggle("Is Static", kinematicBody.IsStatic);
-        if (kinematicBody.IsStatic)
+        Undo.RecordObject(_rigidBody, "2d kinematic props");
+        _rigidBody.IsStatic = EditorGUILayout.Toggle("Is Static", _rigidBody.IsStatic);
+        if (_rigidBody.IsStatic)
             return;
 
-        kinematicBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
-        kinematicBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
-        kinematicBody.Velocity = EditorGUILayout.Vector2Field("Velocity", kinematicBody.Velocity);
+        _rigidBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", _rigidBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
+        _rigidBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", _rigidBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
+        _rigidBody.Velocity = EditorGUILayout.Vector2Field("Velocity", _rigidBody.Velocity);
+        _rigidBody.AngularVelocity = EditorGUILayout.FloatField("Angular Velocity", _rigidBody.AngularVelocity);
         EditorGUILayout.Space();
-        kinematicBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.UseGravity);
+        _rigidBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", _rigidBody.UseGravity);
     }
     
     private void InfoBox(string text)

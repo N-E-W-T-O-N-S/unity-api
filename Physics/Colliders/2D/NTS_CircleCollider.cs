@@ -1,3 +1,5 @@
+using NEWTONS.Core._2D;
+using NEWTONS.Core._3D;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +11,11 @@ public class NTS_CircleCollider : NTS_Collider2D
 
     public NEWTONS.Core._2D.CircleCollider CircleCollider { get => _circleCollider; set => _circleCollider = value; }
 
+    protected override NEWTONS.Core._2D.Collider2D BaseCollider => CircleCollider;
+
+
     public override NTS_Rigidbody2D Body { get; protected set; }
-    
+
     public override Vector2 Center { get => CircleCollider.Center.ToUnityVector(); set => CircleCollider.Center = value.ToNewtonsVector(); }
 
     public override Vector2 GlobalCenter => CircleCollider.GlobalCenter.ToUnityVector();
@@ -21,31 +26,12 @@ public class NTS_CircleCollider : NTS_Collider2D
 
     public override Vector2 ScaleNoNotify { set => CircleCollider.ScaleNoNotify = value.ToNewtonsVector(); }
 
+    public override float Restitution { get => CircleCollider.Restitution; set => CircleCollider.Restitution = value; }
+
 
     public float Radius { get => CircleCollider.Radius; set => CircleCollider.Radius = value; }
 
     public float ScaledRadius => CircleCollider.ScaledRadius;
-
-    private void Awake()
-    {
-        Body = GetComponent<NTS_Rigidbody2D>();
-        CircleCollider.Body = Body.Body;
-        CircleCollider.OnUpdateScale += OnUpdateNEWTONSScale;
-
-        CircleCollider.AddToPhysicsEngine();
-    }
-
-    private void OnUpdateNEWTONSScale()
-    {
-        UnityEngine.Vector3 loc = transform.localScale;
-        UnityEngine.Vector3 los = transform.lossyScale;
-        UnityEngine.Vector3 k = new UnityEngine.Vector3(los.x / loc.x, los.y / loc.y);
-        transform.localScale = new UnityEngine.Vector3(Scale.x / k.x, Scale.y / k.y);
-
-        // lossy = local * K
-        // K = lossy / local
-        // newLocal += newLossy - K
-    }
 
 #if UNITY_EDITOR
     public void Validate()

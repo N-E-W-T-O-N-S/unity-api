@@ -64,13 +64,13 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
         set => NEWTONS.Core._2D.Physics2D.Gravity = value.ToNewtonsVector();
     }
 
-    private void Awake()
+    private void Start()
     {
+        NEWTONS.Core._2D.Physics2D.DeltaTime = Time.fixedDeltaTime;
         NEWTONS.Core._2D.Physics2D.Temperature = initialTemperature;
         NEWTONS.Core._2D.Physics2D.Density = initialDensity;
         NEWTONS.Core._2D.Physics2D.UseCustomDrag = initialUseCustomDrag;
         NEWTONS.Core._2D.Physics2D.Gravity = initialGravity.ToNewtonsVector();
-        NEWTONS.Core._2D.Physics2D.DeltaTime = Time.fixedDeltaTime;
     }
 
     //private void Update()

@@ -1,8 +1,10 @@
+using NEWTONS.Core._3D;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NTS_Rigidbody2D), typeof(TransformConnector))]
+[ExecuteAlways]
+[RequireComponent(typeof(NTS_Rigidbody2D))]
 public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.IColliderReference2D
 {
     // INFO: Debug
@@ -11,12 +13,12 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
     public NTS_DebugManager debugManager;
     // <------------------------->
 
-    protected TransformConnector _transformConnector;
-
     /// <summary>
     /// KinematicBody2D attached to the collider
     /// </summary>
     public abstract NTS_Rigidbody2D Body { get; protected set; }
+
+    protected abstract NEWTONS.Core._2D.Collider2D BaseCollider { get; }
 
     /// <summary>
     /// the local center of the collider
@@ -34,15 +36,37 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
 
     public abstract UnityEngine.Vector2 ScaleNoNotify { set; }
 
-    private void OnValidate()
+    public abstract float Restitution { get; set; }
+
+    private void Awake()
     {
-        _transformConnector = GetComponent<TransformConnector>();
-        _transformConnector.OnScaleChanged += OnTransformScaleChange;
+        // Maby only do this in edit mode 
+        Body = GetComponent<NTS_Rigidbody2D>();
+        if (!Body.TrySetAttachedCollider(this))
+            Debug.LogError("Collider " + name + " could not be attached to its Rigidbody " + Body.name);
+
+        BaseCollider.Body = Body.Body;
+        BaseCollider.OnUpdateScale += OnUpdateNEWTONSScale;
+
+        if (!Application.isPlaying)
+            return;
+
+        BaseCollider.AddToPhysicsEngine();
     }
 
-    protected void OnTransformScaleChange()
+
+    private void OnUpdateNEWTONSScale()
     {
-        ScaleNoNotify = transform.lossyScale;
+        UnityEngine.Vector3 loc = transform.localScale;
+        UnityEngine.Vector3 los = transform.lossyScale;
+        UnityEngine.Vector3 k = new UnityEngine.Vector3(los.x / loc.x, los.y / loc.y);
+        transform.localScale = new UnityEngine.Vector3(Scale.x / k.x, Scale.y / k.y);
+    }
+
+    private void Update()
+    {
+        if (transform.lossyScale != (Vector3)Scale)
+            ScaleNoNotify = transform.lossyScale;
     }
 
     public virtual void Dispose()
@@ -53,5 +77,11 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
     public virtual NEWTONS.Core._2D.IColliderReference2D SetCollider(NEWTONS.Core._2D.Collider2D collider)
     {
         throw new System.NotImplementedException();
+    }
+
+    private void OnDestroy()
+    {
+        BaseCollider.OnUpdateScale -= OnUpdateNEWTONSScale;
+        //BaseCollider.OnCollisionEnter -= OnNEWTONSCollisionEnter;
     }
 }
