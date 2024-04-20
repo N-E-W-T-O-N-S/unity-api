@@ -73,22 +73,14 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
         NEWTONS.Core._2D.Physics2D.Gravity = initialGravity.ToNewtonsVector();
     }
 
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space))
-    //        NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
-    //}
+    private void Update()
+    {
+        if (Time.fixedDeltaTime != NEWTONS.Core._2D.Physics2D.DeltaTime)
+            NEWTONS.Core._2D.Physics2D.DeltaTime = Time.fixedDeltaTime;
+    }
 
     private void FixedUpdate()
     {
         NEWTONS.Core._2D.Physics2D.Update();
-    }
-
-    public static void DestroyBody(NTS_Rigidbody2D body)
-    {
-        //tests.Remove(body);
-        NEWTONS.Core._2D.Rigidbody2D b = body.Body;
-        if (b != null)
-            NEWTONS.Core._2D.Physics2D.RemoveBody(b);
     }
 }
