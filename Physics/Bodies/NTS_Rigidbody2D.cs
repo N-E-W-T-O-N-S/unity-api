@@ -38,7 +38,7 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
     /// Sets this rigidbodys collider if the colliders rigidbody is the same as this one.
     /// </summary>
     /// <returns>true if the bodies are the same else false</returns>
-    public bool TrySetAttachedCollider(NTS_Collider2D collider)
+    public bool TryAttachCollider(NTS_Collider2D collider)
     {
         if (collider.Body != this) return false;
 
@@ -108,12 +108,13 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
 
     private void Awake()
     {
-        if (Application.isPlaying)
-        {
-            Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
-            Body.OnUpdateRotation += OnUpdateNEWTOSRotation;
-            Body.AddToPhysicsEngine();   
-        }
+        if (!Application.isPlaying)
+            return;
+
+        Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
+        Body.OnUpdateRotation += OnUpdateNEWTOSRotation;
+        Body.AddReference(this);
+        Body.AddToPhysicsEngine();
     }
 
     private void Update()
@@ -127,12 +128,12 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
     {
-        Body?.AddForce(force.ToNewtonsVector(), forceMode);
+        Body.AddForce(force.ToNewtonsVector(), forceMode);
     }
 
     public void AddTorque(float torque, NEWTONS.Core.ForceMode force)
     {
-        Body?.AddTorque(torque, force);
+        Body.AddTorque(torque, force);
     }
 
     private void OnUpdateNEWTONSPosition()
@@ -148,21 +149,20 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
 
     private void OnDestroy()
     {
+        if (!Application.isPlaying)
+            return;
+
         Body.OnUpdatePosition -= OnUpdateNEWTONSPosition;
         Body.OnUpdateRotation -= OnUpdateNEWTOSRotation;
-        NTS_PhysicsWorld2D.DestroyBody(this);
-    }
-    
-    public void Dispose()
-    {
-        Body = null;
-        Destroy(this);
+        Body.Dispose();
     }
 
-    public NEWTONS.Core._2D.IRigidbodyReference2D SetRigidbody(NEWTONS.Core._2D.Rigidbody2D kinematicBody)
+    public void Dispose()
     {
-        Body = kinematicBody;
-        return this;
+        if (TryGetAttachedCollider(out NTS_Collider2D coll))
+            Destroy(coll);
+
+        Destroy(this);
     }
 
 

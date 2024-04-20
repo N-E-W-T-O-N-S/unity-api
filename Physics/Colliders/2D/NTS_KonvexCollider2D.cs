@@ -41,40 +41,8 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
     [Obsolete("Use Points instead")]
     public UnityEngine.Vector2[] ScaledPoints => KonvexCollider.ScaledPoints.ToUnityVectorArray();
 
-    public override void Dispose()
-    {
-        KonvexCollider = null;
-        Destroy(this);
-    }
-
-    public override IColliderReference2D SetCollider(NEWTONS.Core._2D.Collider2D collider)
-    {
-        KonvexCollider = collider as KonvexCollider2D;
-        if (KonvexCollider == null)
-            throw new ArgumentException("Collider must be of type " + GetType());
-        return this;
-    }
-
 #if UNITY_EDITOR
-    public void Validate() 
-    {
-        try
-        {
-            NTS_Rigidbody2D kBody = GetComponent<NTS_Rigidbody2D>();
-            if (KonvexCollider.Body != kBody.Body || Body != kBody)
-            {
-                KonvexCollider.Body = kBody.Body;
-                Body = kBody;
-            }
-        }
-        catch
-        {
-            debugManager.LogError("KonvexCollider2D: " + name + " is missing a KinematicBody2D component");
-        }
-    }
-
     public bool foldOutDebugManager = false;
-
 #endif
 
 }

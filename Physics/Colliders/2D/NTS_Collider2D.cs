@@ -40,21 +40,20 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
 
     private void Awake()
     {
-        // Maby only do this in edit mode 
         Body = GetComponent<NTS_Rigidbody2D>();
-        if (!Body.TrySetAttachedCollider(this))
+        if (!Body.TryAttachCollider(this))
             Debug.LogError("Collider " + name + " could not be attached to its Rigidbody " + Body.name);
 
         BaseCollider.Body = Body.Body;
-        BaseCollider.OnUpdateScale += OnUpdateNEWTONSScale;
 
         if (!Application.isPlaying)
             return;
 
+        BaseCollider.OnUpdateScale += OnUpdateNEWTONSScale;
+        BaseCollider.AddReference(this);
         BaseCollider.AddToPhysicsEngine();
     }
-
-
+    
     private void OnUpdateNEWTONSScale()
     {
         UnityEngine.Vector3 loc = transform.localScale;
@@ -65,23 +64,44 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+            BaseCollider.Dispose();
+
         if (transform.lossyScale != (Vector3)Scale)
             ScaleNoNotify = transform.lossyScale;
     }
 
-    public virtual void Dispose()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public virtual NEWTONS.Core._2D.IColliderReference2D SetCollider(NEWTONS.Core._2D.Collider2D collider)
-    {
-        throw new System.NotImplementedException();
-    }
-
     private void OnDestroy()
     {
+        if (!Application.isPlaying)
+            return;
+
         BaseCollider.OnUpdateScale -= OnUpdateNEWTONSScale;
-        //BaseCollider.OnCollisionEnter -= OnNEWTONSCollisionEnter;
+        BaseCollider.Dispose();
     }
+
+    public void Dispose()
+    {
+        Destroy(this);
+    }
+
+
+#if UNITY_EDITOR
+    public void Validate()
+    {
+        try
+        {
+            NTS_Rigidbody2D kBody = GetComponent<NTS_Rigidbody2D>();
+            if (BaseCollider.Body != kBody.Body || Body != kBody)
+            {
+                BaseCollider.Body = kBody.Body;
+                Body = kBody;
+            }
+        }
+        catch
+        {
+            debugManager.LogError($"The collider {name} has no {typeof(NTS_Rigidbody2D)} attached to it");
+        }
+    }
+#endif
 }

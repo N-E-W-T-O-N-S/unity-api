@@ -34,25 +34,7 @@ public class NTS_CircleCollider : NTS_Collider2D
     public float ScaledRadius => CircleCollider.ScaledRadius;
 
 #if UNITY_EDITOR
-    public void Validate()
-    {
-        try
-        {
-            NTS_Rigidbody2D kBody = GetComponent<NTS_Rigidbody2D>();
-            if (CircleCollider.Body != kBody.Body || Body != kBody)
-            {
-                CircleCollider.Body = kBody.Body;
-                Body = kBody;
-            }
-        }
-        catch
-        {
-            debugManager.LogError("CuboidCollider: " + name + " is missing a KinematicBody component");
-        }
-    }
-
     public bool foldOutDebugManager = false;
-
 #endif
 
 }

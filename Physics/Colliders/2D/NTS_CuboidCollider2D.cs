@@ -39,38 +39,7 @@ public class NTS_CuboidCollider2D : NTS_Collider2D
 
     public UnityEngine.Vector2[] PointsRaw => CuboidCollider.PointsRaw.ToUnityVectorArray();
 
-    public override void Dispose()
-    {
-        CuboidCollider = null;
-        Destroy(this);
-    }
-
-    public override IColliderReference2D SetCollider(NEWTONS.Core._2D.Collider2D collider)
-    {
-        CuboidCollider = collider as CuboidCollider2D;
-        if (CuboidCollider == null)
-            throw new ArgumentException("Collider must be of type CuboidCollider2D");
-        return this;
-    }
-
 #if UNITY_EDITOR
-    public void Validate()
-    {
-        try
-        {
-            NTS_Rigidbody2D kBody = GetComponent<NTS_Rigidbody2D>();
-            if (CuboidCollider.Body != kBody.Body || Body != kBody)
-            {
-                CuboidCollider.Body = kBody.Body;
-                Body = kBody;
-            }
-        }
-        catch
-        {
-            debugManager.LogError("KonvexCollider2D: " + name + " is missing a RigidBody2D component");
-        }
-    }
-
     public bool foldOutDebugManager = false;
 
 #endif
