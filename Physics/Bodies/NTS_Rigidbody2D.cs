@@ -35,12 +35,12 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
     }
 
     /// <summary>
-    /// Sets this rigidbodys collider if the colliders rigidbody is the same as this one.
+    /// Sets this rigidbodys collider if the colliders rigidbody is the same as this one (or null).
     /// </summary>
-    /// <returns>true if the bodies are the same else false</returns>
+    /// <returns>true if the bodies are the same or null else false</returns>
     public bool TryAttachCollider(NTS_Collider2D collider)
     {
-        if (collider.Body != this) return false;
+        if (collider != null && collider.Body != this) return false;
 
         attachedCollider = collider;
         return true;

@@ -64,7 +64,7 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Escape))
             BaseCollider.Dispose();
 
         if (transform.lossyScale != (Vector3)Scale)
@@ -73,6 +73,7 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
 
     private void OnDestroy()
     {
+        Body.TryAttachCollider(null);
         if (!Application.isPlaying)
             return;
 
@@ -82,6 +83,7 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
 
     public void Dispose()
     {
+        Body.TryAttachCollider(null);
         Destroy(this);
     }
 
