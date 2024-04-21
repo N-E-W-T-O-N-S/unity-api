@@ -45,6 +45,7 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
             Debug.LogError("Collider " + name + " could not be attached to its Rigidbody " + Body.name);
 
         BaseCollider.Body = Body.Body;
+        BaseCollider.Body.Collider = BaseCollider;
 
         if (!Application.isPlaying)
             return;
