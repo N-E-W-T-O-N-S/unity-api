@@ -13,22 +13,7 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
         private set => _konvexCollider = value;
     }
 
-    protected override NEWTONS.Core._2D.Collider2D BaseCollider => KonvexCollider;
-
-    public override NTS_Rigidbody2D Body { get; protected set; }
-
-    public override UnityEngine.Vector2 Center { get => KonvexCollider.Center.ToUnityVector(); set => KonvexCollider.Center = value.ToNewtonsVector(); }
-
-    public override UnityEngine.Vector2 GlobalCenter => Center + Body.Position;
-
-    public override UnityEngine.Vector2 Scale { get => KonvexCollider.Scale.ToUnityVector(); set => KonvexCollider.Scale = value.ToNewtonsVector(); }
-
-    public override UnityEngine.Vector2 ScaleNoNotify { set => KonvexCollider.ScaleNoNotify = value.ToNewtonsVector(); }
-
-    public override float Rotation { get => KonvexCollider.Rotation; }
-
-    public override float Restitution { get => KonvexCollider.Restitution; set => KonvexCollider.Restitution = value; }
-
+    public override NEWTONS.Core._2D.Collider2D BaseCollider => KonvexCollider;
 
     public UnityEngine.Vector2 Size { get => KonvexCollider.Size.ToUnityVector(); set => KonvexCollider.Size = value.ToNewtonsVector(); }
     

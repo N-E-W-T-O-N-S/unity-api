@@ -12,17 +12,11 @@ public class NTS_KonvexCollider2DEditor : Editor
     private void OnEnable()
     {
         _konvexCollider = (NTS_KonvexCollider2D)target;
-        _konvexCollider.Validate();
     }
 
     public override void OnInspectorGUI()
     {
         DrawProps();
-
-        if (GUI.changed)
-        {
-            _konvexCollider.Validate();
-        }
     }
 
     private void DrawProps()

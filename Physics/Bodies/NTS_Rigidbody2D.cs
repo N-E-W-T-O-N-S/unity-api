@@ -1,8 +1,3 @@
-using NEWTONS.Core;
-using NEWTONS.Core._3D;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -40,9 +35,17 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
     /// <returns>true if the bodies are the same or null else false</returns>
     public bool TryAttachCollider(NTS_Collider2D collider)
     {
-        if (collider != null && collider.Body != this) return false;
+
+        if (collider == null)
+        {
+            attachedCollider = null;
+            Body.Collider = null;
+            return true;
+        }
+        else if (collider.Body != this) return false;
 
         attachedCollider = collider;
+        Body.Collider = attachedCollider.BaseCollider;
         return true;
     }
 
@@ -119,6 +122,9 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
 
     private void Update()
     {
+        //if (name == "Floor")
+        //    Debug.Log(AngularVelocity);
+
         if (Position != (UnityEngine.Vector2)transform.position)
             PositionNoNotify = transform.position;
 
@@ -152,8 +158,6 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         if (!Application.isPlaying)
             return;
 
-        Body.OnUpdatePosition -= OnUpdateNEWTONSPosition;
-        Body.OnUpdateRotation -= OnUpdateNEWTOSRotation;
         Body.Dispose();
     }
 

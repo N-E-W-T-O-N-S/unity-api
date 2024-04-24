@@ -1,11 +1,12 @@
 using NEWTONS.Core._3D;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [ExecuteAlways]
 [RequireComponent(typeof(NTS_Rigidbody2D))]
-public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.IColliderReference2D
+public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.IColliderReference2D, ISerializationCallbackReceiver
 {
     // INFO: Debug
     // <------------------------->
@@ -16,27 +17,29 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
     /// <summary>
     /// KinematicBody2D attached to the collider
     /// </summary>
-    public abstract NTS_Rigidbody2D Body { get; protected set; }
+    public NTS_Rigidbody2D Body { get; protected set; }
 
-    protected abstract NEWTONS.Core._2D.Collider2D BaseCollider { get; }
+    public abstract NEWTONS.Core._2D.Collider2D BaseCollider { get; }
 
     /// <summary>
     /// the local center of the collider
     /// </summary>
-    public abstract UnityEngine.Vector2 Center { get; set; }
+    public UnityEngine.Vector2 Center { get => BaseCollider.Center.ToUnityVector(); set => BaseCollider.Center = value.ToNewtonsVector(); }
 
-    public abstract UnityEngine.Vector2 GlobalCenter { get; }
+    public UnityEngine.Vector2 GlobalCenter { get => BaseCollider.GlobalCenter.ToUnityVector(); }
 
-    public abstract float Rotation { get; }
+    public float Rotation { get => BaseCollider.Rotation; }
 
     /// <summary>
     /// lossy scale of the colliser
     /// </summary>
-    public abstract UnityEngine.Vector2 Scale { get; set; }
+    public UnityEngine.Vector2 Scale { get => BaseCollider.Scale.ToUnityVector(); set => BaseCollider.Scale = value.ToNewtonsVector(); }
 
-    public abstract UnityEngine.Vector2 ScaleNoNotify { set; }
+    public UnityEngine.Vector2 ScaleNoNotify { set => BaseCollider.ScaleNoNotify = value.ToNewtonsVector(); }
 
-    public abstract float Restitution { get; set; }
+    public float Restitution { get => BaseCollider.Restitution; set => BaseCollider.Restitution = value; }
+
+    
 
     private void Awake()
     {
@@ -45,7 +48,6 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
             Debug.LogError("Collider " + name + " could not be attached to its Rigidbody " + Body.name);
 
         BaseCollider.Body = Body.Body;
-        BaseCollider.Body.Collider = BaseCollider;
 
         if (!Application.isPlaying)
             return;
@@ -78,7 +80,6 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
         if (!Application.isPlaying)
             return;
 
-        BaseCollider.OnUpdateScale -= OnUpdateNEWTONSScale;
         BaseCollider.Dispose();
     }
 
@@ -90,21 +91,18 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
 
 
 #if UNITY_EDITOR
-    public void Validate()
+    public void OnBeforeSerialize()
     {
-        try
-        {
-            NTS_Rigidbody2D kBody = GetComponent<NTS_Rigidbody2D>();
-            if (BaseCollider.Body != kBody.Body || Body != kBody)
-            {
-                BaseCollider.Body = kBody.Body;
-                Body = kBody;
-            }
-        }
-        catch
-        {
-            debugManager.LogError($"The collider {name} has no {typeof(NTS_Rigidbody2D)} attached to it");
-        }
+        if (Body == null)
+            return;
+
+        if (BaseCollider.Body != Body.Body)
+            BaseCollider.Body = Body.Body;
+    }
+
+    public void OnAfterDeserialize()
+    {
+
     }
 #endif
 }
