@@ -12,17 +12,11 @@ public class NTS_CuboidCollider2DEditor : Editor
     private void OnEnable()
     {
         _cuboidCollider = (NTS_CuboidCollider2D)target;
-        _cuboidCollider.Validate();
     }
 
     public override void OnInspectorGUI()
     {
         DrawProps();
-
-        if (GUI.changed)
-        {
-            _cuboidCollider.Validate();
-        }
     }
 
     private void DrawProps()

@@ -12,17 +12,11 @@ public class NTS_CircleColliderEditor : Editor
     private void OnEnable()
     {
         _circleCollider = (NTS_CircleCollider)target;
-        _circleCollider.Validate();
     }
 
     public override void OnInspectorGUI()
     {
         DrawProps();
-
-        if (GUI.changed)
-        {
-            _circleCollider.Validate();
-        }
     }
 
     private void DrawProps()
