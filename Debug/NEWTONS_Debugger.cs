@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NEWTONS_Debugger : MonoBehaviour
 {
-    private void OnValidate()
+    private void OnEnable()
     {
         NEWTONS_Debugger[] allDebuger = FindObjectsOfType<NEWTONS_Debugger>();
         if (allDebuger.Length > 1)
@@ -32,6 +32,13 @@ public class NEWTONS_Debugger : MonoBehaviour
     private void OnError(string message)
     {
         Debug.LogError(message);
+    }
+
+    private void OnDisable()
+    {
+        NEWTONS.Debuger.Debug.OnLog -= OnLog;
+        NEWTONS.Debuger.Debug.OnWarning -= OnWarning;
+        NEWTONS.Debuger.Debug.OnError -= OnError;
     }
 
 }

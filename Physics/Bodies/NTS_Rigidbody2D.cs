@@ -1,23 +1,53 @@
-using NEWTONS.Core;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TransformConnector))]
+[ExecuteAlways]
 public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReference2D
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core._2D.Rigidbody2D _body;
+    private NEWTONS.Core._2D.Rigidbody2D _body = new();
 
     /// <summary>
     /// Direct access to the Physics Engine's KinematicBody
-    /// <inheritdoc cref="NEWTONS.Core.KinematicBody2D"/>
+    /// <inheritdoc cref="NEWTONS.Core._2D.Rigidbody2D"/>
     /// <para><u><b>WARNING:</b></u> <b>Do not directly use to change properties</b></para>
     /// </summary>
     public NEWTONS.Core._2D.Rigidbody2D Body { get => _body; private set => _body = value; }
 
-    private TransformConnector _transformConnector;
+    private NTS_Collider2D attachedCollider;
+
+    /// <summary>
+    /// Gets the rigidbodys attached collider
+    /// </summary>
+    /// <returns>true if a collider is attached else false</returns>
+    public bool TryGetAttachedCollider(out NTS_Collider2D collider)
+    {
+        collider = null;
+        if (attachedCollider == null)
+            return false;
+
+        collider = attachedCollider;
+        return true;
+    }
+
+    /// <summary>
+    /// Sets this rigidbodys collider if the colliders rigidbody is the same as this one (or null).
+    /// </summary>
+    /// <returns>true if the bodies are the same or null else false</returns>
+    public bool TryAttachCollider(NTS_Collider2D collider)
+    {
+
+        if (collider == null)
+        {
+            attachedCollider = null;
+            Body.Collider = null;
+            return true;
+        }
+        else if (collider.Body != this) return false;
+
+        attachedCollider = collider;
+        Body.Collider = attachedCollider.BaseCollider;
+        return true;
+    }
 
     public bool IsStatic
     {
@@ -31,20 +61,10 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.Position = value.ToNewtonsVector();
     }
 
-    public UnityEngine.Vector2 PositionNoNotify
-    {
-        set => _body.PositionNoNotify = value.ToNewtonsVector();
-    }
-
     public float Rotation
     {
         get => _body.Rotation;
         set => _body.Rotation = value;
-    }
-
-    public float RotationNoNotify
-    {
-        set => _body.RotationNoNotify = value;
     }
 
     public bool UseGravity
@@ -61,6 +81,12 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.Velocity = value.ToNewtonsVector();
     }
 
+    public float AngularVelocity
+    {
+        get => Body.AngularVelocity;
+        set => Body.AngularVelocity = value;
+    }
+
     public float Mass
     {
         get => Body.Mass;
@@ -75,21 +101,43 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
 
     private void Awake()
     {
+        if (!Application.isPlaying)
+            return;
+
         Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
         Body.OnUpdateRotation += OnUpdateNEWTOSRotation;
+        Body.AddReference(this);
         Body.AddToPhysicsEngine();
     }
 
-    private void OnValidate()
+    private void Update()
     {
-        _transformConnector = GetComponent<TransformConnector>();
-        _transformConnector.OnPositionChanged += OnTransformPositionChange;
-        _transformConnector.OnRotationChanged += OnTransformRotationChange;
+        if (Position != (UnityEngine.Vector2)transform.position)
+            Position = transform.position;
+
+        if (Rotation != transform.rotation.z)
+            Rotation = transform.rotation.eulerAngles.z;
     }
+
+    public void AddCurrentVelocity(Vector2 velocity)
+    {
+        Body.AddCurrentVelocity(velocity.ToNewtonsVector());
+    }
+
+    public void AddCurrentAngularVelocity(float angle)
+    {
+        Body.AddCurrentAngularVelocity(angle);
+    }
+
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
     {
-        Body?.AddForce(force.ToNewtonsVector(), forceMode);
+        Body.AddForce(force.ToNewtonsVector(), forceMode);
+    }
+
+    public void AddTorque(float torque, NEWTONS.Core.ForceMode force)
+    {
+        Body.AddTorque(torque, force);
     }
 
     private void OnUpdateNEWTONSPosition()
@@ -103,31 +151,20 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         transform.rotation = UnityEngine.Quaternion.Euler(rot.x, rot.y, Rotation);
     }
 
-    private void OnTransformPositionChange()
-    {
-        PositionNoNotify = transform.position;
-    }
-
-    private void OnTransformRotationChange()
-    {
-        RotationNoNotify = transform.rotation.eulerAngles.z;
-    }
-
     private void OnDestroy()
     {
-        //PhysicsWorld.DestroyBody(this);
+        if (!Application.isPlaying)
+            return;
+
+        Body.Dispose();
     }
 
     public void Dispose()
     {
-        Body = null;
-        Destroy(this);
-    }
+        if (TryGetAttachedCollider(out NTS_Collider2D coll))
+            Destroy(coll);
 
-    public NEWTONS.Core._2D.IRigidbodyReference2D SetRigidbody(NEWTONS.Core._2D.Rigidbody2D kinematicBody)
-    {
-        Body = kinematicBody;
-        return this;
+        Destroy(this);
     }
 
 

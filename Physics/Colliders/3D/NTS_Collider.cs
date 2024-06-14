@@ -4,11 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NTS_Rigidbody), typeof(TransformConnector))]
+[ExecuteAlways]
+[RequireComponent(typeof(NTS_Rigidbody))]
 public abstract class NTS_Collider : MonoBehaviour, NEWTONS.Core._3D.IColliderReference
 {
-    protected TransformConnector _transformConnector;
-
     // INFO: Debug
     // <------------------------->
     [HideInInspector]
@@ -38,15 +37,10 @@ public abstract class NTS_Collider : MonoBehaviour, NEWTONS.Core._3D.IColliderRe
 
     public abstract float Restitution { get; set; }
 
-    private void OnValidate()
+    private void Update()
     {
-        _transformConnector = GetComponent<TransformConnector>();
-        _transformConnector.OnScaleChanged += OnTransformScaleChange;
-    }
-
-    protected void OnTransformScaleChange()
-    {
-        ScaleNoNotify = transform.lossyScale;
+        if (transform.lossyScale != Scale)
+            ScaleNoNotify = transform.lossyScale;
     }
 
     public virtual void Dispose()
