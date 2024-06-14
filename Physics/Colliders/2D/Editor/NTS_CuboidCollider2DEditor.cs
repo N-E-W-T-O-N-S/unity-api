@@ -42,14 +42,6 @@ public class NTS_CuboidCollider2DEditor : Editor
             SceneView.RepaintAll();
         }
         EditorGUILayout.Space();
-
-        _cuboidCollider.foldOutDebugManager = EditorGUILayout.Foldout(_cuboidCollider.foldOutDebugManager, "Debug Manager");
-        if (_cuboidCollider.foldOutDebugManager)
-        {
-            _cuboidCollider.debugManager.showMessages = EditorGUILayout.Toggle("Show Messages", _cuboidCollider.debugManager.showMessages);
-            _cuboidCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", _cuboidCollider.debugManager.showWarnigs);
-            _cuboidCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", _cuboidCollider.debugManager.showErrors);
-        }
     }
 
     private void OnSceneGUI()

@@ -5,7 +5,7 @@ using NEWTONS.Core._2D;
 public class NTS_KonvexCollider2D : NTS_Collider2D
 {
     [SerializeField, HideInInspector]
-    private KonvexCollider2D _konvexCollider;
+    private KonvexCollider2D _konvexCollider = new();
 
     public KonvexCollider2D KonvexCollider 
     { 
@@ -22,12 +22,4 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
     public UnityEngine.Vector2[] Points => KonvexCollider.Points.ToUnityVectorArray();
 
     public UnityEngine.Vector2[] PointsRaw { get => KonvexCollider.PointsRaw.ToUnityVectorArray(); set => KonvexCollider.PointsRaw = value.ToNewtonsVectorArray(); }
-
-    [Obsolete("Use Points instead")]
-    public UnityEngine.Vector2[] ScaledPoints => KonvexCollider.ScaledPoints.ToUnityVectorArray();
-
-#if UNITY_EDITOR
-    public bool foldOutDebugManager = false;
-#endif
-
 }
