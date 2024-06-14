@@ -26,15 +26,24 @@ public class KinematicBodyEditor2D : Editor
 
         Undo.RecordObject(_rigidBody, "2d kinematic props");
         _rigidBody.IsStatic = EditorGUILayout.Toggle("Is Static", _rigidBody.IsStatic);
+
+        EditorGUILayout.Space();
+
         if (_rigidBody.IsStatic)
             return;
 
         _rigidBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", _rigidBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
         _rigidBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", _rigidBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
         _rigidBody.Velocity = EditorGUILayout.Vector2Field("Velocity", _rigidBody.Velocity);
-        _rigidBody.AngularVelocity = EditorGUILayout.FloatField("Angular Velocity", _rigidBody.AngularVelocity);
+        _rigidBody.FixRotation = EditorGUILayout.Toggle("Fix Rotation", _rigidBody.FixRotation);
+
+        if (!_rigidBody.FixRotation)
+            _rigidBody.AngularVelocity = EditorGUILayout.FloatField("Angular Velocity", _rigidBody.AngularVelocity);
+
         EditorGUILayout.Space();
+
         _rigidBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", _rigidBody.UseGravity);
+
     }
     
     private void InfoBox(string text)

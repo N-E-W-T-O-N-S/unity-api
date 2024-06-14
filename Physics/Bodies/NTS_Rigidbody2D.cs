@@ -13,41 +13,7 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
     /// </summary>
     public NEWTONS.Core._2D.Rigidbody2D Body { get => _body; private set => _body = value; }
 
-    private NTS_Collider2D attachedCollider;
-
-    /// <summary>
-    /// Gets the rigidbodys attached collider
-    /// </summary>
-    /// <returns>true if a collider is attached else false</returns>
-    public bool TryGetAttachedCollider(out NTS_Collider2D collider)
-    {
-        collider = null;
-        if (attachedCollider == null)
-            return false;
-
-        collider = attachedCollider;
-        return true;
-    }
-
-    /// <summary>
-    /// Sets this rigidbodys collider if the colliders rigidbody is the same as this one (or null).
-    /// </summary>
-    /// <returns>true if the bodies are the same or null else false</returns>
-    public bool TryAttachCollider(NTS_Collider2D collider)
-    {
-
-        if (collider == null)
-        {
-            attachedCollider = null;
-            Body.Collider = null;
-            return true;
-        }
-        else if (collider.Body != this) return false;
-
-        attachedCollider = collider;
-        Body.Collider = attachedCollider.BaseCollider;
-        return true;
-    }
+    private NTS_Collider2D _attachedCollider;
 
     public bool IsStatic
     {
@@ -61,11 +27,20 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.Position = value.ToNewtonsVector();
     }
 
+    public bool FixRotation
+    {
+        get => Body.FixRotation;
+        set => Body.FixRotation = value;
+    }
+
     public float Rotation
     {
         get => _body.Rotation;
         set => _body.Rotation = value;
     }
+
+    public float Inertia => Body.Inertia;
+
 
     public bool UseGravity
     {
@@ -73,7 +48,6 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.UseGravity = value;
     }
 
-    public float Inertia => Body.Inertia;
 
     public UnityEngine.Vector2 Velocity
     {
@@ -98,6 +72,8 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         get => Body.Drag;
         set => Body.Drag = value;
     }
+
+    public float InvMass => Body.InvMass;
 
     private void Awake()
     {
@@ -138,6 +114,40 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
     public void AddTorque(float torque, NEWTONS.Core.ForceMode force)
     {
         Body.AddTorque(torque, force);
+    }
+
+    /// <summary>
+    /// Gets the rigidbodys attached collider
+    /// </summary>
+    /// <returns>true if a collider is attached else false</returns>
+    public bool TryGetAttachedCollider(out NTS_Collider2D collider)
+    {
+        collider = null;
+        if (_attachedCollider == null)
+            return false;
+
+        collider = _attachedCollider;
+        return true;
+    }
+
+    /// <summary>
+    /// Sets this rigidbodys collider if the colliders rigidbody is the same as this one (or null).
+    /// </summary>
+    /// <returns>true if the bodies are the same or null else false</returns>
+    public bool TryAttachCollider(NTS_Collider2D collider)
+    {
+
+        if (collider == null)
+        {
+            _attachedCollider = null;
+            Body.Collider = null;
+            return true;
+        }
+        else if (collider.Body != this) return false;
+
+        _attachedCollider = collider;
+        Body.Collider = _attachedCollider.BaseCollider;
+        return true;
     }
 
     private void OnUpdateNEWTONSPosition()
