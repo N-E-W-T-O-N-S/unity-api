@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class Rotation : MonoBehaviour
 {
-    public NTS_Rigidbody body;
-    public float speed = 2.5f;
+    public NTS_Rigidbody2D body;
+    public float torque = 1f;
 
     void Start()
     {
-        
+        body = GetComponent<NTS_Rigidbody2D>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        transform.Rotate(Vector3.forward, Time.fixedDeltaTime * 15);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            body.AddTorque(torque, NEWTONS.Core.ForceMode.Force);
+        }
     }
 }

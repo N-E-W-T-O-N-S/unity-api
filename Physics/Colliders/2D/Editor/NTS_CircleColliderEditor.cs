@@ -1,3 +1,4 @@
+using NEWTONS.Core._3D;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -11,17 +12,11 @@ public class NTS_CircleColliderEditor : Editor
     private void OnEnable()
     {
         _circleCollider = (NTS_CircleCollider)target;
-        _circleCollider.Validate();
     }
 
     public override void OnInspectorGUI()
     {
         DrawProps();
-
-        if (GUI.changed)
-        {
-            _circleCollider.Validate();
-        }
     }
 
     private void DrawProps()
@@ -37,20 +32,18 @@ public class NTS_CircleColliderEditor : Editor
         float oldRadius = _circleCollider.Radius;
         _circleCollider.Radius = Mathf.Max(EditorGUILayout.FloatField("Radius", _circleCollider.Radius), 0);
 
+        _circleCollider.Restitution = EditorGUILayout.Slider("Restitution", _circleCollider.Restitution, 0, 1);
+
+        GUI.enabled = false;
+        EditorGUILayout.FloatField("Inertia", _circleCollider.Body.Inertia);
+        GUI.enabled = true;
+
         if (oldRadius != _circleCollider.Radius || oldCenter != _circleCollider.Center)
         {
             SceneView.RepaintAll();
         }
 
         EditorGUILayout.Space();
-
-        _circleCollider.foldOutDebugManager = EditorGUILayout.Foldout(_circleCollider.foldOutDebugManager, "Debug Manager");
-        if (_circleCollider.foldOutDebugManager)
-        {
-            _circleCollider.debugManager.showMessages = EditorGUILayout.Toggle("Show Messages", _circleCollider.debugManager.showMessages);
-            _circleCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", _circleCollider.debugManager.showWarnigs);
-            _circleCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", _circleCollider.debugManager.showErrors);
-        }
     }
 
     private void OnSceneGUI()

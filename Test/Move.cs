@@ -4,25 +4,30 @@ using UnityEngine;
 
 public class Move : MonoBehaviour
 {
-    public NTS_Rigidbody body;
+    public Rigidbody body;
+    List<ContactPoint> contactPoints = new List<ContactPoint>();
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        body = GetComponent<Rigidbody>();
+        body.velocity = Vector3.left;
     }
 
-    private void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            body.Velocity += new Vector3(0, 5, 0);
+        collision.GetContacts(contactPoints);
+        Debug.Log(contactPoints.Count);
+        body.velocity = Vector3.zero;
+        body.angularVelocity = Vector3.zero;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void OnDrawGizmos()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-
-        body.Velocity = new Vector3(x, body.Velocity.y, body.Velocity.z);
+        Gizmos.color = Color.yellow;
+        foreach (ContactPoint point in contactPoints)
+        {
+            Gizmos.DrawRay(point.point, point.normal);
+        }
     }
 }

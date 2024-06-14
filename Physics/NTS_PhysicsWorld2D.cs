@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class NTS_PhysicsWorld2D : MonoBehaviour
 {
-    public static List<NTS_Rigidbody2D> tests = new List<NTS_Rigidbody2D>();
-    public static List<NTS_KonvexCollider2D> colltest = new List<NTS_KonvexCollider2D>();
+    public static List<NTS_Rigidbody2D> tests = new();
+    public static List<NTS_KonvexCollider2D> colltest = new();
+
+    public static NTS_PhysicsWorld2D Instance;
 
     //TODO: Look into removing these:
     #region Internal NEWTONS fields
@@ -66,29 +68,23 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this);
+    }
+
+    private void Start()
+    {
+        NEWTONS.Core._2D.Physics2D.DeltaTime = Time.fixedDeltaTime;
         NEWTONS.Core._2D.Physics2D.Temperature = initialTemperature;
         NEWTONS.Core._2D.Physics2D.Density = initialDensity;
         NEWTONS.Core._2D.Physics2D.UseCustomDrag = initialUseCustomDrag;
         NEWTONS.Core._2D.Physics2D.Gravity = initialGravity.ToNewtonsVector();
-        NEWTONS.Core._2D.Physics2D.DeltaTime = Time.fixedDeltaTime;
     }
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space))
-    //        NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
-    //}
 
     private void FixedUpdate()
     {
-        NEWTONS.Core._2D.Physics2D.Update();
-    }
-
-    public static void DestroyBody(NTS_Rigidbody2D body)
-    {
-        //tests.Remove(body);
-        NEWTONS.Core._2D.Rigidbody2D b = body.Body;
-        if (b != null)
-            NEWTONS.Core._2D.Physics2D.RemoveBody(b);
+        NEWTONS.Core._2D.Physics2D.Update(Time.fixedDeltaTime);
     }
 }

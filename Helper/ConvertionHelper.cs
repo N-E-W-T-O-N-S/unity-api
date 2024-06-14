@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using NEWTONS.Core;
 using System.Runtime.CompilerServices;
 
 public static class ConvertionHelper
