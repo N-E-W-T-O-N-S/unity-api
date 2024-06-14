@@ -44,14 +44,6 @@ public class NTS_CircleColliderEditor : Editor
         }
 
         EditorGUILayout.Space();
-
-        _circleCollider.foldOutDebugManager = EditorGUILayout.Foldout(_circleCollider.foldOutDebugManager, "Debug Manager");
-        if (_circleCollider.foldOutDebugManager)
-        {
-            _circleCollider.debugManager.showMessages = EditorGUILayout.Toggle("Show Messages", _circleCollider.debugManager.showMessages);
-            _circleCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", _circleCollider.debugManager.showWarnigs);
-            _circleCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", _circleCollider.debugManager.showErrors);
-        }
     }
 
     private void OnSceneGUI()

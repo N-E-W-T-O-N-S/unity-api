@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class NTS_PhysicsWorld2D : MonoBehaviour
 {
-    public static List<NTS_Rigidbody2D> tests = new List<NTS_Rigidbody2D>();
-    public static List<NTS_KonvexCollider2D> colltest = new List<NTS_KonvexCollider2D>();
+    public static List<NTS_Rigidbody2D> tests = new();
+    public static List<NTS_KonvexCollider2D> colltest = new();
+
+    public static NTS_PhysicsWorld2D Instance;
 
     //TODO: Look into removing these:
     #region Internal NEWTONS fields
@@ -64,6 +66,14 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
         set => NEWTONS.Core._2D.Physics2D.Gravity = value.ToNewtonsVector();
     }
 
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this);
+    }
+
     private void Start()
     {
         NEWTONS.Core._2D.Physics2D.DeltaTime = Time.fixedDeltaTime;
@@ -73,14 +83,8 @@ public class NTS_PhysicsWorld2D : MonoBehaviour
         NEWTONS.Core._2D.Physics2D.Gravity = initialGravity.ToNewtonsVector();
     }
 
-    private void Update()
-    {
-        if (Time.fixedDeltaTime != NEWTONS.Core._2D.Physics2D.DeltaTime)
-            NEWTONS.Core._2D.Physics2D.DeltaTime = Time.fixedDeltaTime;
-    }
-
     private void FixedUpdate()
     {
-        NEWTONS.Core._2D.Physics2D.Update();
+        NEWTONS.Core._2D.Physics2D.Update(Time.fixedDeltaTime);
     }
 }

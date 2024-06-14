@@ -1,9 +1,5 @@
-using log4net.Util;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 [CustomEditor(typeof(NTS_Rigidbody2D)), CanEditMultipleObjects]
 public class KinematicBodyEditor2D : Editor

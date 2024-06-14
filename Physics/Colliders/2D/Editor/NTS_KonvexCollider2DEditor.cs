@@ -38,14 +38,6 @@ public class NTS_KonvexCollider2DEditor : Editor
             SceneView.RepaintAll();
         }
         EditorGUILayout.Space();
-
-        _konvexCollider.foldOutDebugManager = EditorGUILayout.Foldout(_konvexCollider.foldOutDebugManager, "Debug Manager");
-        if (_konvexCollider.foldOutDebugManager)
-        {
-            _konvexCollider.debugManager.showMessages = EditorGUILayout.Toggle("Show Messages", _konvexCollider.debugManager.showMessages);
-            _konvexCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", _konvexCollider.debugManager.showWarnigs);
-            _konvexCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", _konvexCollider.debugManager.showErrors);
-        }
     }
 
     private void OnSceneGUI()

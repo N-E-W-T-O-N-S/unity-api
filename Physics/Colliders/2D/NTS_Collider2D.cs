@@ -8,11 +8,6 @@ using UnityEngine;
 [RequireComponent(typeof(NTS_Rigidbody2D))]
 public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.IColliderReference2D, ISerializationCallbackReceiver
 {
-    // INFO: Debug
-    // <------------------------->
-    [HideInInspector]
-    public NTS_DebugManager debugManager;
-    // <------------------------->
 
     /// <summary>
     /// KinematicBody2D attached to the collider

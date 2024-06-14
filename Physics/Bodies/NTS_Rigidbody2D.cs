@@ -4,7 +4,7 @@ using UnityEngine;
 public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReference2D
 {
     [SerializeField, HideInInspector]
-    private NEWTONS.Core._2D.Rigidbody2D _body;
+    private NEWTONS.Core._2D.Rigidbody2D _body = new();
 
     /// <summary>
     /// Direct access to the Physics Engine's KinematicBody
@@ -61,20 +61,10 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.Position = value.ToNewtonsVector();
     }
 
-    public UnityEngine.Vector2 PositionNoNotify
-    {
-        set => _body.PositionNoNotify = value.ToNewtonsVector();
-    }
-
     public float Rotation
     {
         get => _body.Rotation;
         set => _body.Rotation = value;
-    }
-
-    public float RotationNoNotify
-    {
-        set => _body.RotationNoNotify = value;
     }
 
     public bool UseGravity
@@ -122,15 +112,23 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
 
     private void Update()
     {
-        //if (name == "Floor")
-        //    Debug.Log(AngularVelocity);
-
         if (Position != (UnityEngine.Vector2)transform.position)
-            PositionNoNotify = transform.position;
+            Position = transform.position;
 
         if (Rotation != transform.rotation.z)
-            RotationNoNotify = transform.rotation.eulerAngles.z;
+            Rotation = transform.rotation.eulerAngles.z;
     }
+
+    public void AddCurrentVelocity(Vector2 velocity)
+    {
+        Body.AddCurrentVelocity(velocity.ToNewtonsVector());
+    }
+
+    public void AddCurrentAngularVelocity(float angle)
+    {
+        Body.AddCurrentAngularVelocity(angle);
+    }
+
 
     public void AddForce(UnityEngine.Vector2 force, NEWTONS.Core.ForceMode forceMode)
     {
