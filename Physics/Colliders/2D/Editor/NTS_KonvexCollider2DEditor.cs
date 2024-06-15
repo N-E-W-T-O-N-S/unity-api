@@ -51,6 +51,6 @@ public class NTS_KonvexCollider2DEditor : Editor
             Handles.DrawLine(points[i] + offset, points[(i + 1) % points.Length] + offset);
         }
 
-
+        EditorHelper.DrawBounds(_konvexCollider);
     }
 }

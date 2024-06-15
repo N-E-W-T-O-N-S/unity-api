@@ -34,10 +34,6 @@ public class NTS_CircleColliderEditor : Editor
 
         _circleCollider.Restitution = EditorGUILayout.Slider("Restitution", _circleCollider.Restitution, 0, 1);
 
-        GUI.enabled = false;
-        EditorGUILayout.FloatField("Inertia", _circleCollider.Body.Inertia);
-        GUI.enabled = true;
-
         if (oldRadius != _circleCollider.Radius || oldCenter != _circleCollider.Center)
         {
             SceneView.RepaintAll();
@@ -50,5 +46,7 @@ public class NTS_CircleColliderEditor : Editor
     {
         Handles.color = Color.green;
         Handles.DrawWireDisc(_circleCollider.GlobalCenter, Vector3.forward, _circleCollider.ScaledRadius);
+
+        EditorHelper.DrawBounds(_circleCollider);
     }
 }

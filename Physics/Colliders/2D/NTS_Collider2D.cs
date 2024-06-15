@@ -34,7 +34,8 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
 
     public float Restitution { get => BaseCollider.Restitution; set => BaseCollider.Restitution = value; }
 
-    
+    public NEWTONS.Core._2D.Bounds2D Bounds => BaseCollider.Bounds;
+
 
     private void Awake()
     {
@@ -51,7 +52,7 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
         BaseCollider.AddReference(this);
         BaseCollider.AddToPhysicsEngine();
     }
-    
+
     private void OnUpdateNEWTONSScale()
     {
         UnityEngine.Vector3 loc = transform.localScale;
@@ -85,7 +86,7 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
     }
 
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
     public void OnBeforeSerialize()
     {
         if (Body == null)
@@ -99,5 +100,5 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
     {
 
     }
-#endif
+//#endif
 }
