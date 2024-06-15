@@ -55,6 +55,7 @@ public class NTS_CuboidCollider2DEditor : Editor
             Handles.DrawLine(points[i] + offset, points[(i + 1) % points.Length] + offset);
         }
 
+        EditorHelper.DrawBounds(_cuboidCollider);
 
     }
 }

@@ -9,7 +9,7 @@ public class NTS_CuboidCollider2D : NTS_Collider2D
 {
 
     [SerializeField, HideInInspector]
-    private CuboidCollider2D _cuboidCollider;
+    private CuboidCollider2D _cuboidCollider = new();
 
     public CuboidCollider2D CuboidCollider { get => _cuboidCollider; private set => _cuboidCollider = value; }
 

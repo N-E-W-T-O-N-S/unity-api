@@ -38,7 +38,13 @@ public class KinematicBodyEditor2D : Editor
         _rigidBody.FixRotation = EditorGUILayout.Toggle("Fix Rotation", _rigidBody.FixRotation);
 
         if (!_rigidBody.FixRotation)
+        {
+            _rigidBody.CustomInertia = EditorGUILayout.Toggle("Custom Inertia", _rigidBody.CustomInertia);
+            GUI.enabled = _rigidBody.CustomInertia;
+            _rigidBody.Inertia = Mathf.Max(NEWTONS.Core.PhysicsInfo.MinInertia, EditorGUILayout.FloatField("Inertia", _rigidBody.Inertia));
+            GUI.enabled = true;
             _rigidBody.AngularVelocity = EditorGUILayout.FloatField("Angular Velocity", _rigidBody.AngularVelocity);
+        }
 
         EditorGUILayout.Space();
 

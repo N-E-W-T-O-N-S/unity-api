@@ -39,7 +39,17 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => _body.Rotation = value;
     }
 
-    public float Inertia => Body.Inertia;
+    public bool CustomInertia
+    {
+        get => Body.CustomInertia;
+        set => Body.CustomInertia = value;
+    }
+
+    public float Inertia
+    {
+        get => Body.Inertia;
+        set => Body.Inertia = value;
+    }
 
 
     public bool UseGravity
