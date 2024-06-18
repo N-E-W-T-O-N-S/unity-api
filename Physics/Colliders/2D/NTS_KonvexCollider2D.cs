@@ -4,7 +4,6 @@ using NEWTONS.Core._2D;
 
 public class NTS_KonvexCollider2D : NTS_Collider2D
 {
-    [SerializeField, HideInInspector]
     private KonvexCollider2D _konvexCollider = new();
 
     public KonvexCollider2D KonvexCollider 
@@ -22,4 +21,35 @@ public class NTS_KonvexCollider2D : NTS_Collider2D
     public UnityEngine.Vector2[] Points => KonvexCollider.Points.ToUnityVectorArray();
 
     public UnityEngine.Vector2[] PointsRaw { get => KonvexCollider.PointsRaw.ToUnityVectorArray(); set => KonvexCollider.PointsRaw = value.ToNewtonsVectorArray(); }
+
+    #region Serialization
+
+    [System.Serializable]
+    private struct SerializerKonvexCollider2D
+    {
+        public Vector2 size;
+        public Vector2[] pointsRaw;
+    }
+
+    [SerializeField, HideInInspector]
+    private SerializerKonvexCollider2D _serializerKonvexCollider;
+
+    public override void OnBeforeSerialize()
+    {
+        base.OnBeforeSerialize();
+        _serializerKonvexCollider = new()
+        {
+            size = Size,
+            pointsRaw = PointsRaw
+        };
+    }
+
+    public override void OnAfterDeserialize()
+    {
+        base.OnAfterDeserialize();
+        Size = _serializerKonvexCollider.size;
+        PointsRaw = _serializerKonvexCollider.pointsRaw;
+    }
+
+    #endregion
 }

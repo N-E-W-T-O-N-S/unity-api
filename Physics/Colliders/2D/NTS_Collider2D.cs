@@ -8,11 +8,13 @@ using UnityEngine;
 [RequireComponent(typeof(NTS_Rigidbody2D))]
 public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.IColliderReference2D, ISerializationCallbackReceiver
 {
+    [SerializeField, HideInInspector]
+    private NTS_Rigidbody2D _body;
 
     /// <summary>
     /// KinematicBody2D attached to the collider
     /// </summary>
-    public NTS_Rigidbody2D Body { get; protected set; }
+    public NTS_Rigidbody2D Body { get => _body; protected set => _body = value; }
 
     public abstract NEWTONS.Core._2D.Collider2D BaseCollider { get; }
 
@@ -26,7 +28,7 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
     public float Rotation { get => BaseCollider.Rotation; }
 
     /// <summary>
-    /// lossy scale of the colliser
+    /// lossy scale of the collider
     /// </summary>
     public UnityEngine.Vector2 Scale { get => BaseCollider.Scale.ToUnityVector(); set => BaseCollider.Scale = value.ToNewtonsVector(); }
 
@@ -51,6 +53,11 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
         BaseCollider.OnUpdateScale += OnUpdateNEWTONSScale;
         BaseCollider.AddReference(this);
         BaseCollider.AddToPhysicsEngine();
+    }
+
+    private void OnValidate()
+    {
+        Body = Body != null ? Body : GetComponent<NTS_Rigidbody2D>();
     }
 
     private void OnUpdateNEWTONSScale()
@@ -85,20 +92,36 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
         Destroy(this);
     }
 
+    #region Serialization
 
-//#if UNITY_EDITOR
-    public void OnBeforeSerialize()
+    [System.Serializable]
+    private struct SerializerCollider2D
     {
-        if (Body == null)
-            return;
-
-        if (BaseCollider.Body != Body.Body)
-            BaseCollider.Body = Body.Body;
+        public Vector2 center;
+        public Vector2 scale;
+        public float restitution;
     }
 
-    public void OnAfterDeserialize()
-    {
+    [SerializeField, HideInInspector]
+    private SerializerCollider2D _serializerCollider;
 
+    public virtual void OnBeforeSerialize()
+    {
+        _serializerCollider = new()
+        {
+            center = Center,
+            scale = Scale,
+            restitution = Restitution
+        };
+
+        BaseCollider.Body = Body.Body;
     }
-//#endif
+
+    public virtual void OnAfterDeserialize()
+    {
+        Center = _serializerCollider.center;
+        Scale = _serializerCollider.scale;
+        Restitution = _serializerCollider.restitution;
+    }
+    #endregion
 }

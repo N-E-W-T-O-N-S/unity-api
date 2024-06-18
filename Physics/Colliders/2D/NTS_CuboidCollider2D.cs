@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class NTS_CuboidCollider2D : NTS_Collider2D
 {
-
-    [SerializeField, HideInInspector]
     private CuboidCollider2D _cuboidCollider = new();
 
     public CuboidCollider2D CuboidCollider { get => _cuboidCollider; private set => _cuboidCollider = value; }
@@ -24,8 +22,31 @@ public class NTS_CuboidCollider2D : NTS_Collider2D
 
     public UnityEngine.Vector2[] PointsRaw => CuboidCollider.PointsRaw.ToUnityVectorArray();
 
-#if UNITY_EDITOR
-    public bool foldOutDebugManager = false;
-#endif
+    #region Serialization
 
+    [System.Serializable]
+    private struct SerializerCuboidCollider2D
+    {
+        public Vector2 size;
+    }
+
+    [SerializeField, HideInInspector]
+    private SerializerCuboidCollider2D _serializerCuboidCollider;
+
+    public override void OnBeforeSerialize()
+    {
+        base.OnBeforeSerialize();
+        _serializerCuboidCollider = new()
+        {
+            size = Size
+        };
+    }
+
+    public override void OnAfterDeserialize()
+    {
+        base.OnAfterDeserialize();
+        Size = _serializerCuboidCollider.size;
+    }
+
+    #endregion
 }

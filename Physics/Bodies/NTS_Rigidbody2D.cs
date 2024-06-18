@@ -1,9 +1,9 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [ExecuteAlways]
-public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReference2D
+public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReference2D, ISerializationCallbackReceiver
 {
-    [SerializeField, HideInInspector]
     private NEWTONS.Core._2D.Rigidbody2D _body = new();
 
     /// <summary>
@@ -13,6 +13,7 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
     /// </summary>
     public NEWTONS.Core._2D.Rigidbody2D Body { get => _body; private set => _body = value; }
 
+    [SerializeField, HideInInspector]
     private NTS_Collider2D _attachedCollider;
 
     public bool IsStatic
@@ -187,6 +188,57 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         Destroy(this);
     }
 
+    #region Serialization
+    [System.Serializable]
+    private struct SerializerRigidbody2D
+    {
+        public bool isStatic;
+        public Vector2 position;
+        public bool fixRotation;
+        public float rotation;
+        public bool customInertia;
+        public float inertia;
+        public bool useGravity;
+        public Vector2 velocity;
+        public float angularVelocity;
+        public float mass;
+        public float drag;
+    }
+
+    [SerializeField, HideInInspector]
+    private SerializerRigidbody2D _serializerBody;
+
+    public void OnBeforeSerialize()
+    {
+        _serializerBody = new()
+        {
+            isStatic = IsStatic,
+            position = Position,
+            fixRotation = FixRotation,
+            rotation = Rotation,
+            customInertia = CustomInertia,
+            inertia = Inertia,
+            useGravity = UseGravity,
+            velocity = Velocity,
+            mass = Mass,
+            drag = Drag,
+        };
+    }
+
+    public void OnAfterDeserialize()
+    {
+        IsStatic = _serializerBody.isStatic;
+        Position = _serializerBody.position;
+        FixRotation = _serializerBody.fixRotation;
+        Rotation = _serializerBody.rotation;
+        CustomInertia = _serializerBody.customInertia;
+        Inertia = _serializerBody.inertia;
+        UseGravity = _serializerBody.useGravity;
+        Velocity = _serializerBody.velocity;
+        Mass = _serializerBody.mass;
+        Drag = _serializerBody.drag;
+    }
+    #endregion
 
 #if UNITY_EDITOR
     public bool foldOutInfo = false;

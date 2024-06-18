@@ -20,23 +20,12 @@ public class PhysicsWorld2DEditor : Editor
 
     private void DrawProps()
     {
-        if (Application.isPlaying)
-        {
-            NTS_PhysicsWorld2D.Gravity = EditorGUILayout.Vector2Field("Gravity", NTS_PhysicsWorld2D.Gravity);
-            NTS_PhysicsWorld2D.UseCustomDrag = EditorGUILayout.Toggle("Use Physical Drag", NTS_PhysicsWorld2D.UseCustomDrag);
-            if (!NTS_PhysicsWorld2D.UseCustomDrag)
-                return;
-            NTS_PhysicsWorld2D.Temperature = Mathf.Max(EditorGUILayout.FloatField("Temperature", NTS_PhysicsWorld2D.Temperature), NEWTONS.Core.PhysicsInfo.MinTemperature);
-            NTS_PhysicsWorld2D.Density = Mathf.Max(EditorGUILayout.FloatField("Density", NTS_PhysicsWorld2D.Density), NEWTONS.Core.PhysicsInfo.MinDensity);
-        }
-        else
-        {
-            physicsWorld.initialGravity = EditorGUILayout.Vector2Field("Gravity", physicsWorld.initialGravity);
-            physicsWorld.initialUseCustomDrag = EditorGUILayout.Toggle("Use Physical Drag", physicsWorld.initialUseCustomDrag);
-            if (!physicsWorld.initialUseCustomDrag)
-                return;
-            physicsWorld.initialTemperature = Mathf.Max(EditorGUILayout.FloatField("Temperature", physicsWorld.initialTemperature), NEWTONS.Core.PhysicsInfo.MinTemperature);
-            physicsWorld.initialDensity = Mathf.Max(EditorGUILayout.FloatField("Density", physicsWorld.initialDensity), NEWTONS.Core.PhysicsInfo.MinDensity);
-        }
+        Undo.RecordObject(physicsWorld, "Properies Changed");
+        NTS_PhysicsWorld2D.Instance.Gravity = EditorGUILayout.Vector2Field("Gravity", NTS_PhysicsWorld2D.Instance.Gravity);
+        NTS_PhysicsWorld2D.Instance.UseCustomDrag = EditorGUILayout.Toggle("Use Physical Drag", NTS_PhysicsWorld2D.Instance.UseCustomDrag);
+        if (!NTS_PhysicsWorld2D.Instance.UseCustomDrag)
+            return;
+        NTS_PhysicsWorld2D.Instance.Temperature = Mathf.Max(EditorGUILayout.FloatField("Temperature", NTS_PhysicsWorld2D.Instance.Temperature), NEWTONS.Core.PhysicsInfo.MinTemperature);
+        NTS_PhysicsWorld2D.Instance.Density = Mathf.Max(EditorGUILayout.FloatField("Density", NTS_PhysicsWorld2D.Instance.Density), NEWTONS.Core.PhysicsInfo.MinDensity);
     }
 }
