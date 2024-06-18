@@ -2,11 +2,11 @@ using NEWTONS.Core._2D;
 using NEWTONS.Core._3D;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class NTS_CircleCollider : NTS_Collider2D
 {
-    [SerializeField, HideInInspector]
     private NEWTONS.Core._2D.CircleCollider _circleCollider = new();
 
     public NEWTONS.Core._2D.CircleCollider CircleCollider { get => _circleCollider; set => _circleCollider = value; }
@@ -18,8 +18,32 @@ public class NTS_CircleCollider : NTS_Collider2D
 
     public float ScaledRadius => CircleCollider.ScaledRadius;
 
-#if UNITY_EDITOR
-    public bool foldOutDebugManager = false;
-#endif
+    #region Serialization
+
+    [System.Serializable]
+    private struct SerializerCircleCollider2D
+    {
+        public float radius;
+    }
+
+    [SerializeField, HideInInspector]
+    private SerializerCircleCollider2D _serializerCircleCollider;
+
+    public override void OnBeforeSerialize()
+    {
+        base.OnBeforeSerialize();
+        _serializerCircleCollider = new()
+        {
+            radius = Radius
+        };
+    }
+
+    public override void OnAfterDeserialize()
+    {
+        base.OnAfterDeserialize();
+        Radius = _serializerCircleCollider.radius;
+    }
+
+    #endregion
 
 }
