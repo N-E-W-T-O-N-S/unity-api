@@ -114,7 +114,9 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
             restitution = Restitution
         };
 
+        Body.TryAttachCollider(this);
         BaseCollider.Body = Body.Body;
+
     }
 
     public virtual void OnAfterDeserialize()
