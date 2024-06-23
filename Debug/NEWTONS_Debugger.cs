@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteAlways]
 public class NEWTONS_Debugger : MonoBehaviour
 {
     private void OnEnable()
@@ -14,9 +15,9 @@ public class NEWTONS_Debugger : MonoBehaviour
             return;
         }
 
-        NEWTONS.Debuger.Debug.OnLog += OnLog;
-        NEWTONS.Debuger.Debug.OnWarning += OnWarning;
-        NEWTONS.Debuger.Debug.OnError += OnError;
+        NEWTONS.Debugger.Debug.OnLog += OnLog;
+        NEWTONS.Debugger.Debug.OnWarning += OnWarning;
+        NEWTONS.Debugger.Debug.OnError += OnError;
     }
 
     private void OnLog(string message)
@@ -36,9 +37,9 @@ public class NEWTONS_Debugger : MonoBehaviour
 
     private void OnDisable()
     {
-        NEWTONS.Debuger.Debug.OnLog -= OnLog;
-        NEWTONS.Debuger.Debug.OnWarning -= OnWarning;
-        NEWTONS.Debuger.Debug.OnError -= OnError;
+        NEWTONS.Debugger.Debug.OnLog -= OnLog;
+        NEWTONS.Debugger.Debug.OnWarning -= OnWarning;
+        NEWTONS.Debugger.Debug.OnError -= OnError;
     }
 
 }

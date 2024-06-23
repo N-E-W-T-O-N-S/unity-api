@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,6 +10,12 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
 
     public List<NTS_Rigidbody2D> tests = new();
     public List<NTS_KonvexCollider2D> colltest = new();
+
+    public int Steps
+    {
+        get => NEWTONS.Core._2D.Physics2D.Steps;
+        set => NEWTONS.Core._2D.Physics2D.Steps = value;
+    }
 
     public bool UseCustomDrag
     {
@@ -40,7 +47,10 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         if (Instance == null)
             Instance = this;
         else if (Instance != this)
+        {
             Destroy(this);
+            return;
+        }
     }
 
     private void OnValidate()
@@ -48,18 +58,39 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         if (Instance == null)
             Instance = this;
         else if (Instance != this)
+        {
             Destroy(this);
+            return;
+        }
     }
+
+    System.Diagnostics.Stopwatch sw = new();
+
+    float time = 0f;
+    int frames = 0;
 
     private void FixedUpdate()
     {
+        if (frames >= 50 * 20)
+        {
+            Debug.Log(time / frames);
+            return;
+        }
+
+        sw.Start();
         NEWTONS.Core._2D.Physics2D.Update(Time.fixedDeltaTime);
+        sw.Stop();
+        time += sw.ElapsedMilliseconds;
+        frames++;
+        sw.Reset();
+    
     }
 
     #region Serialization
     [System.Serializable]
     private struct SerializerPhysicsWorld2D
     {
+        public int steps;
         public Vector2 gravity;
         public bool useCustomDrag;
         public float temperature;
@@ -73,6 +104,7 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
     {
         _serializerWorld = new()
         {
+            steps = Steps,
             gravity = Gravity,
             useCustomDrag = UseCustomDrag,
             temperature = Temperature,
@@ -82,6 +114,7 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
 
     public void OnAfterDeserialize()
     {
+        Steps = _serializerWorld.steps;
         Gravity = _serializerWorld.gravity;
         UseCustomDrag = _serializerWorld.useCustomDrag;
         Temperature = _serializerWorld.temperature;

@@ -18,9 +18,15 @@ public class NTS_CuboidCollider2D : NTS_Collider2D
 
     public UnityEngine.Vector2 ScaledSize => CuboidCollider.ScaledSize.ToUnityVector();
 
-    public UnityEngine.Vector2[] Points => CuboidCollider.Points.ToUnityVectorArray();
+    public UnityEngine.Vector2[] Points
+    {
+        get => CuboidCollider.Points.ToUnityVectorArray();
+    }
 
-    public UnityEngine.Vector2[] PointsRaw => CuboidCollider.PointsRaw.ToUnityVectorArray();
+    public UnityEngine.Vector2[] PointsRaw
+    {
+        get => CuboidCollider.PointsRaw.ToUnityVectorArray();
+    }
 
     #region Serialization
 

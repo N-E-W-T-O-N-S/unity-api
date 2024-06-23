@@ -43,7 +43,7 @@ public class NTS_KonvexCollider2DEditor : Editor
     private void OnSceneGUI()
     {
         Vector2[] points = _konvexCollider.Points;
-        Vector2 offset = (Vector2)_konvexCollider.transform.position + _konvexCollider.Center;
+        Vector2 offset = _konvexCollider.GlobalCenter;
 
         Handles.color = Color.green;
         for (int i = 0; i < points.Length; i++)

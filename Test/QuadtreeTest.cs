@@ -36,7 +36,8 @@ public class QuadtreeTest : MonoBehaviour
     void Update()
     {
         var rect = new Rectangle(rectAnchor.transform.position.ToNewtonsVector(), rectAnchor.transform.localScale.x, rectAnchor.transform.localScale.y);
-        var data = _tree.Receive(rect);
+        List<QuadtreeData<MeshRenderer>> data = new();
+        _tree.Receive(rect, data);
 
         foreach (var rend in renderers)
         {
