@@ -11,15 +11,15 @@ public class QuadtreeTest : MonoBehaviour
 
     public Transform rectAnchor;
 
-    private Quadtree<MeshRenderer> _tree;
+    private BVH2D<MeshRenderer> _tree;
     MeshRenderer[] renderers;
 
 
     void Start()
     {
         renderers = new MeshRenderer[numberOfPoints];
-        _tree = new Quadtree<MeshRenderer>(new Rectangle(transform.position.ToNewtonsVector(), size.x, size.y), 4);
-        transform.localScale = size;
+
+        BVHData2D<MeshRenderer>[] data = new BVHData2D<MeshRenderer>[numberOfPoints];
 
         for (int i = 0; i < numberOfPoints; i++)
         {
@@ -28,15 +28,21 @@ public class QuadtreeTest : MonoBehaviour
             obj.transform.position = new UnityEngine.Vector2(Random.value * size.x, Random.value * size.y) - size * 0.5f;
             var rend = obj.GetComponent<MeshRenderer>();
             renderers[i] = rend;
-            _tree.Insert(new QuadtreeData<MeshRenderer>(new Rectangle(obj.transform.position.ToNewtonsVector(), obj.transform.localScale.x, obj.transform.localScale.y), rend));
+            data[i] = new BVHData2D<MeshRenderer>(obj.transform.position.ToNewtonsVector(), new(0.25f, obj.transform.position.ToNewtonsVector()), rend);
         }
+
+        _tree = new BVH2D<MeshRenderer>();
+        _tree.Build(data);
+        transform.localScale = size;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        var rect = new Rectangle(rectAnchor.transform.position.ToNewtonsVector(), rectAnchor.transform.localScale.x, rectAnchor.transform.localScale.y);
-        List<QuadtreeData<MeshRenderer>> data = new();
+        var pos = rectAnchor.transform.position.ToNewtonsVector();
+        var rect = new Bounds2D(0.5f, pos);
+        List<BVHData2D<MeshRenderer>> data = new();
         _tree.Receive(rect, data);
 
         foreach (var rend in renderers)
@@ -46,7 +52,7 @@ public class QuadtreeTest : MonoBehaviour
 
         foreach (var renderer in data)
         {
-            renderer.Data.material.color = Color.red;
+            renderer.data.material.color = Color.red;
         }
 
     }
