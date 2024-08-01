@@ -42,6 +42,12 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         set => NEWTONS.Core._2D.Physics2D.Gravity = value.ToNewtonsVector();
     }
 
+    public Broadphase BroadphaseAlgorithm
+    {
+        get => (Broadphase)(int)NEWTONS.Core._2D.Physics2D.broadphaseAlgorithm;
+        set => NEWTONS.Core._2D.Physics2D.broadphaseAlgorithm = (NEWTONS.Core._2D.Physics2D.Broadphase)(int)value;
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -64,27 +70,35 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
-    System.Diagnostics.Stopwatch sw = new();
-
-    float time = 0f;
-    int frames = 0;
-
     private void FixedUpdate()
     {
-        if (frames >= 50 * 20)
-        {
-            Debug.Log(time / frames);
-            return;
-        }
-
-        sw.Start();
-        NEWTONS.Core._2D.Physics2D.Update(Time.fixedDeltaTime);
-        sw.Stop();
-        time += sw.ElapsedMilliseconds;
-        frames++;
-        sw.Reset();
-    
+        //if (Input.GetKeyDown(KeyCode.Space))
+            NEWTONS.Core._2D.Physics2D.Update(Time.fixedDeltaTime);
     }
+
+    public enum Broadphase
+    {
+        Quadtree = 0,
+        BVH = 1,
+    }
+
+    //private void OnDrawGizmos()
+    //{
+    //    foreach (var node in NEWTONS.Core._2D.Physics2D._bvh.nodes)
+    //    {
+    //        if (!node.isLeaf)
+    //            continue;
+
+    //        NEWTONS.Core.Vector2 size = (node.bounds.Max - node.bounds.Min);
+    //        Vector2 center = (node.bounds.Min + size * 0.5f).ToUnityVector();
+
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawSphere(center, 0.05f);
+    //        Gizmos.color = Color.yellow;
+    //        Gizmos.DrawWireCube(center, size.ToUnityVector());
+    //        Gizmos.color = Color.white;
+    //    }
+    //}
 
     #region Serialization
     [System.Serializable]
@@ -95,6 +109,7 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         public bool useCustomDrag;
         public float temperature;
         public float density;
+        public Broadphase broadphaseAlgorithm;
     }
 
     [SerializeField]
@@ -109,6 +124,7 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
             useCustomDrag = UseCustomDrag,
             temperature = Temperature,
             density = Density,
+            broadphaseAlgorithm = BroadphaseAlgorithm,
         };
     }
 
@@ -119,6 +135,7 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         UseCustomDrag = _serializerWorld.useCustomDrag;
         Temperature = _serializerWorld.temperature;
         Density = _serializerWorld.density;
+        BroadphaseAlgorithm = _serializerWorld.broadphaseAlgorithm;
     }
     #endregion
 }

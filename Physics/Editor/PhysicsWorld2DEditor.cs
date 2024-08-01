@@ -25,6 +25,8 @@ public class PhysicsWorld2DEditor : Editor
         NTS_PhysicsWorld2D.Instance.Steps = Mathf.Max(1, EditorGUILayout.IntField("Steps", NTS_PhysicsWorld2D.Instance.Steps));
         NTS_PhysicsWorld2D.Instance.Gravity = EditorGUILayout.Vector2Field("Gravity", NTS_PhysicsWorld2D.Instance.Gravity);
         NTS_PhysicsWorld2D.Instance.UseCustomDrag = EditorGUILayout.Toggle("Use Physical Drag", NTS_PhysicsWorld2D.Instance.UseCustomDrag);
+        NTS_PhysicsWorld2D.Instance.BroadphaseAlgorithm = (NTS_PhysicsWorld2D.Broadphase)EditorGUILayout.EnumPopup("Broadphase Algorithm", NTS_PhysicsWorld2D.Instance.BroadphaseAlgorithm);
+        
         if (!NTS_PhysicsWorld2D.Instance.UseCustomDrag)
             return;
         NTS_PhysicsWorld2D.Instance.Temperature = Mathf.Max(EditorGUILayout.FloatField("Temperature", NTS_PhysicsWorld2D.Instance.Temperature), NEWTONS.Core.PhysicsInfo.MinTemperature);
