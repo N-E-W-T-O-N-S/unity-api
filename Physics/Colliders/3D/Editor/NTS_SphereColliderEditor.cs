@@ -11,27 +11,23 @@ public class NTS_SphereColliderEditor : Editor
     private void OnEnable()
     {
         _sphereCollider = (NTS_SphereCollider)target;
-        _sphereCollider.Validate();
     }
 
     public override void OnInspectorGUI()
     {
         DrawProps();
-
-        if (GUI.changed)
-        {
-            _sphereCollider.Validate();
-        }
     }
 
     private void DrawProps()
     {
-        if (_sphereCollider.SphereColl == null)
+        if (_sphereCollider.SphereCollider == null)
             return;
 
         Undo.RecordObject(_sphereCollider, "sphere props");
+
         Vector3 oldCenter = _sphereCollider.Center;
         _sphereCollider.Center = EditorGUILayout.Vector3Field("Center", _sphereCollider.Center);
+
         float oldRadius = _sphereCollider.Radius;
         _sphereCollider.Radius = Mathf.Max(EditorGUILayout.FloatField("Radius", _sphereCollider.Radius), 0);
 
@@ -42,14 +38,6 @@ public class NTS_SphereColliderEditor : Editor
             SceneView.RepaintAll();
         }
         EditorGUILayout.Space();
-
-        _sphereCollider.foldOutDebugManager = EditorGUILayout.Foldout(_sphereCollider.foldOutDebugManager, "Debug Manager");
-        if (_sphereCollider.foldOutDebugManager)
-        {
-            _sphereCollider.debugManager.showMessages = EditorGUILayout.Toggle("Show Messages", _sphereCollider.debugManager.showMessages);
-            _sphereCollider.debugManager.showWarnigs = EditorGUILayout.Toggle("Show Warnings", _sphereCollider.debugManager.showWarnigs);
-            _sphereCollider.debugManager.showErrors = EditorGUILayout.Toggle("Show Errors", _sphereCollider.debugManager.showErrors);
-        }
     }
 
     private void OnSceneGUI()

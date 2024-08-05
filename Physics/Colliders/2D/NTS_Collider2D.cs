@@ -21,20 +21,35 @@ public abstract class NTS_Collider2D : MonoBehaviour, NEWTONS.Core._2D.ICollider
     /// <summary>
     /// the local center of the collider
     /// </summary>
-    public UnityEngine.Vector2 Center { get => BaseCollider.Center.ToUnityVector(); set => BaseCollider.Center = value.ToNewtonsVector(); }
+    public UnityEngine.Vector2 Center
+    {
+        get => BaseCollider.Center.ToUnityVector();
+        set => BaseCollider.Center = value.ToNewtonsVector();
+    }
 
-    public UnityEngine.Vector2 GlobalCenter { get => BaseCollider.GlobalCenter.ToUnityVector(); }
+    public UnityEngine.Vector2 GlobalCenter => BaseCollider.GlobalCenter.ToUnityVector();
 
-    public float Rotation { get => BaseCollider.Rotation; }
+    public float Rotation => BaseCollider.Rotation;
 
     /// <summary>
     /// lossy scale of the collider
     /// </summary>
-    public UnityEngine.Vector2 Scale { get => BaseCollider.Scale.ToUnityVector(); set => BaseCollider.Scale = value.ToNewtonsVector(); }
+    public UnityEngine.Vector2 Scale
+    {
+        get => BaseCollider.Scale.ToUnityVector();
+        set => BaseCollider.Scale = value.ToNewtonsVector();
+    }
 
-    public UnityEngine.Vector2 ScaleNoNotify { set => BaseCollider.ScaleNoNotify = value.ToNewtonsVector(); }
+    public UnityEngine.Vector2 ScaleNoNotify
+    {
+        set => BaseCollider.ScaleNoNotify = value.ToNewtonsVector();
+    }
 
-    public float Restitution { get => BaseCollider.Restitution; set => BaseCollider.Restitution = value; }
+    public float Restitution 
+    { 
+        get => BaseCollider.Restitution; 
+        set => BaseCollider.Restitution = value; 
+    }
 
     public NEWTONS.Core._2D.Bounds2D Bounds => BaseCollider.Bounds;
 

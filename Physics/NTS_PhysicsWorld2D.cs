@@ -8,9 +8,6 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
 {
     public static NTS_PhysicsWorld2D Instance;
 
-    public List<NTS_Rigidbody2D> tests = new();
-    public List<NTS_KonvexCollider2D> colltest = new();
-
     public int Steps
     {
         get => NEWTONS.Core._2D.Physics2D.Steps;
@@ -35,7 +32,6 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         set => NEWTONS.Core._2D.Physics2D.Density = value;
     }
 
-
     public UnityEngine.Vector2 Gravity
     {
         get => NEWTONS.Core._2D.Physics2D.Gravity.ToUnityVector();
@@ -44,8 +40,8 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
 
     public Broadphase BroadphaseAlgorithm
     {
-        get => (Broadphase)(int)NEWTONS.Core._2D.Physics2D.broadphaseAlgorithm;
-        set => NEWTONS.Core._2D.Physics2D.broadphaseAlgorithm = (NEWTONS.Core._2D.Physics2D.Broadphase)(int)value;
+        get => (Broadphase)NEWTONS.Core._2D.Physics2D.broadphaseAlgorithm;
+        set => NEWTONS.Core._2D.Physics2D.broadphaseAlgorithm = (NEWTONS.Core._2D.Physics2D.Broadphase)value;
     }
 
     private void Awake()

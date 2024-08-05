@@ -4,12 +4,12 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(NTS_Rigidbody)), CanEditMultipleObjects]
-public class KinematicBodyEditor : Editor
+public class RigidBodyEditor : Editor
 {
-    NTS_Rigidbody kinematicBody;
+    NTS_Rigidbody rigidBody;
     private void OnEnable()
     {
-        kinematicBody = (NTS_Rigidbody)target;
+        rigidBody = (NTS_Rigidbody)target;
     }
 
     public override void OnInspectorGUI()
@@ -24,19 +24,19 @@ public class KinematicBodyEditor : Editor
 
     private void DrawProps()
     {
-        if (kinematicBody.Body == null)
+        if (rigidBody.Body == null)
             return;
 
-        Undo.RecordObject(kinematicBody, "kinematic props");
-        kinematicBody.IsStatic = EditorGUILayout.Toggle("Is Static", kinematicBody.IsStatic);
-        if (kinematicBody.IsStatic)
+        Undo.RecordObject(rigidBody, "kinematic props");
+        rigidBody.IsStatic = EditorGUILayout.Toggle("Is Static", rigidBody.IsStatic);
+        if (rigidBody.IsStatic)
             return;
 
-        kinematicBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", kinematicBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
-        kinematicBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", kinematicBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
-        kinematicBody.Velocity = EditorGUILayout.Vector3Field("Velocity", kinematicBody.Velocity);
+        rigidBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", rigidBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
+        rigidBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", rigidBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
+        rigidBody.Velocity = EditorGUILayout.Vector3Field("Velocity", rigidBody.Velocity);
         EditorGUILayout.Space();
-        kinematicBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", kinematicBody.UseGravity);
+        rigidBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", rigidBody.UseGravity);
     }
 
 

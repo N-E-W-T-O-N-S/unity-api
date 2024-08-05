@@ -1,4 +1,3 @@
-using NEWTONS.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,92 +5,56 @@ using UnityEngine;
 
 public class NTS_CuboidCollider : NTS_Collider
 {
+    private NEWTONS.Core._3D.CuboidCollider _cuboidCollider = new();
+
+    public NEWTONS.Core._3D.CuboidCollider CuboidCollider { get => _cuboidCollider; private set => _cuboidCollider = value; }
+
+    public override NEWTONS.Core._3D.Collider BaseCollider => CuboidCollider;
+
+    public Vector3 Size { get => CuboidCollider.Size.ToUnityVector(); set => CuboidCollider.Size = value.ToNewtonsVector(); }
+
+    public Vector3 ScaledSize => CuboidCollider.ScaledSize.ToUnityVector();
+
+    public Vector3[] Points
+    {
+        get => CuboidCollider.Points.ToUnityVectorArray();
+    }
+
+    public int[] Indices
+    {
+        get => CuboidCollider.Indices;
+    }
+
+    public Vector3[] PointsRaw
+    {
+        get => CuboidCollider.PointsRaw.ToUnityVectorArray();
+    }
+
+    #region Serialization
+
+    [System.Serializable]
+    private struct SerializerCuboidCollider
+    {
+        public Vector3 size;
+    }
+
     [SerializeField, HideInInspector]
-    private NEWTONS.Core._3D.CuboidCollider _cuboidColl;
+    private SerializerCuboidCollider _serializerCuboidCollider;
 
-    public NEWTONS.Core._3D.CuboidCollider CuboidColl { get => _cuboidColl; private set => _cuboidColl = value; }
-
-    public override NTS_Rigidbody Body { get; protected set; }
-
-    public override UnityEngine.Vector3 Center { get => CuboidColl.Center.ToUnityVector(); set => CuboidColl.Center = value.ToNewtonsVector(); }
-
-    public override UnityEngine.Vector3 GlobalCenter { get => CuboidColl.GlobalCenter.ToUnityVector(); }
-
-    public override UnityEngine.Quaternion Rotation { get => CuboidColl.Rotation.ToUnityQuaternion(); }
-
-    public override UnityEngine.Vector3 Scale { get => CuboidColl.Scale.ToUnityVector(); set => CuboidColl.Scale = value.ToNewtonsVector(); }
-
-    public override UnityEngine.Vector3 ScaleNoNotify { set => CuboidColl.ScaleNoNotify = value.ToNewtonsVector(); }
-
-    public override float Restitution { get => CuboidColl.Restitution; set => CuboidColl.Restitution = value; }
-    
-    
-    public UnityEngine.Vector3 Size { get => CuboidColl.Size.ToUnityVector(); set => CuboidColl.Size = value.ToNewtonsVector(); }
-    
-    public UnityEngine.Vector3 ScaledSize => CuboidColl.ScaledSize.ToUnityVector();
-
-    public int[] Indices { get => CuboidColl.Indices; set => CuboidColl.Indices = value; }
-
-    public UnityEngine.Vector3[] PointsRaw { get => CuboidColl.PointsRaw.ToUnityVectorArray(); set => CuboidColl.PointsRaw = value.ToNewtonsVectorArray(); }
-
-    public UnityEngine.Vector3[] Points { get => CuboidColl.Points.ToUnityVectorArray(); }
-
-
-    private void Awake()
+    public override void OnBeforeSerialize()
     {
-        Body = GetComponent<NTS_Rigidbody>();
-        CuboidColl.Body = Body.Body;
-        CuboidColl.OnUpdateScale += OnUpdateNEWTONSScale;
-
-        CuboidColl.AddToPhysicsEngine();
-    }
-
-    private void OnUpdateNEWTONSScale()
-    {
-        UnityEngine.Vector3 loc = transform.localScale;
-        UnityEngine.Vector3 los = transform.lossyScale;
-        UnityEngine.Vector3 k = new UnityEngine.Vector3(los.x / loc.x, los.y / loc.y, los.z / loc.z);
-        transform.localScale = new UnityEngine.Vector3(Scale.x / k.x, Scale.y / k.y, Scale.z / k.z);
-
-        // lossy = local * K
-        // K = lossy / local
-        // newLocal += newLossy - K
-    }
-
-    public override void Dispose()
-    {
-        CuboidColl = null;
-        Destroy(this);
-    }
-
-    public override NEWTONS.Core._3D.IColliderReference SetCollider(NEWTONS.Core._3D.Collider collider)
-    {
-        CuboidColl = collider as NEWTONS.Core._3D.CuboidCollider;
-        if (CuboidColl == null)
-            throw new ArgumentException("Collider must be of type CuboidCollider");
-        return this;
-    }
-
-#if UNITY_EDITOR
-    public void Validate()
-    {
-        try
+        base.OnBeforeSerialize();
+        _serializerCuboidCollider = new()
         {
-            NTS_Rigidbody kBody = GetComponent<NTS_Rigidbody>();
-            if (CuboidColl.Body != kBody.Body || Body != kBody)
-            {
-                CuboidColl.Body = kBody.Body;
-                Body = kBody;
-            }
-        }
-        catch
-        {
-            debugManager.LogError("CuboidCollider: " + name + " is missing a KinematicBody component");
-        }
+            size = Size
+        };
     }
 
-    public bool foldOutDebugManager = false;
+    public override void OnAfterDeserialize()
+    {
+        base.OnAfterDeserialize();
+        Size = _serializerCuboidCollider.size;
+    }
 
-#endif
-
+    #endregion
 }

@@ -27,7 +27,7 @@ public class NTS_CuboidCollider2DEditor : Editor
         Undo.RecordObject(_cuboidCollider, "konvex props");
         Vector2 oldCenter = _cuboidCollider.Center;
         _cuboidCollider.Center = EditorGUILayout.Vector2Field("Center", _cuboidCollider.Center);
-        Vector2 oldScale = _cuboidCollider.Size;
+        Vector2 oldSize = _cuboidCollider.Size;
         Vector2 size = EditorGUILayout.Vector2Field("Size", _cuboidCollider.Size);
         _cuboidCollider.Size = new Vector2(Mathf.Max(0, size.x), Mathf.Max(0, size.y));
 
@@ -37,7 +37,7 @@ public class NTS_CuboidCollider2DEditor : Editor
         EditorGUILayout.FloatField("Inertia", _cuboidCollider.Body.Inertia);
         GUI.enabled = true;
 
-        if (oldScale != _cuboidCollider.Size || oldCenter != _cuboidCollider.Center)
+        if (oldSize != _cuboidCollider.Size || oldCenter != _cuboidCollider.Center)
         {
             SceneView.RepaintAll();
         }
