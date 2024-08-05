@@ -5,70 +5,42 @@ using UnityEngine;
 public class NTS_SphereCollider : NTS_Collider
 {
 
+    private NEWTONS.Core._3D.SphereCollider _sphereCollider = new();
+
+    public NEWTONS.Core._3D.SphereCollider SphereCollider { get => _sphereCollider; set => _sphereCollider = value; }
+
+    public override NEWTONS.Core._3D.Collider BaseCollider => SphereCollider;
+
+
+    public float Radius { get => SphereCollider.Radius; set => SphereCollider.Radius = value; }
+
+    public float ScaledRadius => SphereCollider.ScaledRadius;
+
+    #region Serialization
+
+    [System.Serializable]
+    private struct SerializerCircleCollider
+    {
+        public float radius;
+    }
+
     [SerializeField, HideInInspector]
-    private NEWTONS.Core._3D.SphereCollider _sphereCollider;
+    private SerializerCircleCollider _serializerSphereCollider;
 
-    public NEWTONS.Core._3D.SphereCollider SphereColl { get => _sphereCollider; private set => _sphereCollider = value; }
-
-    public override NTS_Rigidbody Body { get; protected set; }
-
-    public override Vector3 Center { get => SphereColl.Center.ToUnityVector(); set => SphereColl.Center = value.ToNewtonsVector(); }
-
-    public override Vector3 GlobalCenter => SphereColl.GlobalCenter.ToUnityVector();
-
-    public override Quaternion Rotation => SphereColl.Rotation.ToUnityQuaternion();
-
-    public override Vector3 Scale { get => SphereColl.Scale.ToUnityVector(); set => SphereColl.Scale = value.ToNewtonsVector(); }
-
-    public override Vector3 ScaleNoNotify { set => SphereColl.ScaleNoNotify = value.ToNewtonsVector(); }
-
-    public override float Restitution { get => SphereColl.Restitution; set => SphereColl.Restitution = value; }
-
-    
-    public float Radius { get => SphereColl.Radius; set => SphereColl.Radius = value; }
-
-    public float ScaledRadius => SphereColl.ScaledRadius;
-
-    private void Awake()
+    public override void OnBeforeSerialize()
     {
-        Body = GetComponent<NTS_Rigidbody>();
-        SphereColl.Body = Body.Body;
-        SphereColl.OnUpdateScale += OnUpdateNEWTONSScale;
-
-        SphereColl.AddToPhysicsEngine();
-    }
-
-    private void OnUpdateNEWTONSScale()
-    {
-        UnityEngine.Vector3 loc = transform.localScale;
-        UnityEngine.Vector3 los = transform.lossyScale;
-        UnityEngine.Vector3 k = new UnityEngine.Vector3(los.x / loc.x, los.y / loc.y, los.z / loc.z);
-        transform.localScale = new UnityEngine.Vector3(Scale.x / k.x, Scale.y / k.y, Scale.z / k.z);
-
-        // lossy = local * K
-        // K = lossy / local
-        // newLocal += newLossy - K
-    }
-
-#if UNITY_EDITOR
-    public void Validate()
-    {
-        try
+        base.OnBeforeSerialize();
+        _serializerSphereCollider = new()
         {
-            NTS_Rigidbody kBody = GetComponent<NTS_Rigidbody>();
-            if (SphereColl.Body != kBody.Body || Body != kBody)
-            {
-                SphereColl.Body = kBody.Body;
-                Body = kBody;
-            }
-        }
-        catch
-        {
-            debugManager.LogError("CuboidCollider: " + name + " is missing a KinematicBody component");
-        }
+            radius = Radius
+        };
     }
 
-    public bool foldOutDebugManager = false;
+    public override void OnAfterDeserialize()
+    {
+        base.OnAfterDeserialize();
+        Radius = _serializerSphereCollider.radius;
+    }
 
-#endif
+    #endregion
 }

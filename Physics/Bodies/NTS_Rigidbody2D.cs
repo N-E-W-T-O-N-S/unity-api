@@ -7,7 +7,7 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
     private NEWTONS.Core._2D.Rigidbody2D _body = new();
 
     /// <summary>
-    /// Direct access to the Physics Engine's KinematicBody
+    /// Direct access to the Physics Engine's RigidBody2D
     /// <inheritdoc cref="NEWTONS.Core._2D.Rigidbody2D"/>
     /// <para><u><b>WARNING:</b></u> <b>Do not directly use to change properties</b></para>
     /// </summary>
@@ -52,13 +52,11 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.Inertia = value;
     }
 
-
     public bool UseGravity
     {
         get => Body.UseGravity;
         set => Body.UseGravity = value;
     }
-
 
     public UnityEngine.Vector2 Velocity
     {
@@ -92,17 +90,17 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
             return;
 
         Body.OnUpdatePosition += OnUpdateNEWTONSPosition;
-        Body.OnUpdateRotation += OnUpdateNEWTOSRotation;
+        Body.OnUpdateRotation += OnUpdateNEWTONSRotation;
         Body.AddReference(this);
         Body.AddToPhysicsEngine();
     }
 
     private void Update()
     {
-        if (Position != (UnityEngine.Vector2)transform.position)
+        if (Position != (Vector2)transform.position)
             Position = transform.position;
 
-        if (Rotation != transform.rotation.z)
+        if (Rotation != transform.rotation.eulerAngles.z)
             Rotation = transform.rotation.eulerAngles.z;
     }
 
@@ -166,7 +164,7 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         transform.position = Position;
     }
 
-    private void OnUpdateNEWTOSRotation()
+    private void OnUpdateNEWTONSRotation()
     {
         UnityEngine.Vector3 rot = transform.rotation.eulerAngles;
         transform.rotation = UnityEngine.Quaternion.Euler(rot.x, rot.y, Rotation);

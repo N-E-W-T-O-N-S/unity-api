@@ -1,109 +1,119 @@
-using NEWTONS.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NTS_PhysicsWorld : MonoBehaviour
+public class NTS_PhysicsWorld : MonoBehaviour, ISerializationCallbackReceiver
 {
-    public static List<NTS_Rigidbody> tests = new List<NTS_Rigidbody>();
-    public static List<NTS_CuboidCollider> colltest = new List<NTS_CuboidCollider>();
+    public static NTS_PhysicsWorld Instance;
 
-    //TODO: Look into removing these:
-    #region Internal NEWTONS fields
-    /// <summary>
-    /// <b><u>WARNING:</u></b> Internal NEWTONS field. Do not use.
-    /// </summary>
-    /// <remarks>
-    /// Do not use this field directly. Insteade use <see cref="Temperature"/> to alter the Temperature.
-    /// </remarks>
-    public float initialTemperature = NEWTONS.Core._3D.Physics.Temperature;
-    /// <summary>
-    /// <b><u>WARNING:</u></b> Internal NEWTONS field. Do not use.
-    /// </summary>
-    /// <remarks>
-    /// Do not use this field directly. Insteade use <see cref="Density"/> to alter the Density.
-    /// </remarks>
-    public float initialDensity = NEWTONS.Core._3D.Physics.Density;
-    /// <summary>
-    /// <b><u>WARNING:</u></b> Internal NEWTONS field. Do not use.
-    /// </summary>
-    /// <remarks>
-    /// Do not use this field directly. Insteade use <see cref="UseCustomDrag"/> to alter the UseCustomDrag.
-    /// </remarks>
-    public bool initialUseCustomDrag = NEWTONS.Core._3D.Physics.UseCustomDrag;
-    /// <summary>
-    /// <b><u>WARNING:</u></b> Internal NEWTONS field. Do not use.
-    /// </summary>
-    /// <remarks>
-    /// Do not use this field directly. Insteade use <see cref="Gravity"/> to alter the Gravity.
-    /// </remarks>
-    public UnityEngine.Vector3 initialGravity = NEWTONS.Core._3D.Physics.Gravity.ToUnityVector();
-    #endregion
+    public int Steps
+    {
+        get => NEWTONS.Core._3D.Physics.Steps;
+        set => NEWTONS.Core._3D.Physics.Steps = value;
+    }
 
-    public static bool UseCustomDrag
+    public bool UseCustomDrag
     {
         get => NEWTONS.Core._3D.Physics.UseCustomDrag;
         set => NEWTONS.Core._3D.Physics.UseCustomDrag = value;
     }
 
-    public static float Temperature
+    public float Temperature
     {
         get => NEWTONS.Core._3D.Physics.Temperature;
         set => NEWTONS.Core._3D.Physics.Temperature = value;
     }
 
-    public static float Density
+    public float Density
     {
-        get => NEWTONS.Core._3D.Physics.Density;
-        set => NEWTONS.Core._3D.Physics.Density = value;
+        get => NEWTONS.Core._2D.Physics2D.Density;
+        set => NEWTONS.Core._2D.Physics2D.Density = value;
     }
 
-    public static UnityEngine.Vector3 Gravity
+    public UnityEngine.Vector2 Gravity
     {
-        get => NEWTONS.Core._3D.Physics.Gravity.ToUnityVector();
-        set => NEWTONS.Core._3D.Physics.Gravity = value.ToNewtonsVector();
+        get => NEWTONS.Core._2D.Physics2D.Gravity.ToUnityVector();
+        set => NEWTONS.Core._2D.Physics2D.Gravity = value.ToNewtonsVector();
     }
 
     private void Awake()
     {
-        NEWTONS.Core._3D.Physics.DeltaTime = Time.fixedDeltaTime;
-        NEWTONS.Core._3D.Physics.Temperature = initialTemperature;
-        NEWTONS.Core._3D.Physics.Density = initialDensity;
-        NEWTONS.Core._3D.Physics.UseCustomDrag = initialUseCustomDrag;
-        NEWTONS.Core._3D.Physics.Gravity = initialGravity.ToNewtonsVector();
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
     }
 
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space))
-    //        NEWTONS.Core.Physics.Update(Time.fixedDeltaTime);
-    //}
+    private void OnValidate()
+    {
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+    }
 
     private void FixedUpdate()
     {
-        NEWTONS.Core._3D.Physics.Update();
+        NEWTONS.Core._3D.Physics.Update(Time.fixedDeltaTime);
     }
 
-    public static void DestroyBody(NTS_Rigidbody body)
+    //private void OnDrawGizmos()
+    //{
+    //    foreach (var node in NEWTONS.Core._3D.Physics._bvh.nodes)
+    //    {
+    //        if (!node.isLeaf)
+    //            continue;
+
+    //        NEWTONS.Core.Vector3 size = (node.bounds.Max - node.bounds.Min);
+    //        Vector3 center = (node.bounds.Min + size * 0.5f).ToUnityVector();
+
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawSphere(center, 0.05f);
+    //        Gizmos.color = Color.yellow;
+    //        Gizmos.DrawWireCube(center, size.ToUnityVector());
+    //        Gizmos.color = Color.white;
+    //    }
+    //}
+
+    #region Serialization
+    [System.Serializable]
+    private struct SerializerPhysicsWorld2D
     {
-        //tests.Remove(body);
-        NEWTONS.Core._3D.Rigidbody b = body.Body;
-        if (b != null)
-            NEWTONS.Core._3D.Physics.RemoveBody(b);
+        public int steps;
+        public Vector3 gravity;
+        public bool useCustomDrag;
+        public float temperature;
+        public float density;
     }
 
-    private void Test2()
+    [SerializeField]
+    private SerializerPhysicsWorld2D _serializerWorld;
+
+    public void OnBeforeSerialize()
     {
-        CollisionInfo coll = colltest[0].CuboidColl.IsColliding(colltest[1].CuboidColl);
-        if (coll.didCollide)
+        _serializerWorld = new()
         {
-            colltest[0].GetComponent<MeshRenderer>().material.color = Color.red;
-            colltest[1].GetComponent<MeshRenderer>().material.color = Color.red;
-        }
-        else
-        {
-            colltest[0].GetComponent<MeshRenderer>().material.color = Color.white;
-            colltest[1].GetComponent<MeshRenderer>().material.color = Color.white;
-        }
+            steps = Steps,
+            gravity = Gravity,
+            useCustomDrag = UseCustomDrag,
+            temperature = Temperature,
+            density = Density,
+        };
     }
+
+    public void OnAfterDeserialize()
+    {
+        Steps = _serializerWorld.steps;
+        Gravity = _serializerWorld.gravity;
+        UseCustomDrag = _serializerWorld.useCustomDrag;
+        Temperature = _serializerWorld.temperature;
+        Density = _serializerWorld.density;
+    }
+    #endregion
 }
