@@ -76,10 +76,10 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         set => Body.Mass = value;
     }
 
-    public float Drag
+    public float DragCoefficient
     {
-        get => Body.Drag;
-        set => Body.Drag = value;
+        get => Body.DragCoefficient;
+        set => Body.DragCoefficient = value;
     }
 
     public float InvMass => Body.InvMass;
@@ -219,7 +219,8 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
             useGravity = UseGravity,
             velocity = Velocity,
             mass = Mass,
-            drag = Drag,
+            drag = DragCoefficient,
+            angularVelocity = AngularVelocity,
         };
     }
 
@@ -234,7 +235,8 @@ public class NTS_Rigidbody2D : MonoBehaviour, NEWTONS.Core._2D.IRigidbodyReferen
         UseGravity = _serializerBody.useGravity;
         Velocity = _serializerBody.velocity;
         Mass = _serializerBody.mass;
-        Drag = _serializerBody.drag;
+        DragCoefficient = _serializerBody.drag;
+        AngularVelocity = _serializerBody.angularVelocity;
     }
     #endregion
 

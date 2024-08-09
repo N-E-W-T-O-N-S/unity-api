@@ -33,7 +33,7 @@ public class KinematicBodyEditor2D : Editor
             return;
 
         _rigidBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", _rigidBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
-        _rigidBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", _rigidBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
+        _rigidBody.DragCoefficient = Mathf.Max(EditorGUILayout.FloatField("Drag", _rigidBody.DragCoefficient), NEWTONS.Core.PhysicsInfo.MinDragCoefficient);
         _rigidBody.Velocity = EditorGUILayout.Vector2Field("Velocity", _rigidBody.Velocity);
         _rigidBody.FixRotation = EditorGUILayout.Toggle("Fix Rotation", _rigidBody.FixRotation);
 

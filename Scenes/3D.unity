@@ -331,7 +331,7 @@ Transform:
   m_GameObject: {fileID: 647266499}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.691, y: 8.24, z: 0}
+  m_LocalPosition: {x: -1.05, y: 8.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -371,7 +371,7 @@ MonoBehaviour:
   _attachedCollider: {fileID: 647266506}
   _serializerBody:
     isStatic: 0
-    position: {x: -0.691, y: 8.24, z: 0}
+    position: {x: -1.05, y: 8.32, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     customInertia: 0
     inertia: 0
@@ -872,7 +872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializerWorld:
-    steps: 5
+    steps: 1
     gravity: {x: 0, y: -9.81, z: 0}
     useCustomDrag: 0
     temperature: 0
@@ -1213,7 +1213,7 @@ MonoBehaviour:
   _attachedCollider: {fileID: 2063659089}
   _serializerBody:
     isStatic: 0
-    position: {x: -1.1, y: 9.53, z: 0}
+    position: {x: -0.95, y: 9.63, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     customInertia: 0
     inertia: 0
@@ -1282,7 +1282,7 @@ Transform:
   m_GameObject: {fileID: 2063659088}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1, y: 9.53, z: 0}
+  m_LocalPosition: {x: -0.95, y: 9.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -83,4 +83,26 @@ public static class ConvertionHelper
     {
         return new NEWTONS.Core.Quaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static UnityEngine.Bounds ToUnityBounds(this NEWTONS.Core._2D.Bounds2D bounds)
+    {
+        return new UnityEngine.Bounds()
+        {
+            min = bounds.Min.ToUnityVector(),
+            max = bounds.Max.ToUnityVector()
+        };
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static NEWTONS.Core._2D.Bounds2D ToNewtonsBounds2D(this UnityEngine.Bounds bounds)
+    {
+        return new NEWTONS.Core._2D.Bounds2D(bounds.min.ToNewtonsVector(), bounds.max.ToNewtonsVector());
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static NEWTONS.Core._3D.Bounds ToNewtonsBounds(this UnityEngine.Bounds bounds)
+    {
+        return new NEWTONS.Core._3D.Bounds(bounds.min.ToNewtonsVector(), bounds.max.ToNewtonsVector());
+    }
 }
