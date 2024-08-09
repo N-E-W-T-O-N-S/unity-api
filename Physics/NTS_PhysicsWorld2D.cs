@@ -32,6 +32,12 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         set => NEWTONS.Core._2D.Physics2D.Density = value;
     }
 
+    public List<NEWTONS.Core._2D.Physics2D.AirComposition> AirCompositions
+    {
+        get => NEWTONS.Core._2D.Physics2D.AirCompositions;
+        set => NEWTONS.Core._2D.Physics2D.AirCompositions = value;
+    }
+
     public UnityEngine.Vector2 Gravity
     {
         get => NEWTONS.Core._2D.Physics2D.Gravity.ToUnityVector();
@@ -55,6 +61,18 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
+    private void Start()
+    {
+        //foreach (var body in NEWTONS.Core._2D.Physics2D.Bodies)
+        //{
+        //    body.DragCoefficient = 1f;
+        //    body.FixRotation = true;
+
+        //    if (body.Collider != null)
+        //        body.Collider.Restitution = 0f;
+        //}
+    }
+
     private void OnValidate()
     {
         if (Instance == null)
@@ -66,10 +84,21 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
+    private void Update()
+    {
+        if (!nextStep)
+            nextStep = Input.GetKeyDown(KeyCode.Space);
+    }
+
+    bool nextStep = false;
+
     private void FixedUpdate()
     {
-        //if (Input.GetKeyDown(KeyCode.Space))
+        //if (nextStep)
+        {
             NEWTONS.Core._2D.Physics2D.Update(Time.fixedDeltaTime);
+            nextStep = false;
+        }
     }
 
     public enum Broadphase
@@ -78,23 +107,26 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         BVH = 1,
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    foreach (var node in NEWTONS.Core._2D.Physics2D._bvh.nodes)
-    //    {
-    //        if (!node.isLeaf)
-    //            continue;
+    private void OnDrawGizmos()
+    {
+        if (!Application.isPlaying)
+            return;
 
-    //        NEWTONS.Core.Vector2 size = (node.bounds.Max - node.bounds.Min);
-    //        Vector2 center = (node.bounds.Min + size * 0.5f).ToUnityVector();
+        foreach (var node in NEWTONS.Core._2D.Physics2D._bvh.nodes)
+        {
+            if (!node.isLeaf)
+                continue;
 
-    //        Gizmos.color = Color.red;
-    //        Gizmos.DrawSphere(center, 0.05f);
-    //        Gizmos.color = Color.yellow;
-    //        Gizmos.DrawWireCube(center, size.ToUnityVector());
-    //        Gizmos.color = Color.white;
-    //    }
-    //}
+            NEWTONS.Core.Vector2 size = (node.bounds.Max - node.bounds.Min);
+            Vector2 center = (node.bounds.Min + size * 0.5f).ToUnityVector();
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(center, 0.05f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(center, size.ToUnityVector());
+            Gizmos.color = Color.white;
+        }
+    }
 
     #region Serialization
     [System.Serializable]
@@ -106,6 +138,7 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         public float temperature;
         public float density;
         public Broadphase broadphaseAlgorithm;
+        public List<NEWTONS.Core._2D.Physics2D.AirComposition> airCompositions;
     }
 
     [SerializeField]
@@ -121,6 +154,7 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
             temperature = Temperature,
             density = Density,
             broadphaseAlgorithm = BroadphaseAlgorithm,
+            airCompositions = AirCompositions,
         };
     }
 
@@ -132,6 +166,13 @@ public class NTS_PhysicsWorld2D : MonoBehaviour, ISerializationCallbackReceiver
         Temperature = _serializerWorld.temperature;
         Density = _serializerWorld.density;
         BroadphaseAlgorithm = _serializerWorld.broadphaseAlgorithm;
+        AirCompositions = _serializerWorld.airCompositions;
     }
     #endregion
+
+#if UNITY_EDITOR
+    public bool foldOutAirCompositions = false;
+    public List<Color> airCompositionColors = new();
+    public List<bool> airCompositionFoldOuts = new();
+#endif
 }

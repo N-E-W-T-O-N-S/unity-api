@@ -134,6 +134,8 @@ GameObject:
   - component: {fileID: 18520766}
   - component: {fileID: 18520765}
   - component: {fileID: 18520764}
+  - component: {fileID: 18520768}
+  - component: {fileID: 18520767}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -166,12 +168,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializerWorld:
-    steps: 5
+    steps: 1
     gravity: {x: 0, y: -9.81}
     useCustomDrag: 0
     temperature: 0
-    density: 1e-20
+    density: 1.2041
     broadphaseAlgorithm: 1
+    airCompositions:
+    - Bounds:
+        Min:
+          x: 0
+          y: -5
+        Max:
+          x: 20
+          y: 15
+    - Bounds:
+        Min:
+          x: -20
+          y: -5
+        Max:
+          x: 0
+          y: 15
+  foldOutAirCompositions: 1
+  airCompositionColors:
+  - {r: 0.23255605, g: 0.735849, b: 0.6924729, a: 1}
+  - {r: 0.7, g: 0.2, b: 0.1, a: 1}
+  airCompositionFoldOuts: 0101
 --- !u!4 &18520766
 Transform:
   m_ObjectHideFlags: 0
@@ -187,6 +209,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &18520767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18520763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8ab5bc9396924144988028a64017795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hello: []
+--- !u!54 &18520768
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18520763}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &24161958
 GameObject:
   m_ObjectHideFlags: 0

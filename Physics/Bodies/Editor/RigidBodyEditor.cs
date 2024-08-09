@@ -33,7 +33,7 @@ public class RigidBodyEditor : Editor
             return;
 
         rigidBody.Mass = Mathf.Max(EditorGUILayout.FloatField("Mass", rigidBody.Mass), NEWTONS.Core.PhysicsInfo.MinMass);
-        rigidBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", rigidBody.Drag), NEWTONS.Core.PhysicsInfo.MinDrag);
+        rigidBody.Drag = Mathf.Max(EditorGUILayout.FloatField("Drag", rigidBody.Drag), NEWTONS.Core.PhysicsInfo.MinDragCoefficient);
         rigidBody.Velocity = EditorGUILayout.Vector3Field("Velocity", rigidBody.Velocity);
         EditorGUILayout.Space();
         rigidBody.UseGravity = EditorGUILayout.Toggle("Use Gravity", rigidBody.UseGravity);
